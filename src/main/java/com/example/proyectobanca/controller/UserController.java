@@ -20,7 +20,6 @@ Usuarios:
 •	Delete by ID
 */
 
-
     // ALL
     @GetMapping("/hi")
     public String hi(){
