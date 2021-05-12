@@ -1,13 +1,13 @@
 package com.example.proyectobanca.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-public class Movimientos {
+public class Transaction {
 
     @Id
     @GeneratedValue
@@ -25,7 +25,19 @@ public class Movimientos {
     @Column(name="created_date")
     private Instant createdDate;
 
-    public Movimientos() {
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_bank_account")
+    @JsonIgnore
+    @ApiModelProperty("Bank account to which a single transaction belongs: BankAccount")
+    private BankAccount bankAccount;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_category")
+    @JsonIgnore
+    @ApiModelProperty("Category to which a single transaction belongs: Category")
+    private Category category;
+
+    public Transaction() {
     }
 
     public Long getImporte() {

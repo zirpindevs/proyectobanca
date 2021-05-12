@@ -1,13 +1,15 @@
 package com.example.proyectobanca.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-public class Cuenta {
+public class BankAccount {
 
     @Id
     @GeneratedValue
@@ -28,8 +30,25 @@ public class Cuenta {
     @Column(name="last_modified")
     private Instant lastModified;
 
+    @ManyToMany(mappedBy = "cuentas")
+    @JsonIgnore
+    @ApiModelProperty("Lista de usuarios asociados a una cuenta: List<User>")
+    private List<User> users = new ArrayList<>();
 
-    public Cuenta() {
+    @OneToMany(mappedBy = "bankAccount", cascade = CascadeType.ALL)
+    @ApiModelProperty("List of transactions that a bank account has: List<Transaction>")
+    private List<Transaction> transactions = new ArrayList<>();
+
+
+    public BankAccount() {
+    }
+
+    public BankAccount(Long numeroCuenta, Long saldo, Boolean enabled, Instant createdDate, Instant lastModified) {
+        this.numeroCuenta = numeroCuenta;
+        this.saldo = saldo;
+        this.enabled = enabled;
+        this.createdDate = createdDate;
+        this.lastModified = lastModified;
     }
 
     public Long getNumeroTarjeta() {

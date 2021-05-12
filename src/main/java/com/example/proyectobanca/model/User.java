@@ -1,6 +1,6 @@
 package com.example.proyectobanca.model;
 
-import org.hibernate.annotations.Where;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -14,22 +14,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="username")
     private String username;
 
-    @Column(name="email")
     private String email;
 
-    @Column(name="password")
     private String password;
 
-    @Column(name="name")
     private String name;
 
     @Column(name="last_name")
     private String lastName;
 
-    @Column(name="enabled")
     private Boolean enabled;
 
     @Column(name="created_date")
@@ -38,8 +33,10 @@ public class User {
     @Column(name="last_modified")
     private Instant lastModified;
 
-    @OneToMany(mappedBy = "user")
-    private List<Tarjeta> tarjeta = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Column(name="credit_cards")
+    @ApiModelProperty("List of credit cards that a user has: List<Tarjeta>")
+    private List<CreditCard> creditCards = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -47,7 +44,8 @@ public class User {
             joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name="cuenta_id", referencedColumnName = "id")}
     )
-    private List<Cuenta> cuenta = new ArrayList<>();
+    @ApiModelProperty("Lista de cuentas bancarias asociadas a un usuario: List<Cuenta>")
+    private List<BankAccount> bankAccounts = new ArrayList<>();
 
 
     public User() {
@@ -57,6 +55,14 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -123,20 +129,20 @@ public class User {
         this.lastModified = lastModified;
     }
 
-    public List<Tarjeta> getTarjeta() {
-        return tarjeta;
+    public List<CreditCard> getCreditCards() {
+        return creditCards;
     }
 
-    public void setTarjeta(List<Tarjeta> tarjeta) {
-        this.tarjeta = tarjeta;
+    public void setCreditCards(List<CreditCard> creditCards) {
+        this.creditCards = creditCards;
     }
 
-    public List<Cuenta> getCuenta() {
-        return cuenta;
+    public List<BankAccount> getCuentas() {
+        return bankAccounts;
     }
 
-    public void setCuenta(List<Cuenta> cuenta) {
-        this.cuenta = cuenta;
+    public void setCuentas(List<BankAccount> bankAccounts) {
+        this.bankAccounts = bankAccounts;
     }
 
     @Override

@@ -1,37 +1,35 @@
 package com.example.proyectobanca.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.Date;
 
 @Entity
-public class Tarjeta {
+public class CreditCard {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name="numer_tarjeta")
-    private Long numeroTarjeta;
+    @Column(name="num_credit_card")
+    private Long numCreditCard;
 
-    @Column(name="placeholder")
     private String placeholder;
 
-    @Column(name="tipo")
-    private String tipo;
+    private String type;
 
-    @Column(name="proveedor")
-    private String proveedor;
+    @Column(name="card_provider")
+    private String cardProvider;
 
-    @Column(name="CVV")
-    private String CVV;
+    private String cvv;
 
-    @Column(name="pin")
     private String pin;
 
-    @Column(name="fecha_expiracion")
-    private Date fechaExpiracion;
+    @Column(name="expiration_date")
+    private Date expirationDate;
 
-    @Column(name="enabled")
     private Boolean enabled;
 
     @Column(name="created_date")
@@ -40,19 +38,21 @@ public class Tarjeta {
     @Column(name="last_modified")
     private Instant lastModified;
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
+    @JsonIgnore
+    @ApiModelProperty("User to which a single credid card belongs: User")
     private User user;
 
-    public Tarjeta() {
+    public CreditCard() {
     }
 
-    public Long getNumeroTarjeta() {
-        return numeroTarjeta;
+    public Long getNumCreditCard() {
+        return numCreditCard;
     }
 
-    public void setNumeroTarjeta(Long numeroTarjeta) {
-        this.numeroTarjeta = numeroTarjeta;
+    public void setNumCreditCard(Long numCreditCard) {
+        this.numCreditCard = numCreditCard;
     }
 
     public String getPlaceholder() {
@@ -63,28 +63,28 @@ public class Tarjeta {
         this.placeholder = placeholder;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getType() {
+        return type;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getProveedor() {
-        return proveedor;
+    public String getCardProvider() {
+        return cardProvider;
     }
 
-    public void setProveedor(String proveedor) {
-        this.proveedor = proveedor;
+    public void setCardProvider(String cardProvider) {
+        this.cardProvider = cardProvider;
     }
 
-    public String getCVV() {
-        return CVV;
+    public String getCvv() {
+        return cvv;
     }
 
-    public void setCVV(String CVV) {
-        this.CVV = CVV;
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
     }
 
     public String getPin() {
@@ -95,12 +95,12 @@ public class Tarjeta {
         this.pin = pin;
     }
 
-    public Date getFechaExpiracion() {
-        return fechaExpiracion;
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setFechaExpiracion(Date fechaExpiracion) {
-        this.fechaExpiracion = fechaExpiracion;
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public Boolean getEnabled() {
@@ -139,13 +139,13 @@ public class Tarjeta {
     public String toString() {
         return "Tarjeta{" +
                 "id=" + id +
-                ", numeroTarjeta=" + numeroTarjeta +
+                ", numeroTarjeta=" + numCreditCard +
                 ", placeholder='" + placeholder + '\'' +
-                ", tipo='" + tipo + '\'' +
-                ", proveedor='" + proveedor + '\'' +
-                ", CVV='" + CVV + '\'' +
+                ", tipo='" + type + '\'' +
+                ", proveedor='" + cardProvider + '\'' +
+                ", CVV='" + cvv + '\'' +
                 ", pin='" + pin + '\'' +
-                ", fechaExpiracion=" + fechaExpiracion +
+                ", fechaExpiracion=" + expirationDate +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +
                 ", lastModified=" + lastModified +
