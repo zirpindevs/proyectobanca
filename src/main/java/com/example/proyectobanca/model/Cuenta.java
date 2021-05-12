@@ -13,8 +13,8 @@ public class Cuenta {
     @GeneratedValue
     private Long id;
 
-    @Column(name="numer_tarjeta")
-    private Long numeroTarjeta;
+    @Column(name="numer_cuenta")
+    private Long numeroCuenta;
 
     @Column(name="saldo")
     private Long saldo;
@@ -33,11 +33,11 @@ public class Cuenta {
     }
 
     public Long getNumeroTarjeta() {
-        return numeroTarjeta;
+        return numeroCuenta;
     }
 
     public void setNumeroTarjeta(Long numeroTarjeta) {
-        this.numeroTarjeta = numeroTarjeta;
+        this.numeroCuenta = numeroTarjeta;
     }
 
     public Long getSaldo() {
@@ -76,7 +76,7 @@ public class Cuenta {
     public String toString() {
         return "Cuenta{" +
                 "id=" + id +
-                ", numeroTarjeta=" + numeroTarjeta +
+                ", numeroTarjeta=" + numeroCuenta +
                 ", saldo=" + saldo +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +
