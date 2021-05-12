@@ -1,7 +1,11 @@
 package com.example.proyectobanca.model;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -33,6 +37,18 @@ public class User {
 
     @Column(name="last_modified")
     private Instant lastModified;
+
+    @OneToMany(mappedBy = "user")
+    private List<Tarjeta> tarjeta = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_cuenta",
+            joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name="cuenta_id", referencedColumnName = "id")}
+    )
+    private List<Cuenta> cuenta = new ArrayList<>();
+
 
     public User() {
     }
@@ -105,6 +121,22 @@ public class User {
 
     public void setLastModified(Instant lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public List<Tarjeta> getTarjeta() {
+        return tarjeta;
+    }
+
+    public void setTarjeta(List<Tarjeta> tarjeta) {
+        this.tarjeta = tarjeta;
+    }
+
+    public List<Cuenta> getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(List<Cuenta> cuenta) {
+        this.cuenta = cuenta;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.example.proyectobanca.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Date;
 
@@ -42,6 +39,10 @@ public class Tarjeta {
 
     @Column(name="last_modified")
     private Instant lastModified;
+
+    @ManyToOne()
+    @JoinColumn(name = "id_user")
+    private User user;
 
     public Tarjeta() {
     }
@@ -124,6 +125,14 @@ public class Tarjeta {
 
     public void setLastModified(Instant lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
