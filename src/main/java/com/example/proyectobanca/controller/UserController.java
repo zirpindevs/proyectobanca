@@ -6,7 +6,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class CarController {
+public class UserController {
+
+/*
+ENDPOINTS
+
+Usuarios:
+•	Get all
+•	Get one by ID
+•	Get by Filters ?
+            •	Create User / SingUp
+•	Update by ID
+•	Delete by ID
+*/
 
 
     // ALL
