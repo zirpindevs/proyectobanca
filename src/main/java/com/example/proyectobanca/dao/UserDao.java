@@ -4,8 +4,10 @@ import com.example.proyectobanca.model.User;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface UserDao {
 
     List<User> findAllByFilters(Map<String, String> map1);
+
 }

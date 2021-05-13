@@ -3,7 +3,7 @@ package com.example.proyectobanca.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +29,19 @@ public class User {
     @Column(name="number_phone")
     private String numberPhone;
 
+    @Column(nullable = false, columnDefinition = "Boolean default false")
     private Boolean enabled;
 
-    @Column(name="created_date")
-    private Instant createdDate;
+    @Column(name="created_at")
+    private LocalDateTime createdAt;
 
-    @Column(name="last_modified")
-    private Instant lastModified;
+    @Column(name="updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false, columnDefinition = "varchar(255) default 'pendiente'")
+    @Enumerated(EnumType.STRING)
+    @ApiModelProperty("Status of user: UserStatus Enum")
+    private UserStatus status;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Column(name="credit_cards")
@@ -60,6 +66,16 @@ public class User {
         this.nif = nif;
         this.email = email;
         this.password = password;
+    }
+
+    public User(String nif, String email, String password, String name, String lastName, String numberPhone, Boolean enabled) {
+        this.nif = nif;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.lastName = lastName;
+        this.numberPhone = numberPhone;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -126,20 +142,28 @@ public class User {
         this.enabled = enabled;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Instant getLastModified() {
-        return lastModified;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setLastModified(Instant lastModified) {
-        this.lastModified = lastModified;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 
     public List<CreditCard> getCreditCards() {
@@ -169,8 +193,9 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", numberPhone='" + numberPhone + '\'' +
                 ", enabled=" + enabled +
-                ", createdDate=" + createdDate +
-                ", lastModified=" + lastModified +
+                ", createdAt=" + createdAt +
+                ", lastModified=" + updatedAt +
+                ", status=" + status +
                 '}';
     }
 }
