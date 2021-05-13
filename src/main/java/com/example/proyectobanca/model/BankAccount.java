@@ -16,7 +16,7 @@ public class BankAccount {
     @GeneratedValue
     private Long id;
 
-    @Column(name="numer_cuenta")
+    @Column(name="numero_cuenta")
     private Long numeroCuenta;
 
     @Column(name="saldo")
