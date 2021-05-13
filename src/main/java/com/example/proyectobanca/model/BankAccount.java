@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "bank_accounts")
 public class BankAccount {
 
     @Id
@@ -30,7 +31,7 @@ public class BankAccount {
     @Column(name="last_modified")
     private Instant lastModified;
 
-    @ManyToMany(mappedBy = "cuentas")
+    @ManyToMany(mappedBy = "bankAccounts")
     @JsonIgnore
     @ApiModelProperty("Lista de usuarios asociados a una cuenta: List<User>")
     private List<User> users = new ArrayList<>();
@@ -51,12 +52,16 @@ public class BankAccount {
         this.lastModified = lastModified;
     }
 
-    public Long getNumeroTarjeta() {
+    public Long getId() {
+        return id;
+    }
+
+    public Long getNumeroCuenta() {
         return numeroCuenta;
     }
 
-    public void setNumeroTarjeta(Long numeroTarjeta) {
-        this.numeroCuenta = numeroTarjeta;
+    public void setNumeroCuenta(Long numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
     }
 
     public Long getSaldo() {
@@ -91,11 +96,27 @@ public class BankAccount {
         this.lastModified = lastModified;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     @Override
     public String toString() {
-        return "Cuenta{" +
+        return "BankAccount{" +
                 "id=" + id +
-                ", numeroTarjeta=" + numeroCuenta +
+                ", numeroCuenta=" + numeroCuenta +
                 ", saldo=" + saldo +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +

@@ -5,9 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
+@Table(name = "credit_cards")
 public class CreditCard {
     @Id
     @GeneratedValue
@@ -44,7 +47,15 @@ public class CreditCard {
     @ApiModelProperty("User to which a single credid card belongs: User")
     private User user;
 
+    @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
+    @ApiModelProperty("List of transactions that a credit card has: List<Transaction>")
+    private List<Transaction> transactions = new ArrayList<>();
+
     public CreditCard() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Long getNumCreditCard() {
@@ -135,20 +146,29 @@ public class CreditCard {
         this.user = user;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     @Override
     public String toString() {
-        return "Tarjeta{" +
+        return "CreditCard{" +
                 "id=" + id +
-                ", numeroTarjeta=" + numCreditCard +
+                ", numCreditCard=" + numCreditCard +
                 ", placeholder='" + placeholder + '\'' +
-                ", tipo='" + type + '\'' +
-                ", proveedor='" + cardProvider + '\'' +
-                ", CVV='" + cvv + '\'' +
+                ", type='" + type + '\'' +
+                ", cardProvider='" + cardProvider + '\'' +
+                ", cvv='" + cvv + '\'' +
                 ", pin='" + pin + '\'' +
-                ", fechaExpiracion=" + expirationDate +
+                ", expirationDate=" + expirationDate +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +
                 ", lastModified=" + lastModified +
+                ", user=" + user +
                 '}';
     }
 }

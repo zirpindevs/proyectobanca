@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -35,15 +36,16 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Column(name="credit_cards")
-    @ApiModelProperty("List of credit cards that a user has: List<Tarjeta>")
+    @ApiModelProperty("List of credit cards that a user has: List<CreditCard>")
     private List<CreditCard> creditCards = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_cuenta",
+            name = "users_bank_accounts",
             joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name="cuenta_id", referencedColumnName = "id")}
+            inverseJoinColumns = {@JoinColumn(name="bank_account_id", referencedColumnName = "id")}
     )
+    @Column(name="bank_accounts")
     @ApiModelProperty("Lista de cuentas bancarias asociadas a un usuario: List<Cuenta>")
     private List<BankAccount> bankAccounts = new ArrayList<>();
 
@@ -137,11 +139,11 @@ public class User {
         this.creditCards = creditCards;
     }
 
-    public List<BankAccount> getCuentas() {
+    public List<BankAccount> getBankAccounts() {
         return bankAccounts;
     }
 
-    public void setCuentas(List<BankAccount> bankAccounts) {
+    public void setBankAccounts(List<BankAccount> bankAccounts) {
         this.bankAccounts = bankAccounts;
     }
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue
@@ -22,6 +23,10 @@ public class Category {
     public Category() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -30,9 +35,17 @@ public class Category {
         this.nombre = nombre;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     @Override
     public String toString() {
-        return "Categorias{" +
+        return "Category{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 '}';

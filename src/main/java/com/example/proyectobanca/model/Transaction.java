@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
@@ -32,12 +33,26 @@ public class Transaction {
     private BankAccount bankAccount;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_credit_card")
+    @JsonIgnore
+    @ApiModelProperty("Credit card to which a single transaction belongs: CreditCard")
+    private CreditCard creditCard;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_category")
     @JsonIgnore
     @ApiModelProperty("Category to which a single transaction belongs: Category")
     private Category category;
 
     public Transaction() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getImporte() {
@@ -72,14 +87,41 @@ public class Transaction {
         this.createdDate = createdDate;
     }
 
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
-        return "Movimientos{" +
+        return "Transaction{" +
                 "id=" + id +
                 ", importe=" + importe +
                 ", concepto='" + concepto + '\'' +
                 ", tipoMovimiento='" + tipoMovimiento + '\'' +
                 ", createdDate=" + createdDate +
+                ", bankAccount=" + bankAccount +
+                ", creditCard=" + creditCard +
+                ", category=" + category +
                 '}';
     }
 }
