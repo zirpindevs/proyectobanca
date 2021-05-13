@@ -7,10 +7,12 @@ import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 
+@Service
 public class BankAccountServiceImpl implements BankAccountService {
     private final Logger log = LoggerFactory.getLogger(BankAccountDAOImpl.class);
 
@@ -64,12 +66,6 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public void deletBankAccount(BankAccount bankAccounttToDelete) {
-
-    }
-
-
-    @Override
     public List<BankAccount> findAll() {
         log.info("REST request to find all BankAccounts");
 
@@ -85,11 +81,10 @@ public class BankAccountServiceImpl implements BankAccountService {
         return this.bankAccountDAO.findById(id);
     }
 
-/*
     @Override
     public void deleteBankAccount(BankAccount bankAccountToDelete) {
         log.info("REST request to BankAccount an BankAccount by id");
         this.bankAccountRepository.deleteById(bankAccountToDelete.getId());
-    }*/
+    }
 
 }

@@ -51,9 +51,7 @@ public class BankAccountController {
      */
     @PostMapping("/bankaccounts")
     public ResponseEntity<BankAccount> createBankAccount(@RequestBody BankAccount bankAccountToCreate) throws URISyntaxException {
-        log.debug("REST request to create new a creditcard: {} ", bankAccountToCreate);
-
-        System.out.println(bankAccountToCreate);
+        log.debug("REST request to create new a BankAccount: {} ", bankAccountToCreate);
 
         if (bankAccountToCreate.getNumeroCuenta() == null || bankAccountToCreate.getUsers() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -84,12 +82,12 @@ public class BankAccountController {
      * @return ResponseEntity<BankAccount>
      */
     @PutMapping("/bankaccounts")
-    public ResponseEntity<BankAccount> updateCreditCard(@RequestBody BankAccount modifiedBankAccount) {
+    public ResponseEntity<BankAccount> updateBankAccount(@RequestBody BankAccount modifiedBankAccount) {
         log.debug("REST request to update one BankAccount: {} ", modifiedBankAccount);
 
 
         if (modifiedBankAccount.getId() == null) {
-            log.warn("update creditcard without id");
+            log.warn("update BankAccount without id");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -104,11 +102,11 @@ public class BankAccountController {
 
     /**
      * FIND ALL BANKACCOUNTS
-     * @return List<CreditCard>
+     * @return List<BankAccount>
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/creditcards")
-    public List<BankAccount> findAllCreditCards(){
-        log.debug("REST request to find all creditcards");
+    @RequestMapping(method = RequestMethod.GET, value = "/bankaccounts")
+    public List<BankAccount> findAllBankAccount(){
+        log.debug("REST request to find all BankAccounts");
 
         return this.bankAccountRepository.findAll();
     }
@@ -117,38 +115,38 @@ public class BankAccountController {
      * FIND BANKACCOUNTS BY ID
      *
      * @param id
-     * @return ResponseEntity<CreditCard>
+     * @return ResponseEntity<BankAccount>
      * @throws URISyntaxException
      */
-/*    @GetMapping("/creditcards/{id}")
-    public ResponseEntity<CreditCard> findCreditCardById(@PathVariable Long id) throws URISyntaxException {
-        CreditCard findCreditCard = this.creditCardService.findOne(id);
+    @GetMapping("/bankaccounts/{id}")
+    public ResponseEntity<BankAccount> findBankAccountById(@PathVariable Long id) throws URISyntaxException {
+        BankAccount findBankAccount = this.bankAccountService.findOne(id);
 
-        if (findCreditCard == null)
+        if (findBankAccount == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return ResponseEntity.ok().body(findCreditCard);
+        return ResponseEntity.ok().body(findBankAccount);
 
-    }*/
+    }
 
     /**
-     * DELETE CREDIT CARD
+     * DELETE BANKACCOUNTS
      * @param id
      * @return
      */
- /*   @DeleteMapping("/creditcards/{id}")
-    public ResponseEntity<Void> deleteCreditCard(@PathVariable Long id){
-        log.debug("REST request to delete a creditcard: {} ", id);
+    @DeleteMapping("/bankaccounts/{id}")
+    public ResponseEntity<Void> deleteBankAccount(@PathVariable Long id){
+        log.debug("REST request to delete a BankAccount: {} ", id);
 
-        CreditCard creditCardtToDelete = this.creditCardService.findOne(id);
+        BankAccount bankAccountToDelete = this.bankAccountService.findOne(id);
 
-        if (creditCardtToDelete.getId() == null) {
-            log.warn("creditcard not exists");
+        if (bankAccountToDelete.getId() == null) {
+            log.warn("BankAccount not exists");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        this.creditCardService.deleteCreditCard(creditCardtToDelete);
-        return ResponseEntity.noContent().build();
-    }*/
+        this.bankAccountService.deleteBankAccount(bankAccountToDelete);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

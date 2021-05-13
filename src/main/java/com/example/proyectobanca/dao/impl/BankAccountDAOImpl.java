@@ -1,6 +1,8 @@
 package com.example.proyectobanca.dao.impl;
 
+import com.example.proyectobanca.dao.BankAccountDAO;
 import com.example.proyectobanca.model.BankAccount;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -8,11 +10,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-public class BankAccountDAOImpl {
+@Repository
+public class BankAccountDAOImpl implements BankAccountDAO {
+
     @PersistenceContext
     private EntityManager manager;
 
-/*    @Override
+    @Override
     public BankAccount findById(Long id){
 
         CriteriaBuilder builder = manager.getCriteriaBuilder();
@@ -28,5 +32,5 @@ public class BankAccountDAOImpl {
         }
 
         return bankAccount;
-    }*/
+    }
 }

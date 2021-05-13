@@ -8,7 +8,7 @@ import java.util.List;
 public interface BankAccountService {
     BankAccount createBankAccount(BankAccount bankAccount);
     BankAccount updateBankAccount(BankAccount modifiedBankAccount);
-    void deletBankAccount(BankAccount bankAccounttToDelete);
+    void deleteBankAccount(BankAccount bankAccountToDelete);
 
     BankAccount findOne(Long id);
     List<BankAccount> findAll();
