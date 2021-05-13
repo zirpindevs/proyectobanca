@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public class TransactionController {
 
-    private final Logger log = LoggerFactory.getLogger(com.example.proyectobanca.controller.CreditCardController.class);
+    private final Logger log = LoggerFactory.getLogger(Transaction.class);
 
     private final TransactionService transactionService;
 
@@ -36,7 +36,7 @@ public class TransactionController {
      */
     @PostMapping("/transactions")
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transactiontoCreate) throws URISyntaxException {
-        log.debug("REST request to create new a creditcard: {} ", transactiontoCreate);
+        log.debug("REST request to create new a Transaction: {} ", transactiontoCreate);
 
         if (transactiontoCreate.getBankAccount() == null || transactiontoCreate.getImporte() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -100,7 +100,7 @@ public class TransactionController {
      * FIND TRANSACTIONS BY ID
      *
      * @param id
-     * @return ResponseEntity<CreditCard>
+     * @return ResponseEntity<Transaction>
      * @throws URISyntaxException
      */
     @GetMapping("/transactions/{id}")
