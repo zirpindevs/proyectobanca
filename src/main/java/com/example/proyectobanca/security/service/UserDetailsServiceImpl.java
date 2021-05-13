@@ -20,11 +20,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+    public UserDetails loadUserByUsername(String nif) throws UsernameNotFoundException {
+        User user = userRepository.findByNif(nif)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + nif));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),user.getPassword(),new ArrayList<>());
+                user.getNif(),user.getPassword(),new ArrayList<>());
     }
 }

@@ -2,16 +2,16 @@ package com.example.proyectobanca.payload.request;
 
 public class SignupRequest {
 
-    private String username;
+    private String nif;
     private String email;
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getNif() {
+        return nif;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNif(String nif) {
+        this.nif = nif;
     }
 
     public String getEmail() {

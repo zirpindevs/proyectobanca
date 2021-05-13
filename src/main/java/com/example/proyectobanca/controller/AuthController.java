@@ -56,10 +56,10 @@ public class AuthController<JwtUtils> {
     public ResponseEntity<MessageResponse> registerUser(@RequestBody SignupRequest signUpRequest) {
 
         // Check 1: username
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userRepository.existsByNif(signUpRequest.getNif())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Error: Nif is already taken!"));
         }
 
         // Check 2: email
@@ -70,7 +70,7 @@ public class AuthController<JwtUtils> {
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
+        User user = new User(signUpRequest.getNif(),
                             signUpRequest.getEmail(),
                             encoder.encode(signUpRequest.getPassword()));
 

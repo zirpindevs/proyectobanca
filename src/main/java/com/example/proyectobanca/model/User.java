@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String nif;
 
     private String email;
 
@@ -25,6 +25,9 @@ public class User {
 
     @Column(name="last_name")
     private String lastName;
+
+    @Column(name="number_phone")
+    private String numberPhone;
 
     private Boolean enabled;
 
@@ -53,8 +56,8 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
-        this.username = username;
+    public User(String nif, String email, String password) {
+        this.nif = nif;
         this.email = email;
         this.password = password;
     }
@@ -67,12 +70,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNif() {
+        return nif;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNif(String nif) {
+        this.nif = nif;
     }
 
     public String getEmail() {
@@ -105,6 +108,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
     }
 
     public Boolean getEnabled() {
@@ -151,11 +162,12 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", nif='" + nif + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", numberPhone='" + numberPhone + '\'' +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +
                 ", lastModified=" + lastModified +
