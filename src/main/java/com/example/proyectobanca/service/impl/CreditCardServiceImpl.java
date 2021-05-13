@@ -1,6 +1,6 @@
-package com.example.proyectobanca.Service.impl;
+package com.example.proyectobanca.service.impl;
 
-import com.example.proyectobanca.Service.CreditCardService;
+import com.example.proyectobanca.service.CreditCardService;
 import com.example.proyectobanca.dao.CreditCardDAO;
 import com.example.proyectobanca.model.CreditCard;
 import com.example.proyectobanca.repository.CreditCardRepository;
@@ -12,13 +12,13 @@ import java.time.Instant;
 import java.util.List;
 
 @Service
-public class CreditCardImpl implements CreditCardService {
-    private final Logger log = LoggerFactory.getLogger(CreditCardImpl.class);
+public class CreditCardServiceImpl implements CreditCardService {
+    private final Logger log = LoggerFactory.getLogger(CreditCardServiceImpl.class);
 
     private final CreditCardRepository creditCardRepository;
     private final CreditCardDAO creditCardDAO;
 
-    public CreditCardImpl(CreditCardRepository creditCardRepository, CreditCardDAO creditCardDAO) {
+    public CreditCardServiceImpl(CreditCardRepository creditCardRepository, CreditCardDAO creditCardDAO) {
         this.creditCardRepository = creditCardRepository;
         this.creditCardDAO = creditCardDAO;
     }
@@ -30,17 +30,14 @@ public class CreditCardImpl implements CreditCardService {
 
         CreditCard creditCardCreated = null;
 
-        if (creditCard.getId() == null) {
             try{
                 creditCard.setCreatedDate(Instant.now());
                 creditCard.setLastModified(Instant.now());
-              //***********  creditCardCreated = creditCardRepository.save(creditCard);
+                creditCardCreated = creditCardRepository.save(creditCard);
             }catch(Exception e) {
                 log.error("Cannot save the creditcard: {} , error : {}", creditCard, e);
             }
-        }else{
-            log.warn("Creating creditcard with id");
-        }
+
         return creditCardCreated;
     }
 
@@ -49,27 +46,23 @@ public class CreditCardImpl implements CreditCardService {
     @Override
     public CreditCard updateCreditCard(CreditCard modifiedCreditCard) {
 
-        log.debug("Update a expert: {}", modifiedCreditCard);
+        log.debug("Update a CreditCard: {}", modifiedCreditCard);
 
-/*        CreditCard updatedCreditCard = null;
-        CreditCard findedCreditCard = expertDAO.findById(modifiedExpert.getId());
+        CreditCard updatedCreditCard = null;
+        CreditCard findedCreditCard = creditCardDAO.findById(modifiedCreditCard.getId());
 
-        if (findedExpert != null) {
-            if(findedExpert.getTags() != null)
-                existingTags = findedExpert.getTags();
+        if (findedCreditCard != null) {
 
             try{
-                modifiedExpert.setLast_updated(Instant.now());
-                modifiedExpert.setTags(existingTags);
-                updatedExpert = expertRepository.save(modifiedExpert);
+                modifiedCreditCard.setLastModified(Instant.now());
+                updatedCreditCard = creditCardRepository.save(modifiedCreditCard);
             }catch(Exception e){
-                log.error("Cannot save expert: {} , error : {}", modifiedExpert, e);
+                log.error("Cannot save CreditCard: {} , error : {}", modifiedCreditCard, e);
             }
         }else{
-            log.warn("Cannot save expert: {}, because it doesn´t exist", updatedExpert);
+            log.warn("Cannot save CreditCard: {}, because it doesn´t exist", updatedCreditCard);
         }
-        return updatedExpert;*/
-        return null;
+        return updatedCreditCard;
     }
 
 

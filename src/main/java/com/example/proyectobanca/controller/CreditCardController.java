@@ -1,13 +1,10 @@
 package com.example.proyectobanca.controller;
 
-import com.example.proyectobanca.Service.CreditCardService;
+import com.example.proyectobanca.service.CreditCardService;
 import com.example.proyectobanca.model.CreditCard;
 import com.example.proyectobanca.repository.CreditCardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +42,13 @@ public class CreditCardController {
     public ResponseEntity<CreditCard> createCreditCard(@RequestBody CreditCard creditCardtoCreate) throws URISyntaxException {
         log.debug("REST request to create new a creditcard: {} ", creditCardtoCreate);
 
+        System.out.println(creditCardtoCreate);
 
-        if (creditCardtoCreate.getNumCreditCard() == null)
+        if (creditCardtoCreate.getPlaceholder() == null || creditCardtoCreate.getNumCreditCard() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        Optional<CreditCard> checkCreditCard = this.creditCardRepository.findById(creditCardtoCreate.getId());
+        CreditCard checkCreditCard = this.creditCardRepository.findBynumCreditCard(creditCardtoCreate.getNumCreditCard());
+
 
         if(checkCreditCard == null) {
             CreditCard createCreditCard = this.creditCardService.createCreditCard(creditCardtoCreate);

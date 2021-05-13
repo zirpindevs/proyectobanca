@@ -1,4 +1,4 @@
-package com.example.proyectobanca.Service;
+package com.example.proyectobanca.service;
 
 import com.example.proyectobanca.model.CreditCard;
 
