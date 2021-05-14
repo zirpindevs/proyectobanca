@@ -12,8 +12,8 @@ insert into categories(name) values ('Alimentación');
 insert into categories(name) values ('Otros');
 
 -- Bank Account examples
-insert into bank_accounts(id, numero_cuenta, saldo, created_date) values (1, '02601732345271851', '500', "2020-02-11 01:00:00");
-insert into bank_accounts(id, numero_cuenta, saldo, created_date) values (2, '07941320452229156', '1500', "2019-02-11 01:00:00");
+insert into bank_accounts(id, num_account, balance, enabled, created_date) values (1, '02601732345271851', '500', true, "2020-02-11 01:00:00");
+insert into bank_accounts(id, num_account, balance, enabled, created_date) values (2, '07941320452229156', '1500', true, "2019-02-11 01:00:00");
 
 
 -- Credit Card examples

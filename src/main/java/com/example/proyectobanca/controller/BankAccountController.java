@@ -1,14 +1,18 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.BankAccount;
+import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -42,6 +46,36 @@ public class BankAccountController {
         this.bankAccountRepository = bankAccountRepository;
     }
 
+    /**
+     * FIND ALL BANKACCOUNTS
+     * @return List<BankAccount>
+     */
+    @ApiOperation("Get all BankAccounts")
+    @RequestMapping(method = RequestMethod.GET, value = "/bankaccounts")
+    public List<BankAccount> findAllBankAccount(){
+        log.debug("REST request to find all BankAccounts");
+
+        return this.bankAccountRepository.findAll();
+    }
+
+    /**
+     * FIND BANKACCOUNTS BY ID
+     *
+     * @param id
+     * @return ResponseEntity<BankAccount>
+     * @throws URISyntaxException
+     */
+    @ApiOperation("Get all BankAccounts by id")
+    @GetMapping("/bankaccounts/{id}")
+    public ResponseEntity<BankAccount> findBankAccountById(@ApiParam("Primary key of bankaccounts: Long") @PathVariable Long id) throws URISyntaxException {
+        BankAccount findBankAccount = this.bankAccountService.findOne(id);
+
+        if (findBankAccount == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return ResponseEntity.ok().body(findBankAccount);
+
+    }
 
     /**
      * CREATE BANKACCOUNTS
@@ -50,10 +84,13 @@ public class BankAccountController {
      * @throws URISyntaxException
      */
     @PostMapping("/bankaccounts")
-    public ResponseEntity<BankAccount> createBankAccount(@RequestBody BankAccount bankAccountToCreate) throws URISyntaxException {
+    @ApiOperation("Get all BankAccounts")
+    public ResponseEntity<BankAccount> createBankAccount(
+            @ApiParam("BankAccounts that you want to create: BankAccounts")
+            @RequestBody BankAccount bankAccountToCreate) throws URISyntaxException {
         log.debug("REST request to create new a BankAccount: {} ", bankAccountToCreate);
 
-        if (bankAccountToCreate.getNumeroCuenta() == null || bankAccountToCreate.getUsers() == null)
+        if (bankAccountToCreate.getNumAccount() == null || bankAccountToCreate.getUsers() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         BankAccount checkbankAccount = this.bankAccountRepository.findBynumeroCuenta(bankAccountToCreate.getNumeroCuenta());
@@ -63,7 +100,7 @@ public class BankAccountController {
             BankAccount createBankAccount = this.bankAccountService.createBankAccount(bankAccountToCreate);
 
             return ResponseEntity
-                    .created(new URI("/api/etiquetas/" + bankAccountToCreate.getNumeroCuenta()))
+                    .created(new URI("/api/etiquetas/" + bankAccountToCreate.getNumAccount()))
                     .body(bankAccountToCreate);
         }
         else
@@ -82,52 +119,30 @@ public class BankAccountController {
      * @return ResponseEntity<BankAccount>
      */
     @PutMapping("/bankaccounts")
-    public ResponseEntity<BankAccount> updateBankAccount(@RequestBody BankAccount modifiedBankAccount) {
-        log.debug("REST request to update one BankAccount: {} ", modifiedBankAccount);
+    @ApiOperation("Update enable property BankAccount in DB")
+    public ResponseEntity<BankAccount> updateBankAccount(
+            @ApiParam("BankAccount that you want to update enable estatus: BankAccount") @RequestBody BankAccount modifiedBankAccount) {
 
+        log.debug("REST request to update enable status of BankAccount: {} ", modifiedBankAccount);
 
-        if (modifiedBankAccount.getId() == null) {
-            log.warn("update BankAccount without id");
+        if(modifiedBankAccount.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        BankAccount updateBankAccount = this.bankAccountService.updateBankAccount(modifiedBankAccount);
+        BankAccount result = bankAccountService.updateBankAccount(modifiedBankAccount);
 
-        if(updateBankAccount == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (result.getId() == -404L)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok().body(updateBankAccount);
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    }
-
-    /**
-     * FIND ALL BANKACCOUNTS
-     * @return List<BankAccount>
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "/bankaccounts")
-    public List<BankAccount> findAllBankAccount(){
-        log.debug("REST request to find all BankAccounts");
-
-        return this.bankAccountRepository.findAll();
-    }
-
-    /**
-     * FIND BANKACCOUNTS BY ID
-     *
-     * @param id
-     * @return ResponseEntity<BankAccount>
-     * @throws URISyntaxException
-     */
-    @GetMapping("/bankaccounts/{id}")
-    public ResponseEntity<BankAccount> findBankAccountById(@PathVariable Long id) throws URISyntaxException {
-        BankAccount findBankAccount = this.bankAccountService.findOne(id);
-
-        if (findBankAccount == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return ResponseEntity.ok().body(findBankAccount);
+        return ResponseEntity.ok().body(result);
 
     }
+
+
+
+
 
     /**
      * DELETE BANKACCOUNTS

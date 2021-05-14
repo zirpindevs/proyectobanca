@@ -19,16 +19,20 @@ public class BankAccount {
     @Column(name="numero_cuenta")
     private Long numeroCuenta;
 
-    @Column(name="saldo")
-    private Long saldo;
+    @Column(name="balance")
+    @ApiModelProperty("Account balance field: Double")
+    private Double balance;
 
-    @Column(name="enabled")
+    @Column(name="enabled", nullable = false, columnDefinition = "boolean default true")
+    @ApiModelProperty("Account enabled status: Boolean")
     private Boolean enabled;
 
     @Column(name="created_date")
+    @ApiModelProperty("Account  created_date: Instant")
     private Instant createdDate;
 
     @Column(name="last_modified")
+    @ApiModelProperty("Account last_modified: Instant")
     private Instant lastModified;
 
     @ManyToMany(mappedBy = "bankAccounts")
@@ -44,32 +48,36 @@ public class BankAccount {
     public BankAccount() {
     }
 
-    public BankAccount(Long numeroCuenta, Long saldo, Boolean enabled, Instant createdDate, Instant lastModified) {
-        this.numeroCuenta = numeroCuenta;
-        this.saldo = saldo;
+    public BankAccount(Long numeroCuenta, Double balance, Boolean enabled, Instant createdDate, Instant lastModified) {
+        this.numAccount = numeroCuenta;
+        this.balance = balance;
         this.enabled = enabled;
         this.createdDate = createdDate;
         this.lastModified = lastModified;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Long getNumeroCuenta() {
-        return numeroCuenta;
+    public Long getNumAccount() {
+        return numAccount;
     }
 
-    public void setNumeroCuenta(Long numeroCuenta) {
-        this.numeroCuenta = numeroCuenta;
+    public void setNumAccount(Long numAccount) {
+        this.numAccount = numAccount;
     }
 
-    public Long getSaldo() {
-        return saldo;
+    public Double getBalance() {
+        return balance;
     }
 
-    public void setSaldo(Long saldo) {
-        this.saldo = saldo;
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public Boolean getEnabled() {

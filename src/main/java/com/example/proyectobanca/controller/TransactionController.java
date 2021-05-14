@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
+@RestController
+@RequestMapping("/api")
 public class TransactionController {
 
     private final Logger log = LoggerFactory.getLogger(Transaction.class);
@@ -38,8 +40,9 @@ public class TransactionController {
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transactiontoCreate) throws URISyntaxException {
         log.debug("REST request to create new a Transaction: {} ", transactiontoCreate);
 
-        if (transactiontoCreate.getBankAccount() == null || transactiontoCreate.getImporte() == null)
+        if (transactiontoCreate.getImporte() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         Optional<Transaction> checkTransaction = this.transactionRepository.findById(transactiontoCreate.getId());
 

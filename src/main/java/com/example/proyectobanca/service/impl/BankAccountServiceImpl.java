@@ -3,6 +3,7 @@ package com.example.proyectobanca.service.impl;
 import com.example.proyectobanca.dao.BankAccountDAO;
 import com.example.proyectobanca.dao.impl.BankAccountDAOImpl;
 import com.example.proyectobanca.model.BankAccount;
+import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
 import org.slf4j.Logger;
@@ -10,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
@@ -48,21 +51,30 @@ public class BankAccountServiceImpl implements BankAccountService {
 
         log.debug("Update a BankAccount: {}", modifiedBankAccount);
 
-        BankAccount updatedBankAccount = null;
-        BankAccount findedBankAccount = bankAccountDAO.findById(modifiedBankAccount.getId());
+        try {
 
-        if (findedBankAccount != null) {
+            //Optional<BankAccount> beforeUser = bankAccountRepository.findById(modifiedBankAccount.getId());
 
-            try {
-                modifiedBankAccount.setLastModified(Instant.now());
-                updatedBankAccount = bankAccountRepository.save(modifiedBankAccount);
-            } catch (Exception e) {
-                log.error("Cannot save BankAccount: {} , error : {}", modifiedBankAccount, e);
+            modifiedBankAccount = validateFields(modifiedBankAccount);
+
+            if (modifiedBankAccount.getId() == -404L) {
+                BankAccount bankAccountError = new BankAccount();
+                bankAccountError.setId(-404L);
+                return bankAccountError;
             }
-        } else {
-            log.warn("Cannot save BankAccount: {}, because it doesn´t exist", updatedBankAccount);
+
+            modifiedBankAccount.setLastModified(Instant.now());
+            return bankAccountRepository.save(modifiedBankAccount);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            BankAccount bankAccountError = new BankAccount();
+            bankAccountError.setId(-500L);
+            return bankAccountError;
+
         }
-        return updatedBankAccount;
+
     }
 
     @Override
