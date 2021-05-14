@@ -78,8 +78,7 @@ public class BankAccountController {
         if (bankAccountToCreate.getNumAccount() == null || bankAccountToCreate.getUsers() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        BankAccount checkbankAccount = this.bankAccountRepository.findBynumeroCuenta(bankAccountToCreate.getNumeroCuenta());
-
+        BankAccount checkbankAccount = this.bankAccountRepository.findBynumAccount(bankAccountToCreate.getNumAccount());
 
         if(checkbankAccount == null) {
             BankAccount createBankAccount = this.bankAccountService.createBankAccount(bankAccountToCreate);

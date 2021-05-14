@@ -16,8 +16,8 @@ public class BankAccount {
     @GeneratedValue
     private Long id;
 
-    @Column(name="numero_cuenta")
-    private Long numeroCuenta;
+    @Column(name = "num_account", nullable = false, unique = true)
+    private Long numAccount;
 
     @Column(name="balance")
     private Double balance;
@@ -120,8 +120,8 @@ public class BankAccount {
     public String toString() {
         return "BankAccount{" +
                 "id=" + id +
-                ", numeroCuenta=" + numeroCuenta +
-                ", saldo=" + saldo +
+                ", numeroCuenta=" + numAccount +
+                ", balance=" + balance +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +
                 ", lastModified=" + lastModified +

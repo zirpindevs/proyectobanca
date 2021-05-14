@@ -77,6 +77,16 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     }
 
+    private BankAccount validateFields (BankAccount bankAccount){
+
+        if ( bankAccount.getNumAccount() != null || bankAccount.getEnabled() == null){
+            bankAccount = new BankAccount();
+            bankAccount.setId(-404L);
+        }
+
+        return bankAccount;
+    }
+
     @Override
     public List<BankAccount> findAll() {
         log.info("REST request to find all BankAccounts");
