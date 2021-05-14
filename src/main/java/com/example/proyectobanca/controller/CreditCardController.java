@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -76,7 +77,7 @@ public class CreditCardController {
     public ResponseEntity<CreditCard> createCreditCard(@ApiParam("CreditCard that you want to create: CreditCard") @RequestBody CreditCard creditCardtoCreate) throws URISyntaxException {
         log.debug("REST request to create new a creditcard: {} ", creditCardtoCreate);
 
-        if (creditCardtoCreate.getPlaceholder() == null || creditCardtoCreate.getNumCreditCard() == null)
+        if(creditCardtoCreate.getUser() == null && creditCardtoCreate.getNumCreditCard() == null && creditCardtoCreate.getPlaceholder() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         CreditCard checkCreditCard = this.creditCardRepository.findBynumCreditCard(creditCardtoCreate.getNumCreditCard());
