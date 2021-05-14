@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class Category {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="nombre")
-    private String nombre;
+    private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @ApiModelProperty("List of transactions that a category has: List<Transaction>")
@@ -27,12 +27,16 @@ public class Category {
         return id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Transaction> getTransactions() {
@@ -47,7 +51,7 @@ public class Category {
     public String toString() {
         return "Category{" +
                 "id=" + id +
-                ", nombre='" + nombre + '\'' +
+                ", nombre='" + name + '\'' +
                 '}';
     }
 }

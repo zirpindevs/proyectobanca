@@ -1,49 +1,56 @@
 package com.example.proyectobanca.dao.impl;
 
-import com.example.proyectobanca.dao.UserDao;
+import com.example.proyectobanca.dao.CategoryDao;
+import com.example.proyectobanca.model.Category;
 import com.example.proyectobanca.model.User;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
-import javax.transaction.Transactional;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class CategoryDaoImpl implements CategoryDao {
 
     @PersistenceContext
     private EntityManager manager;
 
-    private final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
+    @Autowired
+    private Session session;
+
+    private final Logger log = LoggerFactory.getLogger(CategoryDaoImpl.class);
 
     /**
-     * Get all users with optionals filters options (String name, String pag, String limit)
+     * Get all categories with optionals filters options (String name, String pag, String limit)
      * Dao Method
      * @param map1 map with all filters options (String name, String pag, String limit)
-     * @return List of users from database
+     * @return List of categories from database
      */
     @Override
-    public List<User> findAllByFilters(Map<String, String> map1) {
+    public List<Category> findAllByFilters(Map<String, String> map1) {
 
         try {
 
             CriteriaBuilder builder = manager.getCriteriaBuilder();
-            CriteriaQuery<User> criteria = builder.createQuery(User.class);
-            Root<User> root = criteria.from(User.class);
+            CriteriaQuery<Category> criteria = builder.createQuery(Category.class);
+            Root<Category> root = criteria.from(Category.class);
 
             List<Predicate> predicates = buildPredicatesFilter(map1, builder, root);
 
             criteria.distinct(true).select(root).where(builder.and(predicates.toArray(new Predicate[0])));
 
-            TypedQuery<User> usersQuery = manager.createQuery(criteria);
+            TypedQuery<Category> usersQuery = manager.createQuery(criteria);
 
             if(map1.get("page")!=null && map1.get("limit")!=null){
                 usersQuery.setFirstResult(Integer.parseInt(map1.get("page")));
@@ -55,12 +62,12 @@ public class UserDaoImpl implements UserDao {
         }catch (Exception e){
 
             log.error(e.getMessage());
-            List<User> usersError = new ArrayList<>();
-            User userError = new User();
-            userError.setId(-500L);
-            usersError.add(userError);
+            List<Category> categoriesError = new ArrayList<>();
+            Category categoryError = new Category();
+            categoryError.setId(-500L);
+            categoriesError.add(categoryError);
 
-            return usersError;
+            return categoriesError;
         }
     }
 
@@ -71,7 +78,7 @@ public class UserDaoImpl implements UserDao {
      * @param root
      * @return predicates to sql search
      */
-    private List<Predicate> buildPredicatesFilter(Map<String, String> map1,CriteriaBuilder builder, Root<User> root){
+    private List<Predicate> buildPredicatesFilter(Map<String, String> map1,CriteriaBuilder builder, Root<Category> root){
 
         List<Predicate> predicates = new ArrayList<>();
 

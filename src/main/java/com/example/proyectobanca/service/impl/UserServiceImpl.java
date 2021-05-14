@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
 
             log.error(e.getMessage());
             User userError = new User();
-            userError.setId(-1L);
+            userError.setId(-500L);
 
             return userError;
         }

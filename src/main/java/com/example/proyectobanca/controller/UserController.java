@@ -94,11 +94,11 @@ public class UserController {
         if (result.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        if (result.getId() == -1L)
+        if (result.getId() == -500L)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return ResponseEntity
-                .created(new URI("/api/expertos/" + result.getId()))
+                .created(new URI("/api/users/" + result.getId()))
                 .body(result);
     }
 
