@@ -28,10 +28,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiDetails() {
         return new ApiInfo("AWESOME API",
-                "description",
+                "Bank app Backend",
                 "1.0",
                 "",
-                new Contact("Javier","",""),
+                new Contact("Javier Moreno y Sergio Carrasco","",""),
                 "",
                 "",
                 Collections.emptyList());

@@ -20,19 +20,15 @@ public class BankAccount {
     private Long numeroCuenta;
 
     @Column(name="balance")
-    @ApiModelProperty("Account balance field: Double")
     private Double balance;
 
     @Column(name="enabled", nullable = false, columnDefinition = "boolean default true")
-    @ApiModelProperty("Account enabled status: Boolean")
     private Boolean enabled;
 
     @Column(name="created_date")
-    @ApiModelProperty("Account  created_date: Instant")
     private Instant createdDate;
 
     @Column(name="last_modified")
-    @ApiModelProperty("Account last_modified: Instant")
     private Instant lastModified;
 
     @ManyToMany(mappedBy = "bankAccounts")

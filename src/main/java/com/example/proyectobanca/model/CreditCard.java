@@ -44,7 +44,7 @@ public class CreditCard {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
     @JsonIgnore
-    @ApiModelProperty("User to which a single credid card belongs: User")
+    @ApiModelProperty("User to which a single credit card belongs: User")
     private User user;
 
     @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
