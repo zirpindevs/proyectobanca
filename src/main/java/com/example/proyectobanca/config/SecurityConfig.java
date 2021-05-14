@@ -76,10 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                /* .antMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/users/**").permitAll()
+
                 .antMatchers(HttpMethod.GET, "/api/creditcards/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/creditcards/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/creditcards/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/creditcards/**").permitAll()
+
                 .antMatchers(HttpMethod.GET, "/api/bankaccounts/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/bankaccounts/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/bankaccounts/**").permitAll()
@@ -88,6 +90,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/categories/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/categories/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/categories/**").permitAll()*/
+
+                .antMatchers(HttpMethod.GET, "/api/transactions/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/transactions/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/transactions/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/transactions/**").permitAll()
 
                 .anyRequest().authenticated();
 
