@@ -27,3 +27,9 @@ insert into transactions(id, importe, concepto, tipo_movimiento, id_bank_account
 insert into transactions(id, importe, concepto, tipo_movimiento, id_bank_account, created_date) values (2, '500', "nomina", 'domiciliacion', 2, "2021-04-11 01:00:00");
 
 
+
+-- RELATIONS USER-BANKACCOUNTS examples
+
+insert into users_bank_accounts(user_id, bank_account_id) values (1, 1);
+insert into users_bank_accounts(user_id, bank_account_id) values (2, 2);
+
