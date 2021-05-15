@@ -44,8 +44,8 @@ public class BankAccount {
     public BankAccount() {
     }
 
-    public BankAccount(Long numeroCuenta, Double balance, Boolean enabled, Instant createdDate, Instant lastModified) {
-        this.numAccount = numeroCuenta;
+    public BankAccount(Long numAccount, Double balance, Boolean enabled, Instant createdDate, Instant lastModified) {
+        this.numAccount = numAccount;
         this.balance = balance;
         this.enabled = enabled;
         this.createdDate = createdDate;
@@ -120,7 +120,7 @@ public class BankAccount {
     public String toString() {
         return "BankAccount{" +
                 "id=" + id +
-                ", numeroCuenta=" + numAccount +
+                ", numAccount=" + numAccount +
                 ", balance=" + balance +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +
