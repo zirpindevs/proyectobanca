@@ -109,13 +109,19 @@ public class BankAccountController {
 
         log.debug("REST request to update enable status of BankAccount: {} ", modifiedBankAccount);
 
-        if(modifiedBankAccount.getId() == null)
+        if(modifiedBankAccount.getId() == null && modifiedBankAccount.getNumAccount() == null){
+            System.out.println("por controler1");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
+        }
 
         BankAccount result = bankAccountService.updateBankAccount(modifiedBankAccount);
 
-        if (result.getId() == -404L)
+        if (result.getId() == -404L) {
+            System.out.println("por controler2");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         if (result.getId() == -500L)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
