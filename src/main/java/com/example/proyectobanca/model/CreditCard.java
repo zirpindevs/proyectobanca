@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "credit_cards")
 public class CreditCard {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="num_credit_card")
