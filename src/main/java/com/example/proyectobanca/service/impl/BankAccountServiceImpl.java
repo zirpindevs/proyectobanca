@@ -54,14 +54,12 @@ public class BankAccountServiceImpl implements BankAccountService {
     public BankAccount updateBankAccount(BankAccount modifiedBankAccount) {
 
         log.debug("Update a BankAccount: {}", modifiedBankAccount);
-
+        BankAccount checkModifiedBankAccount = null;
         try {
 
-            //Optional<BankAccount> beforeUser = bankAccountRepository.findById(modifiedBankAccount.getId());
+            checkModifiedBankAccount = validateFields(modifiedBankAccount);
 
-            modifiedBankAccount = validateFields(modifiedBankAccount);
-
-            if (modifiedBankAccount.getId() == -404L) {
+            if (checkModifiedBankAccount.getId() == -404L) {
                 BankAccount bankAccountError = new BankAccount();
                 bankAccountError.setId(-404L);
                 return bankAccountError;
@@ -79,6 +77,15 @@ public class BankAccountServiceImpl implements BankAccountService {
 
         }
 
+    }
+
+    private BankAccount validateFields (BankAccount bankAccount){
+
+        if ( bankAccount.getNumAccount() == null || bankAccount.getEnabled() == null){
+            bankAccount.setId(-404L);
+        }
+
+        return bankAccount;
     }
 
     @Override

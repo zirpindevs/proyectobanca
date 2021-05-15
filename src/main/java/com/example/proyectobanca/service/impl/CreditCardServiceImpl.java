@@ -37,7 +37,6 @@ public class CreditCardServiceImpl implements CreditCardService {
             }catch(Exception e) {
                 log.error("Cannot save the creditcard: {} , error : {}", creditCard, e);
             }
-
         return creditCardCreated;
     }
 

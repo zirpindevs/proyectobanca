@@ -1,7 +1,6 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.BankAccount;
-import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
 import io.swagger.annotations.ApiOperation;
@@ -20,20 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class BankAccountController {
-
-/* ENDPOINTS
-
-    Cuentas:
-            •	Get all
-•	Get one by ID
-•	Get by Filters:
-    o	Get all by User
-    o	Get Ingresos/gastos by Fecha
-•	Create Cuenta
-•	Update by ID
-•	Delete by ID
-
-*/
 
     private final Logger log = LoggerFactory.getLogger(BankAccount.class);
 
@@ -95,7 +80,6 @@ public class BankAccountController {
 
         BankAccount checkbankAccount = this.bankAccountRepository.findBynumAccount(bankAccountToCreate.getNumAccount());
 
-
         if(checkbankAccount == null) {
             BankAccount createBankAccount = this.bankAccountService.createBankAccount(bankAccountToCreate);
 
@@ -121,17 +105,23 @@ public class BankAccountController {
     @PutMapping("/bankaccounts")
     @ApiOperation("Update enable property BankAccount in DB")
     public ResponseEntity<BankAccount> updateBankAccount(
-            @ApiParam("BankAccount that you want to update enable estatus: BankAccount") @RequestBody BankAccount modifiedBankAccount) {
+            @ApiParam("BankAccount that you want to update enable status: BankAccount") @RequestBody BankAccount modifiedBankAccount) {
 
         log.debug("REST request to update enable status of BankAccount: {} ", modifiedBankAccount);
 
-        if(modifiedBankAccount.getId() == null)
+        if(modifiedBankAccount.getId() == null && modifiedBankAccount.getNumAccount() == null){
+            System.out.println("por controler1");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+
+        }
 
         BankAccount result = bankAccountService.updateBankAccount(modifiedBankAccount);
 
-        if (result.getId() == -404L)
+        if (result.getId() == -404L) {
+            System.out.println("por controler2");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         if (result.getId() == -500L)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -141,16 +131,14 @@ public class BankAccountController {
     }
 
 
-
-
-
     /**
      * DELETE BANKACCOUNTS
      * @param id
      * @return
      */
     @DeleteMapping("/bankaccounts/{id}")
-    public ResponseEntity<Void> deleteBankAccount(@PathVariable Long id){
+    @ApiOperation("Delete bankaccount of DB by Id")
+    public ResponseEntity<Void> deleteBankAccount(@ApiParam("Primary key of bankaccount: Long") @PathVariable Long id){
         log.debug("REST request to delete a BankAccount: {} ", id);
 
         BankAccount bankAccountToDelete = this.bankAccountService.findOne(id);
