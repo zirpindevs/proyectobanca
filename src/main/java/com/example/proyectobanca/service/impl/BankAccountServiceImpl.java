@@ -45,6 +45,10 @@ public class BankAccountServiceImpl implements BankAccountService {
         return bankAccountCreated;
     }
 
+    private BankAccount validateFields(BankAccount bankAccount){
+        return new BankAccount();
+    }
+
 
     @Override
     public BankAccount updateBankAccount(BankAccount modifiedBankAccount) {

@@ -13,11 +13,11 @@ import java.util.List;
 public class BankAccount {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="numero_cuenta")
-    private Long numeroCuenta;
+    @Column(name="num_account")
+    private Long numAccount;
 
     @Column(name="balance")
     @ApiModelProperty("Account balance field: Double")
@@ -37,7 +37,7 @@ public class BankAccount {
 
     @ManyToMany(mappedBy = "bankAccounts")
     @JsonIgnore
-    @ApiModelProperty("Lista de usuarios asociados a una cuenta: List<User>")
+    @ApiModelProperty("List of users that a bank account has: List<User>")
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "bankAccount", cascade = CascadeType.ALL)
@@ -48,20 +48,20 @@ public class BankAccount {
     public BankAccount() {
     }
 
-    public BankAccount(Long numeroCuenta, Double balance, Boolean enabled, Instant createdDate, Instant lastModified) {
-        this.numAccount = numeroCuenta;
+    public BankAccount(Long numAccount, Double balance, Boolean enabled, Instant createdDate, Instant lastModified) {
+        this.numAccount = numAccount;
         this.balance = balance;
         this.enabled = enabled;
         this.createdDate = createdDate;
         this.lastModified = lastModified;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getNumAccount() {
@@ -124,8 +124,8 @@ public class BankAccount {
     public String toString() {
         return "BankAccount{" +
                 "id=" + id +
-                ", numeroCuenta=" + numeroCuenta +
-                ", saldo=" + saldo +
+                ", numeroCuenta=" + numAccount +
+                ", balance=" + balance +
                 ", enabled=" + enabled +
                 ", createdDate=" + createdDate +
                 ", lastModified=" + lastModified +

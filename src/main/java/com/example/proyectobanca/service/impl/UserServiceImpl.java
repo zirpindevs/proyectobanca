@@ -17,10 +17,7 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -58,7 +55,6 @@ public class UserServiceImpl implements UserService {
         }catch (Exception e){
 
             log.error(e.getMessage());
-            e.printStackTrace();
             List<User> usersError = new ArrayList<>();
             User userError = new User();
             userError.setId(-500L);
@@ -104,31 +100,54 @@ public class UserServiceImpl implements UserService {
 
         try {
 
-            Optional<User> userExist = repository.findOneByNif(user.getNif());
+            User userValidate = createValidateFields(user);
+            User userVacio = new User();
+            if (ObjectUtils.isEmpty(userValidate.getNif()))
+                return userValidate;
 
-            if (!ObjectUtils.isEmpty(userExist))
-                return new User();
-
-            Boolean userEmailExist = repository.existsByEmail(user.getEmail());
-
-            if (userEmailExist)
-                return new User();
-
-
-            user.setCreatedAt(LocalDateTime.now());
-            user.setStatus(UserStatus.pendiente);
-            user.setEnabled(false);
-
-            return repository.save(user);
+            return repository.save(userValidate);
 
         }catch (Exception e){
 
             log.error(e.getMessage());
+            e.printStackTrace();
             User userError = new User();
             userError.setId(-500L);
 
             return userError;
         }
+    }
+
+    private User createValidateFields (User user){
+
+        if ( user.getNif() == null || user.getEmail() == null || user.getPassword() == null || user.getName() == null || user.getLastName() == null){
+
+            user = new User();
+           // user.setId(-404L);
+
+        }else {
+
+            Optional<User> userExist = repository.findOneByNif(user.getNif());
+            if (!ObjectUtils.isEmpty(userExist))
+                return new User();
+
+            Boolean userEmailExist = repository.existsByEmail(user.getEmail());
+            if (userEmailExist)
+                return new User();
+
+            Boolean numberPhoneExist = repository.existsByNumberPhone(user.getNumberPhone());
+            if (numberPhoneExist)
+                return new User();
+
+
+            if ( user.getEnabled() == null)
+                user.setEnabled(true);
+
+            user.setCreatedAt(LocalDateTime.now());
+            user.setStatus(UserStatus.pendiente);
+        }
+
+        return user;
     }
 
     /**
