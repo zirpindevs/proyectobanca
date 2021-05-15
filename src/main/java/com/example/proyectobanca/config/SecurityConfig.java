@@ -68,13 +68,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-
-
-                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+               /* .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/creditcards/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/bankaccounts/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/transactions/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/transactions/**").permitAll()*/
+
+                .antMatchers(HttpMethod.GET, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/users/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/users/**").permitAll()
@@ -97,7 +97,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/transactions/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/transactions/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/transactions/**").permitAll()
-
 
                 .anyRequest().authenticated();
 

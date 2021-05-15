@@ -1,5 +1,6 @@
 package com.example.proyectobanca.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
@@ -15,27 +16,42 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    @ApiModelProperty("Nif of user: String")
     private String nif;
 
+    @Column(nullable = false,  unique = true)
+    @ApiModelProperty("Contact email of User: String")
     private String email;
 
+    @Column(nullable = false)
+    @ApiModelProperty("Password to Login: String")
     private String password;
 
+    @Column(nullable = false)
+    @ApiModelProperty("Name of user: String")
     private String name;
 
-    @Column(name="last_name")
+    @Column(name="last_name", nullable = false)
+    @ApiModelProperty("Last name of user: String")
     private String lastName;
 
-    @Column(name="number_phone")
+    @Column(name="number_phone", unique = true)
+    @ApiModelProperty("Contact phone of user: String")
     private String numberPhone;
 
-    @Column(nullable = false, columnDefinition = "Boolean default false")
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    @ApiModelProperty("Specifies if a user is enabled on the system: Boolean")
     private Boolean enabled;
 
-    @Column(name="created_at")
+    @Column(name = "created_at" ,nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("Created date: LocalDateTime")
     private LocalDateTime createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("Update date: LocalDateTime")
     private LocalDateTime updatedAt;
 
     @Column(nullable = false, columnDefinition = "varchar(255) default 'pendiente'")
@@ -52,10 +68,11 @@ public class User {
     @JoinTable(
             name = "users_bank_accounts",
             joinColumns = {@JoinColumn(name="user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name="bank_account_id", referencedColumnName = "id")}
+            inverseJoinColumns = {@JoinColumn(name="bank_account_id", referencedColumnName = "id")},
+            uniqueConstraints = {@UniqueConstraint(columnNames = { "user_id", "bank_account_id" })}
     )
     @Column(name="bank_accounts")
-    @ApiModelProperty("Lista de cuentas bancarias asociadas a un usuario: List<Cuenta>")
+    @ApiModelProperty("List of bank accounts that a user has: List<BankAccount>")
     private List<BankAccount> bankAccounts = new ArrayList<>();
 
 

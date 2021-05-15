@@ -3,6 +3,7 @@ package com.example.proyectobanca.service.impl;
 import com.example.proyectobanca.dao.CategoryDao;
 import com.example.proyectobanca.model.Category;
 import com.example.proyectobanca.model.User;
+import com.example.proyectobanca.model.UserStatus;
 import com.example.proyectobanca.repository.CategoryRepository;
 import com.example.proyectobanca.service.CategoryService;
 import org.hibernate.Session;
@@ -10,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -91,19 +94,91 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * Create a new category in database - Service
+     * @param category Category to create
+     * @return category created in database
+     */
     @Override
-    public Category createOne(Category tag) {
-        return null;
+    public Category createOne(Category category) {
+
+        try {
+
+            Boolean exist = repository.existsByName(category.getName());
+
+            if (exist)
+                return new Category();
+
+            return repository.save(category);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            Category categoryError = new Category();
+            categoryError.setId(-500L);
+
+            return categoryError;
+        }
     }
 
+    /**
+     * It update a category of database - Service
+     * @param category to update
+     * @return category updated in database
+     */
     @Override
-    public Category updateOne(Long id, Category tag) {
-        return null;
+    public Category updateOne(Long id, Category category) {
+
+        try {
+
+            boolean exist = repository.existsById(id);
+
+            if (!exist){
+                Category categoryError = new Category();
+                categoryError.setId(-404L);
+                return categoryError;
+            }
+
+            return repository.save(category);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            Category categoryError = new Category();
+            categoryError.setId(-500L);
+            return categoryError;
+
+        }
     }
 
+    /**
+     * Delete category of database by ID - Service
+     * @param id category primary key that you want to delete
+     * @return Optional<Boolean>
+     */
     @Override
-    public Optional<Boolean> deleteOne(Long id) {
-        return Optional.empty();
+    public Optional<Boolean> deleteOne(Long id){
+
+        try {
+            if (id != null && repository.existsById(id)) {
+
+                // TODO - ELIMINAR LA RELACIÓN CON CUENTAS BANCARIAS
+                // Optional<Boolean> result = userDao.deleteUsersBankAccountsRelation(id);
+
+           /*     if (Objects.equals(result, Optional.of(true))){
+                    repository.deleteById(id);
+                }*/
+
+                repository.deleteById(id);
+
+                return Optional.of(true);
+            }
+            return Optional.of(false);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return Optional.empty();
+        }
+
     }
 
     @Override

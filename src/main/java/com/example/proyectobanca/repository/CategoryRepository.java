@@ -6,4 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Category findOneByName(String name);
+
+    boolean existsById(Long id);
+
+    Boolean existsByName(String name);
 }

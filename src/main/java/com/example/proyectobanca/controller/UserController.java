@@ -45,7 +45,7 @@ public class UserController {
         List<User> usersDB = userService.findAll(map1);
 
         if (usersDB.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         if (usersDB.get(0).getId()== -500L)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
