@@ -50,7 +50,7 @@ public class BankAccountController {
      * @return ResponseEntity<BankAccount>
      * @throws URISyntaxException
      */
-    @ApiOperation("Get all BankAccounts by id")
+    @ApiOperation("Get BankAccount by id")
     @GetMapping("/bankaccounts/{id}")
     public ResponseEntity<BankAccount> findBankAccountById(@ApiParam("Primary key of bankaccounts: Long") @PathVariable Long id) throws URISyntaxException {
         BankAccount findBankAccount = this.bankAccountService.findOne(id);
@@ -69,7 +69,7 @@ public class BankAccountController {
      * @throws URISyntaxException
      */
     @PostMapping("/bankaccounts")
-    @ApiOperation("Get all BankAccounts")
+    @ApiOperation("Create BankAccount")
     public ResponseEntity<BankAccount> createBankAccount(
             @ApiParam("BankAccounts that you want to create: BankAccounts")
             @RequestBody BankAccount bankAccountToCreate) throws URISyntaxException {
@@ -109,19 +109,13 @@ public class BankAccountController {
 
         log.debug("REST request to update enable status of BankAccount: {} ", modifiedBankAccount);
 
-        if(modifiedBankAccount.getId() == null && modifiedBankAccount.getNumAccount() == null){
-            System.out.println("por controler1");
+        if(modifiedBankAccount.getId() == null && modifiedBankAccount.getNumAccount() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-
-        }
 
         BankAccount result = bankAccountService.updateBankAccount(modifiedBankAccount);
 
-        if (result.getId() == -404L) {
-            System.out.println("por controler2");
+        if (result.getId() == -404L)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
         if (result.getId() == -500L)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

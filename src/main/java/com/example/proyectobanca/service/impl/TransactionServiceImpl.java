@@ -3,11 +3,13 @@ package com.example.proyectobanca.service.impl;
 import com.example.proyectobanca.dao.TransactionDAO;
 import com.example.proyectobanca.model.BankAccount;
 import com.example.proyectobanca.model.Transaction;
+import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.repository.TransactionRepository;
 import com.example.proyectobanca.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -33,8 +35,20 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transactionCreated = null;
 
         try{
+            Optional<Transaction> checkTransaction = transactionRepository.findById(transaction.getId());
+
+            if (!ObjectUtils.isEmpty(checkTransaction))
+                return new Transaction();
+
+            BankAccount bankAccountTest = new BankAccount();
+            bankAccountTest.setEnabled(true);
+            bankAccountTest.setNumAccount(1111L);
+            bankAccountTest.setBalance(3D);
+            transaction.setBankAccount(bankAccountTest);
+            System.out.println(transaction);
             transaction.setCreatedDate(Instant.now());
             transactionCreated = transactionRepository.save(transaction);
+
         }catch(Exception e) {
             log.error("Cannot save the transaction: {} , error : {}", transaction, e);
         }

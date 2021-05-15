@@ -1,5 +1,6 @@
 package com.example.proyectobanca.controller;
 
+import com.example.proyectobanca.model.BankAccount;
 import com.example.proyectobanca.model.Transaction;
 import com.example.proyectobanca.repository.TransactionRepository;
 import com.example.proyectobanca.service.TransactionService;
@@ -74,27 +75,27 @@ public class TransactionController {
     @ApiOperation("Create a new Transaction in DB")
     public ResponseEntity<Transaction> createTransaction(@ApiParam("Transaction that you want to create: Transaction") @RequestBody Transaction transactiontoCreate) throws URISyntaxException {
         log.debug("REST request to create new a Transaction: {} ", transactiontoCreate);
+        System.out.println(transactiontoCreate);
 
-        if (transactiontoCreate.getImporte() == null) {
+        if (transactiontoCreate.getConcepto() == null || transactiontoCreate.getImporte() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Optional<Transaction> checkTransaction = this.transactionRepository.findById(transactiontoCreate.getId());
 
 
-        if(checkTransaction == null) {
-            Transaction createdTransaction = this.transactionService.createTransaction(transactiontoCreate);
+        Transaction result = this.transactionService.createTransaction(transactiontoCreate);
 
-            return ResponseEntity
-                    .created(new URI("/api/transactions/" + createdTransaction.getBankAccount()))
-                    .body(createdTransaction);
-        }
-        else
-        {
-            log.warn("already in use");
 
+        if (result.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+
+
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+    return ResponseEntity
+                    .created(new URI("/api/transactions/" + result.getId()))
+                    .body(result);
+
+
 
     }
 

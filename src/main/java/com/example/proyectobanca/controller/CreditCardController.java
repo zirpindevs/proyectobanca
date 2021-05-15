@@ -77,6 +77,8 @@ public class CreditCardController {
     public ResponseEntity<CreditCard> createCreditCard(@ApiParam("CreditCard that you want to create: CreditCard") @RequestBody CreditCard creditCardtoCreate) throws URISyntaxException {
         log.debug("REST request to create new a creditcard: {} ", creditCardtoCreate);
 
+        System.out.println(creditCardtoCreate.getUser());
+
         if(creditCardtoCreate.getUser() == null && creditCardtoCreate.getNumCreditCard() == null && creditCardtoCreate.getPlaceholder() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
