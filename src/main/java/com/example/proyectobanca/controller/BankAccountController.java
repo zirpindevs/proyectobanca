@@ -75,7 +75,7 @@ public class BankAccountController {
             @RequestBody BankAccount bankAccountToCreate) throws URISyntaxException {
         log.debug("REST request to create new a BankAccount: {} ", bankAccountToCreate);
 
-        if (bankAccountToCreate.getNumAccount() == null || bankAccountToCreate.getUsers() == null)
+        if (bankAccountToCreate.getNumAccount() == null || bankAccountToCreate.getEnabled() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         BankAccount checkbankAccount = this.bankAccountRepository.findBynumAccount(bankAccountToCreate.getNumAccount());
