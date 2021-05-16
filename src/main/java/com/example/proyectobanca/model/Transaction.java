@@ -32,9 +32,9 @@ public class Transaction {
     @ApiModelProperty("Bank account to which a single transaction belongs: BankAccount")
     private BankAccount bankAccount;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "id_credit_card")
-    @JsonIgnore
+   // @JsonIgnore
     @ApiModelProperty("Credit card to which a single transaction belongs: CreditCard")
     private CreditCard creditCard;
 

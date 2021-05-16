@@ -10,4 +10,6 @@ public interface UserDao {
 
     List<User> findAllByFilters(Map<String, String> map1);
 
+    public Optional<Boolean> deleteUsersBankAccountsRelation(Long idUser);
+
 }

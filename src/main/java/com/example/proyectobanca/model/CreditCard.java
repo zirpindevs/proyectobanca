@@ -49,7 +49,7 @@ public class CreditCard {
 
     @OneToMany(mappedBy = "creditCard", cascade = CascadeType.ALL)
     @ApiModelProperty("List of transactions that a credit card has: List<Transaction>")
-    private List<Transaction> transactions = new ArrayList<>();
+    private List<Transaction> transactions;
 
     public CreditCard() {
     }
@@ -146,13 +146,13 @@ public class CreditCard {
         this.user = user;
     }
 
-    public List<Transaction> getTransactions() {
+  /*  public List<Transaction> getTransactions() {
         return transactions;
     }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
-    }
+    }*/
 
     @Override
     public String toString() {

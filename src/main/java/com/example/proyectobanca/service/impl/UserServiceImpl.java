@@ -200,14 +200,12 @@ public class UserServiceImpl implements UserService {
         try {
             if (id != null && repository.existsById(id)) {
 
-                // TODO - ELIMINAR LA RELACIÓN CON CUENTAS BANCARIAS
-               // Optional<Boolean> result = userDao.deleteUsersBankAccountsRelation(id);
+                // Delete users - bank accounts relations
+                Optional<Boolean> result = userDao.deleteUsersBankAccountsRelation(id);
 
-           /*     if (Objects.equals(result, Optional.of(true))){
+                if (Objects.equals(result, Optional.of(true))){
                     repository.deleteById(id);
-                }*/
-
-                repository.deleteById(id);
+                }
 
                 return Optional.of(true);
             }

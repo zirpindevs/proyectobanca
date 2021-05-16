@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -80,5 +81,30 @@ public class UserDaoImpl implements UserDao {
 
 
         return predicates;
+    }
+
+    /**
+     * Delete all register relationated with Users and BankAccounts
+     * @param idUser primary key of User need to delete of the relation
+     * @return Boolean
+     */
+    @Override
+    @Transactional
+    public Optional<Boolean> deleteUsersBankAccountsRelation(Long idUser){
+
+        try {
+            if (idUser != null) {
+
+                Query queryNative = manager.createNativeQuery("delete from users_bank_accounts where user_id = "+ idUser);
+                queryNative.executeUpdate();
+
+                return Optional.of(true);
+            }
+            return Optional.of(false);
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return Optional.empty();
+        }
     }
 }
