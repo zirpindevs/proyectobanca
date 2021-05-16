@@ -1,10 +1,13 @@
 package com.example.proyectobanca.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,30 +19,49 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="num_credit_card")
-    private Long numCreditCard;
+    @Column(nullable = false, unique = true)
+    @ApiModelProperty("Num of credit card: String")
+    private String numCreditCard;
 
+    @Column(nullable = false)
+    @ApiModelProperty("Name of user own credit card: String")
     private String placeholder;
 
-    private String type;
+    @Column(nullable = false, columnDefinition = "varchar(255) default 'debito'")
+    @Enumerated(EnumType.STRING)
+    @ApiModelProperty("Type of credit card: CreditCardType Enum")
+    private CreditCardType type;
 
     @Column(name="card_provider")
+    @ApiModelProperty("Company provider of credit card(MasterCard...): String")
     private String cardProvider;
 
+    @Column(nullable = false,length = 3)
+    @ApiModelProperty("CVV code of credit card: String")
     private String cvv;
 
+    @Column(nullable = false,length = 4)
+    @ApiModelProperty("PIN code of credit card: String")
     private String pin;
 
-    @Column(name="expiration_date")
-    private Date expirationDate;
+    @Column(name="expiration_date", nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @ApiModelProperty("Expiration date: LocalDate")
+    private LocalDate expirationDate;
 
+    @Column(nullable = false)
+    @ApiModelProperty("Define if the credit card can be used: Boolean")
     private Boolean enabled;
 
-    @Column(name="created_date")
-    private Instant createdDate;
+    @Column(name = "created_at" ,nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("Created date: LocalDateTime")
+    private LocalDateTime createdAt;
 
-    @Column(name="last_modified")
-    private Instant lastModified;
+    @Column(name = "updated_at")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("Update date: LocalDateTime")
+    private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
@@ -54,15 +76,34 @@ public class CreditCard {
     public CreditCard() {
     }
 
+    public CreditCard(String numCreditCard, String placeholder, CreditCardType type, String cardProvider, String cvv, String pin, LocalDate expirationDate, Boolean enabled, LocalDateTime createdAt, LocalDateTime updatedAt, User user, List<Transaction> transactions) {
+        this.numCreditCard = numCreditCard;
+        this.placeholder = placeholder;
+        this.type = type;
+        this.cardProvider = cardProvider;
+        this.cvv = cvv;
+        this.pin = pin;
+        this.expirationDate = expirationDate;
+        this.enabled = enabled;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.user = user;
+        this.transactions = transactions;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public Long getNumCreditCard() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNumCreditCard() {
         return numCreditCard;
     }
 
-    public void setNumCreditCard(Long numCreditCard) {
+    public void setNumCreditCard(String numCreditCard) {
         this.numCreditCard = numCreditCard;
     }
 
@@ -74,11 +115,11 @@ public class CreditCard {
         this.placeholder = placeholder;
     }
 
-    public String getType() {
+    public CreditCardType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(CreditCardType type) {
         this.type = type;
     }
 
@@ -106,11 +147,11 @@ public class CreditCard {
         this.pin = pin;
     }
 
-    public Date getExpirationDate() {
+    public LocalDate getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     }
 
@@ -122,20 +163,20 @@ public class CreditCard {
         this.enabled = enabled;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Instant getLastModified() {
-        return lastModified;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setLastModified(Instant lastModified) {
-        this.lastModified = lastModified;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public User getUser() {
@@ -146,29 +187,28 @@ public class CreditCard {
         this.user = user;
     }
 
-  /*  public List<Transaction> getTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
-    }*/
+    }
 
     @Override
     public String toString() {
         return "CreditCard{" +
                 "id=" + id +
-                ", numCreditCard=" + numCreditCard +
+                ", numCreditCard='" + numCreditCard + '\'' +
                 ", placeholder='" + placeholder + '\'' +
-                ", type='" + type + '\'' +
+                ", type=" + type +
                 ", cardProvider='" + cardProvider + '\'' +
                 ", cvv='" + cvv + '\'' +
                 ", pin='" + pin + '\'' +
                 ", expirationDate=" + expirationDate +
                 ", enabled=" + enabled +
-                ", createdDate=" + createdDate +
-                ", lastModified=" + lastModified +
-                ", user=" + user +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

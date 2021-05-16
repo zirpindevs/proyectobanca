@@ -1,5 +1,7 @@
 package com.example.proyectobanca.controller;
 
+import com.example.proyectobanca.model.CreditCardDTO;
+import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.service.CreditCardService;
 import com.example.proyectobanca.model.CreditCard;
 import com.example.proyectobanca.repository.CreditCardRepository;
@@ -67,38 +69,29 @@ public class CreditCardController {
     }
 
     /**
-     * CREATE CREDITCARD
-     *
-     * @return ResponseEntity<CreditCard>
+     * Create a new credit card in database
+     * @param creditCardDTO CreditCardDTO to create
+     * @return creditCard CreditCard created
      * @throws URISyntaxException
      */
     @PostMapping("/creditcards")
-    @ApiOperation("Create a new CreditCard in DB")
-    public ResponseEntity<CreditCard> createCreditCard(@ApiParam("CreditCard that you want to create: CreditCard") @RequestBody CreditCard creditCardtoCreate) throws URISyntaxException {
-        log.debug("REST request to create new a creditcard: {} ", creditCardtoCreate);
+    @ApiOperation("Create a new credit card in DB")
+    public ResponseEntity<CreditCard> createCreditCard(@ApiParam("creditCard that you want to create: CreditCardDTO") @RequestBody CreditCardDTO creditCardDTO) throws URISyntaxException {
 
-        System.out.println(creditCardtoCreate.getUser());
-
-        if(creditCardtoCreate.getUser() == null && creditCardtoCreate.getNumCreditCard() == null && creditCardtoCreate.getPlaceholder() == null)
+        if(ObjectUtils.isEmpty(creditCardDTO))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        CreditCard checkCreditCard = this.creditCardRepository.findBynumCreditCard(creditCardtoCreate.getNumCreditCard());
+        CreditCard result = creditCardService.createCreditCard(creditCardDTO);
 
-
-        if(checkCreditCard == null) {
-            CreditCard createCreditCard = this.creditCardService.createCreditCard(creditCardtoCreate);
-
-            return ResponseEntity
-                    .created(new URI("/api/etiquetas/" + createCreditCard.getNumCreditCard()))
-                    .body(createCreditCard);
-        }
-        else
-        {
-            log.warn("already in use");
-
+        if (result.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity
+                .created(new URI("/api/creditcards/" + result.getId()))
+                .body(result);
     }
 
     /**

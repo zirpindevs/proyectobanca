@@ -30,8 +30,8 @@ insert into users_bank_accounts(user_id, bank_account_id) values (4, 4);
 
 -- Credit Card examples
 
-insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date) values ('5254646244652394', 'Thomas Conley', 'debit', 'MasterCard', '239', '1234', 1, "2041-02-11 01:00:00");
-insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date) values ('8254645534652344', 'John Connor', 'debit', 'Visa', '122', '1234', 2, "2031-07-11 01:00:00");
+insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date, enabled, created_at) values ('5254646244652394', 'Thomas Conley', 'debito', 'MasterCard', '239', '1234', 1, "2022-02-11", true, '2021-05-14 08:35:50');
+insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date, enabled, created_at) values ('8254645534652344', 'John Connor', 'credito', 'Visa', '122', '1234', 2, "2022-02-11", true, '2021-05-14 08:35:50');
 
 -- Transaction examples
 insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('350', "pago coche", 'ingreso', 1, 2, "2021-02-11 01:00:00");
