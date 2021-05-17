@@ -12,6 +12,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Primary key: Long")
     private Long id;
 
     @ApiModelProperty("Name of Category: String")

@@ -14,6 +14,7 @@ public class BankAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Primary key: Long")
     private Long id;
 
     @Column(name = "num_account", nullable = false, unique = true)

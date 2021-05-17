@@ -17,50 +17,51 @@ import java.util.List;
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Primary key: Long")
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @ApiModelProperty("Num of credit card: String")
+    @ApiModelProperty("Num of credit card: String, Not null, Unique")
     private String numCreditCard;
 
     @Column(nullable = false)
-    @ApiModelProperty("Name of user own credit card: String")
+    @ApiModelProperty("Name of user own credit card: String, Not null")
     private String placeholder;
 
     @Column(nullable = false, columnDefinition = "varchar(255) default 'debito'")
     @Enumerated(EnumType.STRING)
-    @ApiModelProperty("Type of credit card: CreditCardType Enum")
+    @ApiModelProperty("Type of credit card: CreditCardType Enum, Not null")
     private CreditCardType type;
 
     @Column(name="card_provider")
     @ApiModelProperty("Company provider of credit card(MasterCard...): String")
     private String cardProvider;
 
-    @Column(nullable = false,length = 3)
-    @ApiModelProperty("CVV code of credit card: String")
+    @Column(nullable = false, length = 3)
+    @ApiModelProperty("CVV code of credit card: String, Not null, Length = 3")
     private String cvv;
 
     @Column(nullable = false,length = 4)
-    @ApiModelProperty("PIN code of credit card: String")
+    @ApiModelProperty("PIN code of credit card: String, Not null, Length = 4")
     private String pin;
 
     @Column(name="expiration_date", nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty("Expiration date: LocalDate")
+    @ApiModelProperty("Expiration date: LocalDate, Not null, pattern = 'yyyy-MM-dd'")
     private LocalDate expirationDate;
 
     @Column(nullable = false)
-    @ApiModelProperty("Define if the credit card can be used: Boolean")
+    @ApiModelProperty("Define if the credit card can be used: Boolean, Not null")
     private Boolean enabled;
 
-    @Column(name = "created_at" ,nullable = false)
+    @Column(name = "created_at" , nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty("Created date: LocalDateTime")
+    @ApiModelProperty("Created date: LocalDateTime, Not null, pattern='yyyy-MM-dd HH:mm:ss'")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty("Update date: LocalDateTime")
+    @ApiModelProperty("Update date: LocalDateTime, pattern='yyyy-MM-dd HH:mm:ss'")
     private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = CascadeType.ALL)

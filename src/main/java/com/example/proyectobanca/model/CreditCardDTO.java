@@ -12,26 +12,37 @@ import java.util.Date;
 
 public class CreditCardDTO {
 
+    @ApiModelProperty("Num of credit card: String, Not null, Unique")
     private String numCreditCard;
 
+    @ApiModelProperty("Name of user own credit card: String, Not null")
     private String placeholder;
 
+    @ApiModelProperty("Type of credit card: CreditCardType Enum, Not null")
     private CreditCardType type;
 
+    @ApiModelProperty("Company provider of credit card(MasterCard...): String")
     private String cardProvider;
 
+    @ApiModelProperty("CVV code of credit card: String, Not null, Length = 3")
     private String cvv;
 
+    @ApiModelProperty("PIN code of credit card: String, Not null, Length = 4")
     private String pin;
 
+    @ApiModelProperty("Expiration date: LocalDate, Not null, pattern = 'yyyy-MM-dd'")
     private LocalDate expirationDate;
 
+    @ApiModelProperty("Define if the credit card can be used: Boolean, Not null")
     private Boolean enabled;
 
+    @ApiModelProperty("Created date: LocalDateTime, Not null, pattern='yyyy-MM-dd HH:mm:ss'")
     private LocalDateTime createdAt;
 
+    @ApiModelProperty("Update date: LocalDateTime, pattern='yyyy-MM-dd HH:mm:ss'")
     private LocalDateTime updatedAt;
 
+    @ApiModelProperty("Primary key of user own of credit card: Long")
     private Long idUser;
 
     public CreditCardDTO() {
