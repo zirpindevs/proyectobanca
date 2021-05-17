@@ -34,7 +34,7 @@ public class Transaction {
 
     @ManyToOne()
     @JoinColumn(name = "id_credit_card")
-   // @JsonIgnore
+    @JsonIgnore
     @ApiModelProperty("Credit card to which a single transaction belongs: CreditCard")
     private CreditCard creditCard;
 

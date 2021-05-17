@@ -14,6 +14,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty("Name of Category: String")
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

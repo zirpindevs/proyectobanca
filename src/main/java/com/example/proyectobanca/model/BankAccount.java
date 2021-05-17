@@ -17,23 +17,28 @@ public class BankAccount {
     private Long id;
 
     @Column(name = "num_account", nullable = false, unique = true)
+    @ApiModelProperty("Bank account number: Long")
     private Long numAccount;
 
     @Column(name="balance")
+    @ApiModelProperty("Current account balance: Double")
     private Double balance;
 
     @Column(name="enabled", nullable = false, columnDefinition = "boolean default true")
+    @ApiModelProperty("Indicates whether the account can be used or not: Boolean")
     private Boolean enabled;
 
     @Column(name="created_date")
+    @ApiModelProperty("Bank account creation date: Instant")
     private Instant createdDate;
 
     @Column(name="last_modified")
+    @ApiModelProperty("Bank account update date: Instant")
     private Instant lastModified;
 
     @ManyToMany(mappedBy = "bankAccounts")
     @JsonIgnore
-    @ApiModelProperty("Lista de usuarios asociados a una cuenta: List<User>")
+    @ApiModelProperty("List of users that a bank account has: List<User>")
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "bankAccount", cascade = CascadeType.ALL)
