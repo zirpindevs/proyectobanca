@@ -4,13 +4,18 @@ import com.example.proyectobanca.model.CreditCard;
 import com.example.proyectobanca.model.CreditCardDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CreditCardService {
-    CreditCard createCreditCard(CreditCardDTO creditCardDTO);
-    CreditCard updateCreditCard(CreditCard modifiedCreditCard);
-    void deleteCreditCard(CreditCard creditCardtToDelete);
+
+    List<CreditCard> findAll();
 
     CreditCard findOne(Long id);
-    List<CreditCard> findAll();
+
+    CreditCard createCreditCard(CreditCardDTO creditCardDTO);
+
+    CreditCard updateCreditCard(Long id, CreditCardDTO creditCardDTO);
+
+    void deleteCreditCard(CreditCard creditCardtToDelete);
 
 }

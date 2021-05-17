@@ -95,29 +95,29 @@ public class CreditCardController {
     }
 
     /**
-     * UPDATE CREDITCARD
-     *
-     * @param modifiedCreditCard
-     * @return ResponseEntity<CreditCard>
+     * It update a credit card of database
+     * @param creditCardDTO CreditCardDTO to update
+     * @return CreditCard updated in database
      */
-    @PutMapping("/creditcards")
-    @ApiOperation("Update an existing CreditCard in DB")
-    public ResponseEntity<CreditCard> updateCreditCard(@ApiParam("CreditCard that you want to update: CreditCard")@RequestBody CreditCard modifiedCreditCard) {
-        log.debug("REST request to update one CreditCard: {} ", modifiedCreditCard);
+    @PutMapping("/creditcards/{id}")
+    @ApiOperation("Update an existing creditCard in DB")
+    public ResponseEntity<CreditCard> updateCreditCard(
+            @ApiParam("id of CreditCard that you want to update: Long") @PathVariable Long id,
+            @ApiParam("CreditCard that you want to update: CreditCardDTO") @RequestBody CreditCardDTO creditCardDTO
+    ){
 
-
-        if (modifiedCreditCard.getId() == null) {
-            log.warn("update creditcard without id");
+        if(id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        CreditCard updateCreditCard = this.creditCardService.updateCreditCard(modifiedCreditCard);
+        CreditCard result = creditCardService.updateCreditCard(id, creditCardDTO);
 
-        if(updateCreditCard == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (result.getId() == -404L)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok().body(updateCreditCard);
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
+        return ResponseEntity.ok().body(result);
     }
 
 

@@ -45,9 +45,13 @@ public class CreditCardServiceImpl implements CreditCardService {
         return this.creditCardDAO.findById(id);
     }
 
+    /**
+     * Create a new credit card in database - Service
+     * @param creditCardDTO to update
+     * @return CreditCard created in database
+     */
     @Override
     public CreditCard createCreditCard(CreditCardDTO creditCardDTO) {
-
 
         try {
 
@@ -69,29 +73,38 @@ public class CreditCardServiceImpl implements CreditCardService {
         }
     }
 
-
+    /**
+     * It update a credit card of database - Service
+     * @param creditCardDTO to update
+     * @return CreditCard updated in database
+     */
     @Override
-    public CreditCard updateCreditCard(CreditCard modifiedCreditCard) {
+    public CreditCard updateCreditCard(Long id, CreditCardDTO creditCardDTO) {
 
-       /* log.debug("Update a CreditCard: {}", modifiedCreditCard);
+        try {
 
-        CreditCard updatedCreditCard = null;
-        CreditCard findedCreditCard = creditCardDAO.findById(modifiedCreditCard.getId());
+            CreditCard creditCardValidated = updateValidateCreditCard(id, creditCardDTO);
 
-        if (findedCreditCard != null) {
-
-            try{
-                modifiedCreditCard.setLastModified(Instant.now());
-                updatedCreditCard = creditCardRepository.save(modifiedCreditCard);
-            }catch(Exception e){
-                log.error("Cannot save CreditCard: {} , error : {}", modifiedCreditCard, e);
+            if (creditCardValidated.getNumCreditCard() == null){
+                CreditCard creditCardError = new CreditCard();
+                creditCardError.setId(-404L);
+                return creditCardError;
             }
-        }else{
-            log.warn("Cannot save CreditCard: {}, because it doesn´t exist", updatedCreditCard);
+
+
+            return creditCardRepository.save(creditCardValidated);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            CreditCard creditCardError = new CreditCard();
+            creditCardError.setId(-500L);
+
+            return creditCardError;
         }
-        return updatedCreditCard;*/
-        return null;
     }
+
+
 
     @Override
     public void deleteCreditCard(CreditCard creditCardToDelete){
@@ -150,6 +163,63 @@ public class CreditCardServiceImpl implements CreditCardService {
             }
 
             return creditCard;
+        }
+
+
+    }
+
+    /**
+     * Validate a credit card before to update in db
+     * @param creditCardDTO
+     * @return CreditCard
+     */
+    private CreditCard updateValidateCreditCard (Long id, CreditCardDTO creditCardDTO){
+
+        if ( creditCardDTO.getNumCreditCard() == null || creditCardDTO.getPlaceholder() == null || creditCardDTO.getCvv() == null || creditCardDTO.getPin() == null || creditCardDTO.getExpirationDate() == null ){
+
+            return new CreditCard();
+
+        }else {
+
+            // Exist ?
+            Optional<CreditCard> creditCardDB = this.creditCardRepository.findById(id);
+            if (ObjectUtils.isEmpty(creditCardDB))
+                return new CreditCard();
+
+            // Is not possible to modify the number of credit card
+            if (!creditCardDTO.getNumCreditCard().equals(creditCardDB.get().getNumCreditCard()))
+                return new CreditCard();
+
+            // Is not possible to modify the Placeholder of credit card
+            if (!creditCardDTO.getPlaceholder().equals(creditCardDB.get().getPlaceholder()))
+                return new CreditCard();
+
+            // Is not possible to modify the Type of credit card
+            if (!creditCardDTO.getType().equals(creditCardDB.get().getType()))
+                return new CreditCard();
+
+            // Is not possible to modify the Card Provider of credit card
+            if (!creditCardDTO.getCardProvider().equals(creditCardDB.get().getCardProvider()))
+                return new CreditCard();
+
+            // Is not possible to modify the CVV code of credit card
+            if (!creditCardDTO.getCvv().equals(creditCardDB.get().getCvv()))
+                return new CreditCard();
+
+            // Is not possible to modify the Expiration Date of credit card
+            if (!creditCardDTO.getExpirationDate().equals(creditCardDB.get().getExpirationDate()))
+                return new CreditCard();
+
+            // Is not possible to modify the user own of credit card
+            if (!creditCardDTO.getIdUser().equals(creditCardDB.get().getUser().getId()))
+                return new CreditCard();
+
+            // Only is possible to modify in a credit card
+            creditCardDB.get().setPin(creditCardDTO.getPin());
+            creditCardDB.get().setEnabled(creditCardDTO.getEnabled());
+            creditCardDB.get().setUpdatedAt(LocalDateTime.now());
+
+            return creditCardDB.get();
         }
 
 

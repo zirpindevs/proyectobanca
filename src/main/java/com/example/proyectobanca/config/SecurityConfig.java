@@ -98,6 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/transactions/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/transactions/**").permitAll()
 
+                .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
