@@ -12,18 +12,21 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Primary key: Long")
     private Long id;
 
-    @Column(name="importe")
+    @ApiModelProperty("Transaction amount: Long")
     private Long importe;
 
-    @Column(name="concepto")
+    @ApiModelProperty("Transaction description: String")
     private String concepto;
 
     @Column(name="tipo_movimiento")
+    @ApiModelProperty("Type of transaction: String")
     private String tipoMovimiento;
 
     @Column(name="created_date")
+    @ApiModelProperty("Created date: Instant")
     private Instant createdDate;
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -14,49 +14,50 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Primary key: Long")
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @ApiModelProperty("Nif of user: String")
+    @ApiModelProperty("Nif of user: String, Not null, Unique")
     private String nif;
 
     @Column(nullable = false,  unique = true)
-    @ApiModelProperty("Contact email of User: String")
+    @ApiModelProperty("Contact email of User: String, Not null, Unique")
     private String email;
 
     @Column(nullable = false)
-    @ApiModelProperty("Password to Login: String")
+    @ApiModelProperty("Password to Login: String, Not null")
     private String password;
 
     @Column(nullable = false)
-    @ApiModelProperty("Name of user: String")
+    @ApiModelProperty("Name of user: String, Not null")
     private String name;
 
     @Column(name="last_name", nullable = false)
-    @ApiModelProperty("Last name of user: String")
+    @ApiModelProperty("Last name of user: String, Not null")
     private String lastName;
 
     @Column(name="number_phone", unique = true)
-    @ApiModelProperty("Contact phone of user: String")
+    @ApiModelProperty("Contact phone of user: String, Unique")
     private String numberPhone;
 
     @Column(nullable = false, columnDefinition = "boolean default true")
-    @ApiModelProperty("Specifies if a user is enabled on the system: Boolean")
+    @ApiModelProperty("Specifies if a user is enabled on the system: Boolean, Not null, Default = true")
     private Boolean enabled;
 
-    @Column(name = "created_at" ,nullable = false)
+    @Column(name = "created_at", nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty("Created date: LocalDateTime")
+    @ApiModelProperty("Created date: LocalDateTime, Not null, pattern = 'yyyy-MM-dd HH:mm:ss'")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty("Update date: LocalDateTime")
+    @ApiModelProperty("Update date: LocalDateTime, pattern = 'yyyy-MM-dd HH:mm:ss'")
     private LocalDateTime updatedAt;
 
     @Column(nullable = false, columnDefinition = "varchar(255) default 'pendiente'")
     @Enumerated(EnumType.STRING)
-    @ApiModelProperty("Status of user: UserStatus Enum")
+    @ApiModelProperty("Status of user: UserStatus Enum, Not null, Default = 'pendiente'")
     private UserStatus status;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
