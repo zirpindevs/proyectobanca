@@ -15,9 +15,11 @@ public class Transaction {
     @ApiModelProperty("Primary key: Long")
     private Long id;
 
-    @ApiModelProperty("Transaction amount: Long")
-    private Long importe;
+    @Column(nullable = false)
+    @ApiModelProperty("Transaction amount: Double")
+    private Double importe;
 
+    @Column(nullable = false)
     @ApiModelProperty("Transaction description: String")
     private String concepto;
 
@@ -25,7 +27,7 @@ public class Transaction {
     @ApiModelProperty("Type of transaction: String")
     private String tipoMovimiento;
 
-    @Column(name="created_date")
+    @Column(name="created_date", nullable = false)
     @ApiModelProperty("Created date: Instant")
     private Instant createdDate;
 
@@ -58,11 +60,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public Long getImporte() {
+    public Double getImporte() {
         return importe;
     }
 
-    public void setImporte(Long importe) {
+    public void setImporte(Double importe) {
         this.importe = importe;
     }
 

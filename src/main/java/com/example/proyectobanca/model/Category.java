@@ -15,6 +15,7 @@ public class Category {
     @ApiModelProperty("Primary key: Long")
     private Long id;
 
+    @Column(nullable = false, unique = true)
     @ApiModelProperty("Name of Category: String")
     private String name;
 

@@ -21,11 +21,10 @@ public class BankAccount {
     @ApiModelProperty("Bank account number: Long")
     private Long numAccount;
 
-    @Column(name="balance")
     @ApiModelProperty("Current account balance: Double")
     private Double balance;
 
-    @Column(name="enabled", nullable = false, columnDefinition = "boolean default true")
+    @Column(nullable = false, columnDefinition = "boolean default true")
     @ApiModelProperty("Indicates whether the account can be used or not: Boolean")
     private Boolean enabled;
 
