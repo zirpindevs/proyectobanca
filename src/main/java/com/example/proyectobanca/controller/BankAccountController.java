@@ -1,6 +1,7 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.BankAccount;
+import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -145,5 +149,33 @@ public class BankAccountController {
         this.bankAccountService.deleteBankAccount(bankAccountToDelete);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Get daily balance of BankAccount
+     * @return
+     */
+/*    @GetMapping("/bankaccounts/dailybalance")
+    @ApiOperation("GET DailyBalanceByDateRangeByNumAccount")
+    public ResponseEntity<List<User>> findAll(
+            @ApiParam("Init date for search : String") @QueryParam("name") Date initDate,
+            @ApiParam("Finish date for search String") @QueryParam("name") Date finishDate
+    ) {
+
+        Map<String, Date> map1 = new HashMap<>();
+        map1.put("initDate", initDate);
+        map1.put("finishDate", finishDate);
+
+        List<BankAccount> bankAccountsDB = bankAccountService.findAll(map1);
+
+        if (bankAccountsDB.isEmpty())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        if (bankAccountsDB.get(0).getId()== -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity.ok().body(bankAccountsDB);
+    }*/
+
+
 
 }

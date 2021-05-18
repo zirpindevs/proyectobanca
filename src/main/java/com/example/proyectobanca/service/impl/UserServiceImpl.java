@@ -118,38 +118,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private User createValidateFields (User user){
-
-        if ( user.getNif() == null || user.getEmail() == null || user.getPassword() == null || user.getName() == null || user.getLastName() == null){
-
-            user = new User();
-           // user.setId(-404L);
-
-        }else {
-
-            Optional<User> userExist = repository.findOneByNif(user.getNif());
-            if (!ObjectUtils.isEmpty(userExist))
-                return new User();
-
-            Boolean userEmailExist = repository.existsByEmail(user.getEmail());
-            if (userEmailExist)
-                return new User();
-
-            Boolean numberPhoneExist = repository.existsByNumberPhone(user.getNumberPhone());
-            if (numberPhoneExist)
-                return new User();
-
-
-            if ( user.getEnabled() == null)
-                user.setEnabled(true);
-
-            user.setCreatedAt(LocalDateTime.now());
-            user.setStatus(UserStatus.pendiente);
-        }
-
-        return user;
-    }
-
     /**
      * It update a user of database - Service
      * @param user to update
@@ -215,5 +183,42 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
 
+    }
+
+    /**
+     * Validate a user before to save in db
+     * @param user
+     * @return User
+     */
+    private User createValidateFields (User user){
+
+        if ( user.getNif() == null || user.getEmail() == null || user.getPassword() == null || user.getName() == null || user.getLastName() == null){
+
+            user = new User();
+            // user.setId(-404L);
+
+        }else {
+
+            Optional<User> userExist = repository.findOneByNif(user.getNif());
+            if (!ObjectUtils.isEmpty(userExist))
+                return new User();
+
+            Boolean userEmailExist = repository.existsByEmail(user.getEmail());
+            if (userEmailExist)
+                return new User();
+
+            Boolean numberPhoneExist = repository.existsByNumberPhone(user.getNumberPhone());
+            if (numberPhoneExist)
+                return new User();
+
+
+            if ( user.getEnabled() == null)
+                user.setEnabled(true);
+
+            user.setCreatedAt(LocalDateTime.now());
+            user.setStatus(UserStatus.pendiente);
+        }
+
+        return user;
     }
 }

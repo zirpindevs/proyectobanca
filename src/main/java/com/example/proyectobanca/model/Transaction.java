@@ -12,18 +12,23 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty("Primary key: Long")
     private Long id;
 
-    @Column(name="importe")
-    private Long importe;
+    @Column(nullable = false)
+    @ApiModelProperty("Transaction amount: Double")
+    private Double importe;
 
-    @Column(name="concepto")
+    @Column(nullable = false)
+    @ApiModelProperty("Transaction description: String")
     private String concepto;
 
     @Column(name="tipo_movimiento")
+    @ApiModelProperty("Type of transaction: String")
     private String tipoMovimiento;
 
-    @Column(name="created_date")
+    @Column(name="created_date", nullable = false)
+    @ApiModelProperty("Created date: Instant")
     private Instant createdDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -34,7 +39,7 @@ public class Transaction {
 
     @ManyToOne()
     @JoinColumn(name = "id_credit_card")
-   // @JsonIgnore
+    @JsonIgnore
     @ApiModelProperty("Credit card to which a single transaction belongs: CreditCard")
     private CreditCard creditCard;
 
@@ -55,11 +60,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public Long getImporte() {
+    public Double getImporte() {
         return importe;
     }
 
-    public void setImporte(Long importe) {
+    public void setImporte(Double importe) {
         this.importe = importe;
     }
 

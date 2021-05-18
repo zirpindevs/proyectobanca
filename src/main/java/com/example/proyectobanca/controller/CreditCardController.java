@@ -1,5 +1,6 @@
 package com.example.proyectobanca.controller;
 
+import com.example.proyectobanca.model.CreditCardDTO;
 import com.example.proyectobanca.service.CreditCardService;
 import com.example.proyectobanca.model.CreditCard;
 import com.example.proyectobanca.repository.CreditCardRepository;
@@ -67,64 +68,55 @@ public class CreditCardController {
     }
 
     /**
-     * CREATE CREDITCARD
-     *
-     * @return ResponseEntity<CreditCard>
+     * Create a new credit card in database
+     * @param creditCardDTO CreditCardDTO to create
+     * @return creditCard CreditCard created
      * @throws URISyntaxException
      */
     @PostMapping("/creditcards")
-    @ApiOperation("Create a new CreditCard in DB")
-    public ResponseEntity<CreditCard> createCreditCard(@ApiParam("CreditCard that you want to create: CreditCard") @RequestBody CreditCard creditCardtoCreate) throws URISyntaxException {
-        log.debug("REST request to create new a creditcard: {} ", creditCardtoCreate);
+    @ApiOperation("Create a new credit card in DB")
+    public ResponseEntity<CreditCard> createCreditCard(@ApiParam("creditCard that you want to create: CreditCardDTO") @RequestBody CreditCardDTO creditCardDTO) throws URISyntaxException {
 
-        System.out.println(creditCardtoCreate.getUser());
-
-        if(creditCardtoCreate.getUser() == null && creditCardtoCreate.getNumCreditCard() == null && creditCardtoCreate.getPlaceholder() == null)
+        if(ObjectUtils.isEmpty(creditCardDTO))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        CreditCard checkCreditCard = this.creditCardRepository.findBynumCreditCard(creditCardtoCreate.getNumCreditCard());
+        CreditCard result = creditCardService.createCreditCard(creditCardDTO);
 
-
-        if(checkCreditCard == null) {
-            CreditCard createCreditCard = this.creditCardService.createCreditCard(creditCardtoCreate);
-
-            return ResponseEntity
-                    .created(new URI("/api/etiquetas/" + createCreditCard.getNumCreditCard()))
-                    .body(createCreditCard);
-        }
-        else
-        {
-            log.warn("already in use");
-
+        if (result.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity
+                .created(new URI("/api/creditcards/" + result.getId()))
+                .body(result);
     }
 
     /**
-     * UPDATE CREDITCARD
-     *
-     * @param modifiedCreditCard
-     * @return ResponseEntity<CreditCard>
+     * It update a credit card of database
+     * @param creditCardDTO CreditCardDTO to update
+     * @return CreditCard updated in database
      */
-    @PutMapping("/creditcards")
-    @ApiOperation("Update an existing CreditCard in DB")
-    public ResponseEntity<CreditCard> updateCreditCard(@ApiParam("CreditCard that you want to update: CreditCard")@RequestBody CreditCard modifiedCreditCard) {
-        log.debug("REST request to update one CreditCard: {} ", modifiedCreditCard);
+    @PutMapping("/creditcards/{id}")
+    @ApiOperation("Update an existing creditCard in DB")
+    public ResponseEntity<CreditCard> updateCreditCard(
+            @ApiParam("id of CreditCard that you want to update: Long") @PathVariable Long id,
+            @ApiParam("CreditCard that you want to update: CreditCardDTO") @RequestBody CreditCardDTO creditCardDTO
+    ){
 
-
-        if (modifiedCreditCard.getId() == null) {
-            log.warn("update creditcard without id");
+        if(id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        CreditCard updateCreditCard = this.creditCardService.updateCreditCard(modifiedCreditCard);
+        CreditCard result = creditCardService.updateCreditCard(id, creditCardDTO);
 
-        if(updateCreditCard == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (result.getId() == -404L)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok().body(updateCreditCard);
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
+        return ResponseEntity.ok().body(result);
     }
 
 
@@ -136,18 +128,21 @@ public class CreditCardController {
      */
     @DeleteMapping("/creditcards/{id}")
     @ApiOperation("Delete CreditCard of DB by Id")
-    public ResponseEntity<Void> deleteCreditCard(@ApiParam("Primary key of CreditCard: Long") @PathVariable Long id){
+    public ResponseEntity<CreditCard> deleteCreditCard(@ApiParam("Primary key of CreditCard: Long") @PathVariable Long id){
         log.debug("REST request to delete a creditcard: {} ", id);
 
-        CreditCard creditCardtToDelete = this.creditCardService.findOne(id);
-
-        if (creditCardtToDelete.getId() == null) {
-            log.warn("creditcard not exists");
+        if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        this.creditCardService.deleteCreditCard(creditCardtToDelete);
-        return ResponseEntity.noContent().build();
+        CreditCard result = creditCardService.markAsDeleteOne(id);
+
+        if (Objects.equals(result, Optional.of(false)))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
