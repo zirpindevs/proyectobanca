@@ -36,6 +36,9 @@ public class CreditCardDTO {
     @ApiModelProperty("Define if the credit card can be used: Boolean, Not null")
     private Boolean enabled;
 
+    @ApiModelProperty("Define if the credit card can be used: Boolean, Not null by default false")
+    private Boolean deleted;
+
     @ApiModelProperty("Created date: LocalDateTime, Not null, pattern='yyyy-MM-dd HH:mm:ss'")
     private LocalDateTime createdAt;
 
@@ -48,7 +51,7 @@ public class CreditCardDTO {
     public CreditCardDTO() {
     }
 
-    public CreditCardDTO(String numCreditCard, String placeholder, CreditCardType type, String cardProvider, String cvv, String pin, LocalDate expirationDate, Boolean enabled, LocalDateTime createdAt, LocalDateTime updatedAt, Long idUser) {
+    public CreditCardDTO(String numCreditCard, String placeholder, CreditCardType type, String cardProvider, String cvv, String pin, LocalDate expirationDate, Boolean enabled, Boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt, Long idUser) {
         this.numCreditCard = numCreditCard;
         this.placeholder = placeholder;
         this.type = type;
@@ -57,6 +60,7 @@ public class CreditCardDTO {
         this.pin = pin;
         this.expirationDate = expirationDate;
         this.enabled = enabled;
+        this.deleted = deleted;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.idUser = idUser;
@@ -149,4 +153,9 @@ public class CreditCardDTO {
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
     }
+
+    public Boolean getDeleted() { return deleted; }
+
+    public void setDeleted(Boolean deleted) { this.deleted = deleted; }
 }
+

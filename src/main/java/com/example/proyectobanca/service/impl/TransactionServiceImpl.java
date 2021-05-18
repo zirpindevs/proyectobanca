@@ -40,11 +40,7 @@ public class TransactionServiceImpl implements TransactionService {
             if (!ObjectUtils.isEmpty(checkTransaction))
                 return new Transaction();
 
-/*            BankAccount bankAccountTest = new BankAccount();
-            bankAccountTest.setEnabled(true);
-            bankAccountTest.setNumAccount(1111L);
-            bankAccountTest.setBalance(3D);
-            transaction.setBankAccount(bankAccountTest);*/
+
             System.out.println(transaction);
             transaction.setCreatedDate(Instant.now());
             transactionCreated = transactionRepository.save(transaction);
