@@ -31,6 +31,10 @@ public class Transaction {
     @ApiModelProperty("Created date: Instant")
     private Instant createdDate;
 
+    @Column(name="last_modified")
+    @ApiModelProperty("Transaction update date: Instant")
+    private Instant lastModified;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_bank_account")
     @JsonIgnore
@@ -92,6 +96,10 @@ public class Transaction {
         this.createdDate = createdDate;
     }
 
+    public Instant getLastModified() { return lastModified; }
+
+    public void setLastModified(Instant lastModified) { this.lastModified = lastModified; }
+
     public BankAccount getBankAccount() {
         return bankAccount;
     }
@@ -124,9 +132,7 @@ public class Transaction {
                 ", concepto='" + concepto + '\'' +
                 ", tipoMovimiento='" + tipoMovimiento + '\'' +
                 ", createdDate=" + createdDate +
-                ", bankAccount=" + bankAccount +
-                ", creditCard=" + creditCard +
-                ", category=" + category +
+                ", lastModified=" + lastModified +
                 '}';
     }
 }

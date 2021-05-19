@@ -30,12 +30,43 @@ insert into users_bank_accounts(user_id, bank_account_id) values (4, 4);
 
 -- Credit Card examples
 
-insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date, enabled, created_at) values ('5254646244652394', 'Thomas Conley', 'debito', 'MasterCard', '239', '1234', 1, "2022-02-11", true, '2021-05-14 08:35:50');
-insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date, enabled, created_at) values ('8254645534652344', 'John Connor', 'credito', 'Visa', '122', '1234', 2, "2022-02-11", true, '2021-05-14 08:35:50');
+insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date, created_at) values ('5254646244652394', 'Thomas Conley', 'debito', 'MasterCard', '239', '1234', 1, "2022-02-11", '2021-05-14 08:35:50');
+insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date, created_at) values ('8254645534652344', 'John Connor', 'credito', 'Visa', '122', '1234', 2, "2022-02-11", '2021-05-14 08:35:50');
 
 -- Transaction examples
 insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values (350, "pago coche", 'ingreso', 1, 2, "2021-02-11 01:00:00");
 insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values (-50, 'alquiler garaje', "pago", 1, 2, "2020-02-11 01:00:00");
 insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values (500, "nomina", 'domiciliacion', 2, 1, "2021-04-11 01:00:00");
 
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('350', "taller coche", 'gasto', 1, 2, "2021-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('560', 'alquiler garaje', "gasto", 1, 2, "2020-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('5000', "herencia familiar", 'domiciliacion', 2, 1, "2021-04-11 01:00:00");
 
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('150', "pago movil", 'gasto', 1, 2, "2021-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('50', 'alquiler garaje', "gasto", 1, 2, "2020-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('25', "netflix", 'domiciliacion', 2, 1, "2021-04-11 01:00:00");
+
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('350', "pago coche", 'ingreso', 1, 2, "2021-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('50', 'alquiler garaje', "pago", 1, 2, "2020-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('50', "amazon prime", 'domiciliacion', 2, 1, "2021-04-11 01:00:00");
+
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('150', "pago bar", 'gasto', 1, 2, "2021-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('90', 'pago agua', "gasto", 1, 2, "2020-03-27 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('25', "bizum", 'ingreso', 2, 1, "2021-04-11 01:00:00");
+
+
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('1350', "taller coche", 'gasto', 1, 2, "2021-05-01 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('560', 'alquiler garaje', "gasto", 1, 2, "2020-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('5000', "herencia familiar", 'domiciliacion', 2, 1, "2021-04-11 01:00:00");
+
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('5150', "pago luz", 'gasto', 1, 2, "2021-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('505', 'alquiler garaje', "gasto", 1, 2, "2020-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('2235', "netflix", 'domiciliacion', 2, 1, "2021-04-05 01:00:00");
+
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('3450', "pago moto", 'ingreso', 1, 2, "2021-05-17 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('5650', 'casa rural', "pago", 1, 2, "2020-02-12 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('5670', "ropa zara", 'pago', 2, 1, "2021-01-21 01:00:00");
+
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('678', "pago gas", 'gasto', 1, 2, "2021-02-15 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('770', 'compra mercadona', "gasto", 1, 2, "2020-01-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('234', "bizum", 'ingreso', 2, 1, "2021-04-08 01:00:00");

@@ -33,7 +33,7 @@ public class CreditCard {
     @ApiModelProperty("Type of credit card: CreditCardType Enum, Not null")
     private CreditCardType type;
 
-    @Column(name="card_provider")
+    @Column(name="card_provider", nullable = false)
     @ApiModelProperty("Company provider of credit card(MasterCard...): String")
     private String cardProvider;
 
@@ -50,9 +50,13 @@ public class CreditCard {
     @ApiModelProperty("Expiration date: LocalDate, Not null, pattern = 'yyyy-MM-dd'")
     private LocalDate expirationDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default true")
     @ApiModelProperty("Define if the credit card can be used: Boolean, Not null")
     private Boolean enabled;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    @ApiModelProperty("Define if the credit card can be used: Boolean, Not null by default false")
+    private Boolean deleted;
 
     @Column(name = "created_at" , nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -77,7 +81,7 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(String numCreditCard, String placeholder, CreditCardType type, String cardProvider, String cvv, String pin, LocalDate expirationDate, Boolean enabled, LocalDateTime createdAt, LocalDateTime updatedAt, User user, List<Transaction> transactions) {
+    public CreditCard(String numCreditCard, String placeholder, CreditCardType type, String cardProvider, String cvv, String pin, LocalDate expirationDate, Boolean enabled, Boolean deleted, LocalDateTime createdAt, LocalDateTime updatedAt, User user, List<Transaction> transactions) {
         this.numCreditCard = numCreditCard;
         this.placeholder = placeholder;
         this.type = type;
@@ -86,6 +90,7 @@ public class CreditCard {
         this.pin = pin;
         this.expirationDate = expirationDate;
         this.enabled = enabled;
+        this.deleted = deleted;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.user = user;
@@ -164,6 +169,14 @@ public class CreditCard {
         this.enabled = enabled;
     }
 
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -208,6 +221,7 @@ public class CreditCard {
                 ", pin='" + pin + '\'' +
                 ", expirationDate=" + expirationDate +
                 ", enabled=" + enabled +
+                ", deleted=" + deleted +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

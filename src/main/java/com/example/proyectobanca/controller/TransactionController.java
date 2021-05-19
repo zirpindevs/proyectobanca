@@ -1,7 +1,9 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.BankAccount;
+import com.example.proyectobanca.model.CreditCard;
 import com.example.proyectobanca.model.Transaction;
+import com.example.proyectobanca.model.TransactionDTO;
 import com.example.proyectobanca.repository.TransactionRepository;
 import com.example.proyectobanca.service.TransactionService;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -66,62 +69,62 @@ public class TransactionController {
 
 
     /**
-     * CREATE TRANSACTIONS
-     *
-     * @return ResponseEntity<Transaction>
+     * Create a transaction in database
+     * @param transactionDTO TransactionDTO to create
+     * @return transaction Transaction created
      * @throws URISyntaxException
      */
     @PostMapping("/transactions")
     @ApiOperation("Create a new Transaction in DB")
-    public ResponseEntity<Transaction> createTransaction(@ApiParam("Transaction that you want to create: Transaction") @RequestBody Transaction transactiontoCreate) throws URISyntaxException {
-        log.debug("REST request to create new a Transaction: {} ", transactiontoCreate);
-        System.out.println(transactiontoCreate);
+    public ResponseEntity<Transaction> createTransaction(@ApiParam("Transaction that you want to create: Transaction") @RequestBody TransactionDTO transactionDTO) throws URISyntaxException {
+        log.debug("REST request to create new a Transaction: {} ", transactionDTO);
 
-        if (transactiontoCreate.getConcepto() == null || transactiontoCreate.getImporte() == null)
+        if(ObjectUtils.isEmpty(transactionDTO))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 
-        Transaction result = this.transactionService.createTransaction(transactiontoCreate);
-
+        Transaction result = transactionService.createTransaction(transactionDTO);
 
         if (result.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-
         if (result.getId() == -500L)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    return ResponseEntity
-                    .created(new URI("/api/transactions/" + result.getId()))
-                    .body(result);
-
+        return ResponseEntity
+                .created(new URI("/api/transactions/" + result.getId()))
+                .body(result);
 
 
     }
 
     /**
-     * UPDATE TRANSACTIONS
+     * It update a transaction of database
      *
-     * @param modifiedTransaction
-     * @return ResponseEntity<Transaction>
+     * @param transactionDTO TransactionDTO to update
+     * @return Transaction updated in database
      */
-    @PutMapping("/transactions")
+    @PutMapping("/transactions/{id}")
     @ApiOperation("Update an existing Transaction in DB")
-    public ResponseEntity<Transaction> updateTransaction(@ApiParam("Transaction that you want to update: Transaction")@RequestBody Transaction modifiedTransaction) {
-        log.debug("REST request to update one Transaction: {} ", modifiedTransaction);
+    public ResponseEntity<Transaction> updateTransaction(
+            @ApiParam("id of Transaction that you want to update: Long") @PathVariable Long id,
+            @ApiParam("Transaction that you want to update: Transaction")@RequestBody TransactionDTO transactionDTO
+    ) {
 
+        log.debug("REST request to update one Transaction: {} ", transactionDTO);
 
-        if (modifiedTransaction.getId() == null) {
-            log.warn("update Transaction without id");
+        if(id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        Transaction updateTransaction = this.transactionService.updateTransaction(modifiedTransaction);
+        Transaction result = transactionService.updateTransaction(id, transactionDTO);
 
-        if(updateTransaction == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (result.getId() == -404L)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok().body(updateTransaction);
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity.ok().body(result);
 
     }
 

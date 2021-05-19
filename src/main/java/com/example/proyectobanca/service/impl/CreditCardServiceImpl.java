@@ -13,6 +13,7 @@ import org.springframework.util.ObjectUtils;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -104,10 +105,40 @@ public class CreditCardServiceImpl implements CreditCardService {
         }
     }
 
+
+    /**
+     * Delete creditcard of database by ID - Service
+     * @param id creditcard primary key that you want to delete
+     * @return Optional<Boolean>
+     */
     @Override
-    public void deleteCreditCard(CreditCard creditCardToDelete){
-        log.info("REST request to delete an CreditCard by id");
-        this.creditCardRepository.deleteById(creditCardToDelete.getId());
+    public CreditCard markAsDeleteOne(Long id){
+
+        CreditCard deleteCreditCard = new CreditCard();
+
+        try {
+        Optional<CreditCard> beforeCreditCard = creditCardRepository.findById(id);
+
+        if (!beforeCreditCard.isPresent()){
+            CreditCard creditCardError = new CreditCard();
+            creditCardError.setId(-404L);
+            return creditCardError;
+        }
+
+        deleteCreditCard = beforeCreditCard.get();
+
+            deleteCreditCard.setDeleted(true);
+            deleteCreditCard.setUpdatedAt(LocalDateTime.now());
+            return creditCardRepository.save(deleteCreditCard);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            CreditCard creditCardError = new CreditCard();
+            creditCardError.setId(-500L);
+            return creditCardError;
+
+        }
 
     }
 
@@ -120,7 +151,8 @@ public class CreditCardServiceImpl implements CreditCardService {
 
         CreditCard creditCardEmpty = new CreditCard();
 
-        if ( creditCardDTO.getNumCreditCard() == null || creditCardDTO.getPlaceholder() == null || creditCardDTO.getCvv() == null || creditCardDTO.getPin() == null || creditCardDTO.getExpirationDate() == null ){
+        if ( creditCardDTO.getNumCreditCard() == null || creditCardDTO.getPlaceholder() == null || creditCardDTO.getCvv() == null || creditCardDTO.getPin() == null
+                || creditCardDTO.getExpirationDate() == null  || creditCardDTO.getCardProvider() == null){
 
             return creditCardEmpty;
 
@@ -139,7 +171,7 @@ public class CreditCardServiceImpl implements CreditCardService {
             // If passed all validations
 
             if ( creditCardDTO.getEnabled() == null)
-                creditCardDTO.setEnabled(false);
+                creditCardDTO.setEnabled(true);
 
             if ( creditCardDTO.getType() == null)
                 creditCardDTO.setType(CreditCardType.debito);
@@ -154,6 +186,7 @@ public class CreditCardServiceImpl implements CreditCardService {
             creditCard.setPin(creditCardDTO.getPin());
             creditCard.setExpirationDate(creditCardDTO.getExpirationDate());
             creditCard.setEnabled(creditCardDTO.getEnabled());
+            creditCard.setDeleted(false);
             creditCard.setCreatedAt(LocalDateTime.now());
             if (creditCardDTO.getIdUser() != null) {
                 Optional<User> user = userRepository.findOneById(creditCardDTO.getIdUser());
@@ -173,8 +206,8 @@ public class CreditCardServiceImpl implements CreditCardService {
      */
     private CreditCard updateValidateCreditCard (Long id, CreditCardDTO creditCardDTO){
 
-        if ( creditCardDTO.getNumCreditCard() == null || creditCardDTO.getPlaceholder() == null || creditCardDTO.getCvv() == null || creditCardDTO.getPin() == null || creditCardDTO.getExpirationDate() == null ){
-
+        if ( creditCardDTO.getNumCreditCard() == null || creditCardDTO.getPlaceholder() == null || creditCardDTO.getCvv() == null || creditCardDTO.getPin() == null
+                || creditCardDTO.getExpirationDate() == null || creditCardDTO.getCardProvider() == null || creditCardDTO.getDeleted()){
             return new CreditCard();
 
         }else {
@@ -210,6 +243,10 @@ public class CreditCardServiceImpl implements CreditCardService {
 
             // Is not possible to modify the user own of credit card
             if (!creditCardDTO.getIdUser().equals(creditCardDB.get().getUser().getId()))
+                return new CreditCard();
+
+            // Is not possible to modify the deleted status of credit card
+            if (!creditCardDTO.getDeleted().equals(creditCardDB.get().getDeleted()))
                 return new CreditCard();
 
             // Only is possible to modify in a credit card
