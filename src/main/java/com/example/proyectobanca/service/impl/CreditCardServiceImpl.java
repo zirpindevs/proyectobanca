@@ -117,15 +117,15 @@ public class CreditCardServiceImpl implements CreditCardService {
         CreditCard deleteCreditCard = new CreditCard();
 
         try {
-        Optional<CreditCard> beforeCreditCard = creditCardRepository.findById(id);
+            Optional<CreditCard> beforeCreditCard = creditCardRepository.findById(id);
 
-        if (!beforeCreditCard.isPresent()){
-            CreditCard creditCardError = new CreditCard();
-            creditCardError.setId(-404L);
-            return creditCardError;
-        }
+            if (!beforeCreditCard.isPresent()){
+                CreditCard creditCardError = new CreditCard();
+                creditCardError.setId(-404L);
+                return creditCardError;
+            }
 
-        deleteCreditCard = beforeCreditCard.get();
+            deleteCreditCard = beforeCreditCard.get();
 
             deleteCreditCard.setDeleted(true);
             deleteCreditCard.setUpdatedAt(LocalDateTime.now());
