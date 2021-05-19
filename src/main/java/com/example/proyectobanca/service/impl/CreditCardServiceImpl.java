@@ -104,8 +104,6 @@ public class CreditCardServiceImpl implements CreditCardService {
         }
     }
 
-
-
     @Override
     public void deleteCreditCard(CreditCard creditCardToDelete){
         log.info("REST request to delete an CreditCard by id");

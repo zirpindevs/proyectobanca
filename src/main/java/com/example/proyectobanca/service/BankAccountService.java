@@ -1,15 +1,23 @@
 package com.example.proyectobanca.service;
 
 import com.example.proyectobanca.model.BankAccount;
+import com.example.proyectobanca.model.BankAccountDTO;
 import com.example.proyectobanca.model.CreditCard;
+import com.example.proyectobanca.model.CreditCardDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BankAccountService {
-    BankAccount createBankAccount(BankAccount bankAccount);
-    BankAccount updateBankAccount(BankAccount modifiedBankAccount);
-    void deleteBankAccount(BankAccount bankAccountToDelete);
+
+    List<BankAccount> findAll();
 
     BankAccount findOne(Long id);
-    List<BankAccount> findAll();
+
+    BankAccount createOne(BankAccountDTO bankAccountDTO);
+
+    BankAccount updateOne(Long id, BankAccountDTO bankAccountDTO);
+
+    Optional<Boolean> deleteOne(Long id);
+
 }

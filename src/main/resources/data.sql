@@ -13,10 +13,10 @@ insert into categories(name) values ('Alimentación');
 insert into categories(name) values ('Otros');
 
 -- Bank Account examples
-insert into bank_accounts(num_account, balance, enabled, created_date) values ('02601732345271851', '500', true, "2020-02-11 01:00:00");
-insert into bank_accounts(num_account, balance, enabled, created_date) values ('07941320452229156', '1500', true, "2019-02-11 01:00:00");
-insert into bank_accounts(num_account, balance, enabled, created_date) values ('30215465212525412', '15000', true, "2019-02-11 01:00:00");
-insert into bank_accounts(num_account, balance, enabled, created_date) values ('96582454712536985', '20000', true, "2019-02-11 01:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('02601732345271851', '0', true, "2020-02-11 01:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('07941320452229156', '0', true, "2019-02-11 01:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('30215465212525412', '0', true, "2019-02-11 01:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('96582454712536985', '0', true, "2019-02-11 01:00:00");
 
 
 
@@ -34,8 +34,8 @@ insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv,
 insert into credit_cards(num_credit_card, placeholder, type, card_provider, cvv, pin, id_user, expiration_date, enabled, created_at) values ('8254645534652344', 'John Connor', 'credito', 'Visa', '122', '1234', 2, "2022-02-11", true, '2021-05-14 08:35:50');
 
 -- Transaction examples
-insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('350', "pago coche", 'ingreso', 1, 2, "2021-02-11 01:00:00");
-insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('50', 'alquiler garaje', "pago", 1, 2, "2020-02-11 01:00:00");
-insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('500', "nomina", 'domiciliacion', 2, 1, "2021-04-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values (350, "pago coche", 'ingreso', 1, 2, "2021-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values (-50, 'alquiler garaje', "pago", 1, 2, "2020-02-11 01:00:00");
+insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values (500, "nomina", 'domiciliacion', 2, 1, "2021-04-11 01:00:00");
 
 
