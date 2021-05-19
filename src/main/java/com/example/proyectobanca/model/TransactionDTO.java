@@ -22,6 +22,9 @@ public class TransactionDTO {
     @ApiModelProperty("Created date: Instant")
     private Instant createdDate;
 
+    @ApiModelProperty("Transaction update date: Instant")
+    private Instant lastModified;
+
     @ApiModelProperty("Primary key of transaction own of bankaccount: Long")
     private Long idBankAccount;
 
@@ -34,11 +37,12 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(Double importe, String concepto, String tipoMovimiento, Instant createdDate, Long idBankAccount, Long idCreditCard, Long idCategory) {
+    public TransactionDTO(Double importe, String concepto, String tipoMovimiento, Instant createdDate, Instant lastModified, Long idBankAccount, Long idCreditCard, Long idCategory) {
         this.importe = importe;
         this.concepto = concepto;
         this.tipoMovimiento = tipoMovimiento;
         this.createdDate = createdDate;
+        this.lastModified = lastModified;
         this.idBankAccount = idBankAccount;
         this.idCreditCard = idCreditCard;
         this.idCategory = idCategory;
@@ -75,6 +79,10 @@ public class TransactionDTO {
     public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
     }
+
+    public Instant getLastModified() { return lastModified; }
+
+    public void setLastModified(Instant lastModified) { this.lastModified = lastModified; }
 
     public Long getIdBankAccount() {
         return idBankAccount;
