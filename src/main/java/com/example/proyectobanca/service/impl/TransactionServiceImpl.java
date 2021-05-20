@@ -241,10 +241,10 @@ public class TransactionServiceImpl implements TransactionService {
     private Transaction currentBalance (Transaction transaction) {
 
 
-        if(transaction.getTipoMovimiento().equals("pago") || transaction.getTipoMovimiento().equals("recibo")){
+        if(transaction.getTipoMovimiento().equals(MovimientoType.PAGO) || transaction.getTipoMovimiento().equals(MovimientoType.RECIBO)){
             transaction.getBankAccount().setBalance(transaction.getBankAccount().getBalance() - transaction.getImporte());
         }
-        if (transaction.getTipoMovimiento().equals("transferencia") || transaction.getTipoMovimiento().equals("abono")) {
+        if (transaction.getTipoMovimiento().equals(MovimientoType.TRANSFERENCIA) || transaction.getTipoMovimiento().equals(MovimientoType.ABONO)) {
             transaction.getBankAccount().setBalance( transaction.getBankAccount().getBalance() + transaction.getImporte());
         }
         transaction.setBalanceAfterTransaction(transaction.getBankAccount().getBalance());
@@ -257,9 +257,9 @@ public class TransactionServiceImpl implements TransactionService {
      * @param movimientoType
      * @return Boolean
      */
-    private Boolean ValidateTypeOfMovimiento(String movimientoType){
+    private Boolean ValidateTypeOfMovimiento(Enum movimientoType){
 
-        return (movimientoType).equals("pago") || movimientoType.equals("recibo") || movimientoType.equals("transferencia") || movimientoType.equals("abono");
+        return (movimientoType).equals(MovimientoType.PAGO) || movimientoType.equals(MovimientoType.RECIBO) || movimientoType.equals(MovimientoType.TRANSFERENCIA) || movimientoType.equals(MovimientoType.ABONO);
         }
 
 }

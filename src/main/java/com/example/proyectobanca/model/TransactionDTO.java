@@ -3,6 +3,8 @@ package com.example.proyectobanca.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +22,7 @@ public class TransactionDTO {
     private String concepto;
 
     @ApiModelProperty("Type of transaction: String")
-    private String tipoMovimiento;
+    private MovimientoType tipoMovimiento;
 
     @ApiModelProperty("Created date: Instant")
     private Instant createdDate;
@@ -40,8 +42,7 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(Double importe, String concepto, String tipoMovimiento, Instant createdDate, Instant lastModified, Long idBankAccount, Long idCreditCard,
-                          Long idCategory, Double balanceAfterTransaction) {
+    public TransactionDTO(Double importe, Double balanceAfterTransaction, String concepto, MovimientoType tipoMovimiento, Instant createdDate, Instant lastModified, Long idBankAccount, Long idCreditCard, Long idCategory) {
         this.importe = importe;
         this.balanceAfterTransaction = balanceAfterTransaction;
         this.concepto = concepto;
@@ -71,13 +72,9 @@ public class TransactionDTO {
         this.concepto = concepto;
     }
 
-    public String getTipoMovimiento() {
-        return tipoMovimiento;
-    }
+    public MovimientoType getTipoMovimiento() { return tipoMovimiento; }
 
-    public void setTipoMovimiento(String tipoMovimiento) {
-        this.tipoMovimiento = tipoMovimiento;
-    }
+    public void setTipoMovimiento(MovimientoType tipoMovimiento) { this.tipoMovimiento = tipoMovimiento; }
 
     public Instant getCreatedDate() {
         return createdDate;
