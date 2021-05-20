@@ -48,8 +48,8 @@ public class TransactionOperationsController {
     ) {
 
         Map<String, String> map1 = new HashMap<>();
-        map1.put("startDate", startDate);
-        map1.put("endDate", endDate);
+        map1.put("startDate", startDate + " 00:00:00.000000");
+        map1.put("endDate", endDate + " 23:59:59.999999");
         map1.put("page", page);
         map1.put("limit", limit);
 

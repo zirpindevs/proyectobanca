@@ -1,6 +1,7 @@
 package com.example.proyectobanca.service.impl;
 
 import com.example.proyectobanca.dao.TransactionOperationsDao;
+import com.example.proyectobanca.model.Transaction;
 import com.example.proyectobanca.model.transaction.operations.DailyBalance;
 import com.example.proyectobanca.service.TransactionOperationsService;
 import org.slf4j.Logger;
@@ -8,7 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @Service
@@ -26,91 +30,13 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
     @Override
     public List<DailyBalance> getDailyBalanceByDateRangeByNumAccount(Map<String, String> map1) {
 
-        Collection result = this.transactionOperationsDao.getDailyBalanceByDateRangeByNumAccount(map1);
-        List<DailyBalance> dailyBalances = transformResultToDailyBalances(result);
+        List result = this.transactionOperationsDao.getDailyBalanceByDateRangeByNumAccount(map1);
+        List<DailyBalance> dailyBalances = transformResultToDailyBalances(result, map1);
 
         return dailyBalances;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Javi's code truquis sacados de la manga
-    private List<DailyBalance> transformResultToDailyBalances(Collection result){
+    private List<DailyBalance> transformResultToDailyBalances(List result, Map<String, String> map1) {
 
         List<DailyBalance> dailyBalances = new ArrayList<DailyBalance>();
 
@@ -118,43 +44,19 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
                 item -> {
                     DailyBalance balance = new DailyBalance();
 
-                    Object[] dailyBalanceTest = ((Object[])item);
+                    Object[] transactionDate = ((Object[]) item);
+                    Double balanceDay = (Double) ((Object[]) item)[1];
 
-                    Double balanceTest = (Double) ((Object[])item)[1];
-
-                    balance.setDate((Timestamp) dailyBalanceTest[0]);
-                    balance.setBalance(balanceTest);
+                    balance.setStartDate(map1.get("startDate"));
+                    balance.setEndDate( map1.get("endDate"));
+                    balance.setDate((Timestamp) transactionDate[0]);
+                    balance.setBalance(balanceDay);
                     dailyBalances.add(balance);
                 }
         );
 
-
-
-/*        Iterator iterator = result.iterator();
-        while (iterator.hasNext()) {
-
-            DailyBalance balance = new DailyBalance();
-
-
-            Object objeto = iterator.next();
-            objeto.getClass().arrayType();*/
-
-
-
-         //   balance.setDate(LocalDate.parse(objeto));
-
-/*            System.out.println("objeto:"+objeto);
-            if (objeto != null) {
-                System.out.println("       clase="+objeto.getClass().getName());
-            }
-        }*/
-
-
-       /* result.stream().map(item -> {
-            item.getClass().g
-        });*/
-
-
         return dailyBalances;
+
+     
     }
 }

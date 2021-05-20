@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -146,7 +147,7 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setConcepto(transactionDTO.getConcepto());
             transaction.setImporte(transactionDTO.getImporte());
             transaction.setTipoMovimiento(transactionDTO.getTipoMovimiento());
-            transaction.setCreatedDate(Instant.now());
+            transaction.setCreatedDate(Timestamp.from(Instant.now()));
 
             if (transactionDTO.getIdBankAccount() != null) {
                 Optional<BankAccount> bankAccount = bankAccountRepository.findOneById(transactionDTO.getIdBankAccount());

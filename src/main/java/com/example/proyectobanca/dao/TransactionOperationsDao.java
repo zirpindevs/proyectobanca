@@ -1,9 +1,12 @@
 package com.example.proyectobanca.dao;
 
+import com.example.proyectobanca.model.Transaction;
+
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface TransactionOperationsDao {
 
-    Collection getDailyBalanceByDateRangeByNumAccount(Map<String, String> map1);
+    List<Transaction> getDailyBalanceByDateRangeByNumAccount(Map<String, String> map1);
 }

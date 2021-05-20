@@ -1,13 +1,14 @@
 package com.example.proyectobanca.model.transaction.operations;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 
 public class DailyBalance {
 
     private String startDate;
 
-    private LocalDate endDate;
+    private String endDate;
 
     private Timestamp date;
 
@@ -24,15 +25,17 @@ public class DailyBalance {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public Timestamp getDate() { return date; }
+    public Timestamp getDate() {
+        return date;
+    }
 
     public void setDate(Timestamp date) {
         this.date = date;

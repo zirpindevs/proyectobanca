@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
@@ -34,7 +35,7 @@ public class Transaction {
 
     @Column(name="created_date", nullable = false)
     @ApiModelProperty("Created date: Instant")
-    private Instant createdDate;
+    private Timestamp createdDate;
 
     @Column(name="last_modified")
     @ApiModelProperty("Transaction update date: Instant")
@@ -97,11 +98,11 @@ public class Transaction {
         this.tipoMovimiento = tipoMovimiento;
     }
 
-    public Instant getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Instant createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 
