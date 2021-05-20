@@ -57,6 +57,6 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
         return dailyBalances;
 
-     
+
     }
 }
