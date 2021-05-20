@@ -16,6 +16,6 @@ public interface CreditCardService {
 
     CreditCard updateCreditCard(Long id, CreditCardDTO creditCardDTO);
 
-    void deleteCreditCard(CreditCard creditCardtToDelete);
+    CreditCard markAsDeleteOne(Long id);
 
 }

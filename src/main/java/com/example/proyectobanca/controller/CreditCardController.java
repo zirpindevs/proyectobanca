@@ -1,7 +1,6 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.CreditCardDTO;
-import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.service.CreditCardService;
 import com.example.proyectobanca.model.CreditCard;
 import com.example.proyectobanca.repository.CreditCardRepository;
@@ -129,18 +128,21 @@ public class CreditCardController {
      */
     @DeleteMapping("/creditcards/{id}")
     @ApiOperation("Delete CreditCard of DB by Id")
-    public ResponseEntity<Void> deleteCreditCard(@ApiParam("Primary key of CreditCard: Long") @PathVariable Long id){
+    public ResponseEntity<CreditCard> deleteCreditCard(@ApiParam("Primary key of CreditCard: Long") @PathVariable Long id){
         log.debug("REST request to delete a creditcard: {} ", id);
 
-        CreditCard creditCardtToDelete = this.creditCardService.findOne(id);
-
-        if (creditCardtToDelete.getId() == null) {
-            log.warn("creditcard not exists");
+        if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        this.creditCardService.deleteCreditCard(creditCardtToDelete);
-        return ResponseEntity.noContent().build();
+        CreditCard result = creditCardService.markAsDeleteOne(id);
+
+        if (Objects.equals(result, Optional.of(false)))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -1,6 +1,9 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.BankAccount;
+import com.example.proyectobanca.model.BankAccountDTO;
+import com.example.proyectobanca.model.CreditCard;
+import com.example.proyectobanca.model.CreditCardDTO;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
 import io.swagger.annotations.ApiOperation;
@@ -9,12 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -63,56 +69,47 @@ public class BankAccountController {
     }
 
     /**
-     * CREATE BANKACCOUNTS
-     *
-     * @return ResponseEntity<BankAccount>
+     * Create a new bank account in database
+     * @param bankAccountDTO BankAccountDTO to create
+     * @return bankAccount BankAccount created
      * @throws URISyntaxException
      */
     @PostMapping("/bankaccounts")
-    @ApiOperation("Create BankAccount")
-    public ResponseEntity<BankAccount> createBankAccount(
-            @ApiParam("BankAccounts that you want to create: BankAccounts")
-            @RequestBody BankAccount bankAccountToCreate) throws URISyntaxException {
-        log.debug("REST request to create new a BankAccount: {} ", bankAccountToCreate);
+    @ApiOperation("Create a new bank account in DB")
+    public ResponseEntity<BankAccount> createBankAccount(@ApiParam("bankAccount that you want to create: BankAccountDTO") @RequestBody BankAccountDTO bankAccountDTO) throws URISyntaxException {
 
-        if (bankAccountToCreate.getNumAccount() == null || bankAccountToCreate.getEnabled() == null)
+        if(ObjectUtils.isEmpty(bankAccountDTO))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        BankAccount checkbankAccount = this.bankAccountRepository.findBynumAccount(bankAccountToCreate.getNumAccount());
+        BankAccount result = bankAccountService.createOne(bankAccountDTO);
 
-        if(checkbankAccount == null) {
-            BankAccount createBankAccount = this.bankAccountService.createBankAccount(bankAccountToCreate);
-
-            return ResponseEntity
-                    .created(new URI("/api/etiquetas/" + bankAccountToCreate.getNumAccount()))
-                    .body(bankAccountToCreate);
-        }
-        else
-        {
-            log.warn("already in use");
-
+        if (result.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
+        if (result.getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity
+                .created(new URI("/api/bankaccounts/" + result.getId()))
+                .body(result);
     }
 
     /**
-     * UPDATE BANKACCOUNTS
-     *
-     * @param modifiedBankAccount
-     * @return ResponseEntity<BankAccount>
+     * It update a bank account of database
+     * @param bankAccountDTO BankAccountDTO to update
+     * @return CreditCard updated in database
      */
-    @PutMapping("/bankaccounts")
-    @ApiOperation("Update enable property BankAccount in DB")
-    public ResponseEntity<BankAccount> updateBankAccount(
-            @ApiParam("BankAccount that you want to update enable status: BankAccount") @RequestBody BankAccount modifiedBankAccount) {
+    @PutMapping("/bankaccounts/{id}")
+    @ApiOperation("Update only enabled field of BankAccount in DB")
+    public ResponseEntity<BankAccount> updateCreditCard(
+            @ApiParam("id of BankAccount that you want to update: Long") @PathVariable Long id,
+            @ApiParam("BankAccount that you want to update: BankAccountDTO") @RequestBody BankAccountDTO bankAccountDTO
+    ){
 
-        log.debug("REST request to update enable status of BankAccount: {} ", modifiedBankAccount);
-
-        if(modifiedBankAccount.getId() == null && modifiedBankAccount.getNumAccount() == null)
+        if(id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        BankAccount result = bankAccountService.updateBankAccount(modifiedBankAccount);
+        BankAccount result = bankAccountService.updateOne(id, bankAccountDTO);
 
         if (result.getId() == -404L)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -121,29 +118,29 @@ public class BankAccountController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return ResponseEntity.ok().body(result);
-
     }
 
-
     /**
-     * DELETE BANKACCOUNTS
-     * @param id
-     * @return
+     * Delete bank account of database by ID. Really update the "deleted" field
+     * @param id bank account primary key that you want to delete
+     * @return void
      */
     @DeleteMapping("/bankaccounts/{id}")
-    @ApiOperation("Delete bankaccount of DB by Id")
-    public ResponseEntity<Void> deleteBankAccount(@ApiParam("Primary key of bankaccount: Long") @PathVariable Long id){
-        log.debug("REST request to delete a BankAccount: {} ", id);
+    @ApiOperation("Delete bank account of DB by Id")
+    public ResponseEntity<Void> deleteOne(@ApiParam("Primary key of bank account: Long") @PathVariable Long id){
 
-        BankAccount bankAccountToDelete = this.bankAccountService.findOne(id);
-
-        if (bankAccountToDelete.getId() == null) {
-            log.warn("BankAccount not exists");
+        if (id == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        this.bankAccountService.deleteBankAccount(bankAccountToDelete);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Boolean> result = bankAccountService.deleteOne(id);
+
+        if (Objects.equals(result, Optional.of(false)))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        if (!result.isPresent())
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
