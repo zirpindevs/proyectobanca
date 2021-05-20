@@ -13,6 +13,9 @@ public class TransactionDTO {
     @ApiModelProperty("Transaction amount: Double")
     private Double importe;
 
+    @ApiModelProperty("Balance after each transaction: Double")
+    private Double balanceAfterTransaction;
+
     @ApiModelProperty("Transaction description: String")
     private String concepto;
 
@@ -37,8 +40,10 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(Double importe, String concepto, String tipoMovimiento, Instant createdDate, Instant lastModified, Long idBankAccount, Long idCreditCard, Long idCategory) {
+    public TransactionDTO(Double importe, String concepto, String tipoMovimiento, Instant createdDate, Instant lastModified, Long idBankAccount, Long idCreditCard,
+                          Long idCategory, Double balanceAfterTransaction) {
         this.importe = importe;
+        this.balanceAfterTransaction = balanceAfterTransaction;
         this.concepto = concepto;
         this.tipoMovimiento = tipoMovimiento;
         this.createdDate = createdDate;
@@ -56,9 +61,11 @@ public class TransactionDTO {
         this.importe = importe;
     }
 
-    public String getConcepto() {
-        return concepto;
-    }
+    public Double getBalanceAfterTransaction() { return balanceAfterTransaction; }
+
+    public void setBalanceAfterTransaction(Double balanceAfterTransaction) { this.balanceAfterTransaction = balanceAfterTransaction; }
+
+    public String getConcepto() { return concepto; }
 
     public void setConcepto(String concepto) {
         this.concepto = concepto;

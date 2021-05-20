@@ -19,6 +19,10 @@ public class Transaction {
     @ApiModelProperty("Transaction amount: Double")
     private Double importe;
 
+    @Column(name = "balance_after_transaction", nullable = false)
+    @ApiModelProperty("Balance after each transaction: Double")
+    private Double balanceAfterTransaction;
+
     @Column(nullable = false)
     @ApiModelProperty("Transaction description: String")
     private String concepto;
@@ -71,6 +75,10 @@ public class Transaction {
     public void setImporte(Double importe) {
         this.importe = importe;
     }
+
+    public Double getBalanceAfterTransaction() { return balanceAfterTransaction; }
+
+    public void setBalanceAfterTransaction(Double balanceAfterTransaction) { this.balanceAfterTransaction = balanceAfterTransaction; }
 
     public String getConcepto() {
         return concepto;
@@ -129,6 +137,7 @@ public class Transaction {
         return "Transaction{" +
                 "id=" + id +
                 ", importe=" + importe +
+                ", balanceAfterTransaction=" + balanceAfterTransaction +
                 ", concepto='" + concepto + '\'' +
                 ", tipoMovimiento='" + tipoMovimiento + '\'' +
                 ", createdDate=" + createdDate +
