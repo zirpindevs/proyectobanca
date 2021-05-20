@@ -131,11 +131,14 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transactionEmpty = new Transaction();
 
-        if ( transactionDTO.getConcepto() == null || transactionDTO.getImporte() == null || transactionDTO.getTipoMovimiento() == null){
-
+        if ( transactionDTO.getConcepto() == null || transactionDTO.getImporte() == null || transactionDTO.getTipoMovimiento() == null || ValidateTypeOfMovimiento(transactionDTO.getTipoMovimiento()) != true){
             return transactionEmpty;
+        }
+        if ( transactionDTO.getIdBankAccount() == null && transactionDTO.getIdCreditCard() == null){
+            return transactionEmpty;
+        }
 
-        }else {
+        else {
              // If passed all validations
 
             Transaction transaction = new Transaction();
@@ -158,6 +161,9 @@ public class TransactionServiceImpl implements TransactionService {
                 Optional<CreditCard> creditCard = creditCardRepository.findOneById(transactionDTO.getIdCreditCard());
                 transaction.setCreditCard(creditCard.get());
             }
+
+            // Function to set current balance in the BankAccounts and in Transaction before an operation
+            currentBalance(transaction);
 
 
             return transaction;
@@ -226,5 +232,34 @@ public class TransactionServiceImpl implements TransactionService {
 
     }
 
+
+    /**
+     * Set de current balance in the BankAccounts and in Transaction before an operation
+     * @param transaction
+     * @return Transaction
+     */
+    private Transaction currentBalance (Transaction transaction) {
+
+
+        if(transaction.getTipoMovimiento().equals("pago") || transaction.getTipoMovimiento().equals("recibo")){
+            transaction.getBankAccount().setBalance(transaction.getBankAccount().getBalance() - transaction.getImporte());
+        }
+        if (transaction.getTipoMovimiento().equals("transferencia") || transaction.getTipoMovimiento().equals("abono")) {
+            transaction.getBankAccount().setBalance( transaction.getBankAccount().getBalance() + transaction.getImporte());
+        }
+        transaction.setBalanceAfterTransaction(transaction.getBankAccount().getBalance());
+
+        return transaction;
+    }
+
+    /**
+     * Check if the type of movimiento is a right field
+     * @param movimientoType
+     * @return Boolean
+     */
+    private Boolean ValidateTypeOfMovimiento(String movimientoType){
+
+        return (movimientoType).equals("pago") || movimientoType.equals("recibo") || movimientoType.equals("transferencia") || movimientoType.equals("abono");
+        }
 
 }

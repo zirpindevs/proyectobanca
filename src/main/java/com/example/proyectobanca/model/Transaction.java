@@ -19,7 +19,7 @@ public class Transaction {
     @ApiModelProperty("Transaction amount: Double")
     private Double importe;
 
-    @Column(name = "balance_after_transaction", nullable = false)
+    @Column(name = "balance_after_transaction")
     @ApiModelProperty("Balance after each transaction: Double")
     private Double balanceAfterTransaction;
 
