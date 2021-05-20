@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class TransactionOperationsServiceImpl implements TransactionOperationsService {
@@ -24,6 +24,52 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
     @Override
     public List<DailyBalance> getDailyBalanceByDateRangeByNumAccount(Map<String, String> map1) {
-        return this.transactionOperationsDao.getDailyBalanceByDateRangeByNumAccount(map1);
+
+        Collection result = this.transactionOperationsDao.getDailyBalanceByDateRangeByNumAccount(map1);
+        List<DailyBalance> dailyBalances = transformResultToDailyBalances(result);
+
+        return dailyBalances;
+    }
+
+    private List<DailyBalance> transformResultToDailyBalances(Collection result){
+
+        List<DailyBalance> dailyBalances = new ArrayList<DailyBalance>();
+
+/*        result.forEach(
+                item -> {
+                    DailyBalance balance = new DailyBalance();
+                    System.out.println(item);
+
+                    balance.setDate(LocalDate.parse(item.getClass().getName()));
+                    balance.setBalance(item.getClass().getName());
+                    dailyBalances.add(balance);
+                }
+        );*/
+        Iterator iterator = result.iterator();
+        while (iterator.hasNext()) {
+
+            DailyBalance balance = new DailyBalance();
+
+
+            Object objeto = iterator.next();
+            objeto.getClass().arrayType();
+
+
+
+         //   balance.setDate(LocalDate.parse(objeto));
+
+            System.out.println("objeto:"+objeto);
+            if (objeto != null) {
+                System.out.println("       clase="+objeto.getClass().getName());
+            }
+        }
+
+
+       /* result.stream().map(item -> {
+            item.getClass().g
+        });*/
+
+
+        return dailyBalances;
     }
 }
