@@ -257,9 +257,9 @@ public class TransactionServiceImpl implements TransactionService {
      * @param movimientoType
      * @return Boolean
      */
-    private Boolean ValidateTypeOfMovimiento(String movimientoType){
+    private Boolean ValidateTypeOfMovimiento(Enum movimientoType){
 
-        return (movimientoType).equals("pago") || movimientoType.equals("recibo") || movimientoType.equals("transferencia") || movimientoType.equals("abono");
+        return (movimientoType).equals(MovimientoType.PAGO) || movimientoType.equals(MovimientoType.RECIBO) || movimientoType.equals(MovimientoType.TRANSFERENCIA) || movimientoType.equals(MovimientoType.ABONO);
         }
 
 }

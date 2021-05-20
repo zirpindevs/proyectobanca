@@ -28,8 +28,9 @@ public class Transaction {
     private String concepto;
 
     @Column(name="tipo_movimiento")
+    @Enumerated(EnumType.STRING)
     @ApiModelProperty("Type of transaction: String")
-    private String tipoMovimiento;
+    private MovimientoType tipoMovimiento;
 
     @Column(name="created_date", nullable = false)
     @ApiModelProperty("Created date: Instant")
@@ -88,11 +89,11 @@ public class Transaction {
         this.concepto = concepto;
     }
 
-    public String getTipoMovimiento() {
+    public MovimientoType getTipoMovimiento() {
         return tipoMovimiento;
     }
 
-    public void setTipoMovimiento(String tipoMovimiento) {
+    public void setTipoMovimiento(MovimientoType tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
     }
 
