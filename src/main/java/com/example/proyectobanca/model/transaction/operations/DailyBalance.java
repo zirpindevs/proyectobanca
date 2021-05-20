@@ -1,5 +1,6 @@
 package com.example.proyectobanca.model.transaction.operations;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class DailyBalance {
@@ -8,7 +9,7 @@ public class DailyBalance {
 
     private LocalDate endDate;
 
-    private LocalDate date;
+    private Timestamp date;
 
     private Double balance;
 
@@ -31,11 +32,9 @@ public class DailyBalance {
         this.endDate = endDate;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
+    public Timestamp getDate() { return date; }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

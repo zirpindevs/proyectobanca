@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,38 +32,122 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         return dailyBalances;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Javi's code truquis sacados de la manga
     private List<DailyBalance> transformResultToDailyBalances(Collection result){
 
         List<DailyBalance> dailyBalances = new ArrayList<DailyBalance>();
 
-/*        result.forEach(
+        result.forEach(
                 item -> {
                     DailyBalance balance = new DailyBalance();
-                    System.out.println(item);
 
-                    balance.setDate(LocalDate.parse(item.getClass().getName()));
-                    balance.setBalance(item.getClass().getName());
+                    Object[] dailyBalanceTest = ((Object[])item);
+
+                    Double balanceTest = (Double) ((Object[])item)[1];
+
+                    balance.setDate((Timestamp) dailyBalanceTest[0]);
+                    balance.setBalance(balanceTest);
                     dailyBalances.add(balance);
                 }
-        );*/
-        Iterator iterator = result.iterator();
+        );
+
+
+
+/*        Iterator iterator = result.iterator();
         while (iterator.hasNext()) {
 
             DailyBalance balance = new DailyBalance();
 
 
             Object objeto = iterator.next();
-            objeto.getClass().arrayType();
+            objeto.getClass().arrayType();*/
 
 
 
          //   balance.setDate(LocalDate.parse(objeto));
 
-            System.out.println("objeto:"+objeto);
+/*            System.out.println("objeto:"+objeto);
             if (objeto != null) {
                 System.out.println("       clase="+objeto.getClass().getName());
             }
-        }
+        }*/
 
 
        /* result.stream().map(item -> {
