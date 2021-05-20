@@ -13,10 +13,10 @@ insert into categories(name) values ('Alimentación');
 insert into categories(name) values ('Otros');
 
 -- Bank Account examples
-insert into bank_accounts(num_account, balance, enabled, created_at) values ('02601732345271851', '0', true, "2020-02-11 01:00:00");
-insert into bank_accounts(num_account, balance, enabled, created_at) values ('07941320452229156', '0', true, "2019-02-11 01:00:00");
-insert into bank_accounts(num_account, balance, enabled, created_at) values ('30215465212525412', '0', true, "2019-02-11 01:00:00");
-insert into bank_accounts(num_account, balance, enabled, created_at) values ('96582454712536985', '0', true, "2019-02-11 01:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('02601732345271851', 2345, true, "2020-02-11 11:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('07941320452229156', '0', true, "2019-02-11 23:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('30215465212525412', '0', true, "2019-02-11 12:00:00");
+insert into bank_accounts(num_account, balance, enabled, created_at) values ('96582454712536985', '0', true, "2019-02-11 21:00:00");
 
 
 
@@ -69,4 +69,4 @@ insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id
 
 insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('678', "pago gas", 'recibo', 1, 2, "2021-02-15 04:33:00");
 insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('770', 'compra mercadona', "gasto", 1, 2, "2020-01-11 01:34:00");
-insert into transactions(importe, concepto, tipo_movimiento, id_bank_account, id_credit_card, created_date) values ('234', "bizum", 'abono', 2, 1, "2021-04-08 01:56:00");
+insert into transactions(importe, concepto, tipo_movimiento, balance_after_transaction, id_bank_account, id_credit_card, created_date) values ('234', "bizum", 'abono', 2345, 1, 1, "2021-04-08 01:56:00");
