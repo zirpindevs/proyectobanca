@@ -36,7 +36,7 @@ public class Transaction {
     private Instant lastModified;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_bank_account")
+    @JoinColumn(name = "id_bank_account", nullable = false)
     @JsonIgnore
     @ApiModelProperty("Bank account to which a single transaction belongs: BankAccount")
     private BankAccount bankAccount;
