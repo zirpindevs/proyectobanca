@@ -249,4 +249,41 @@ public class TransactionOperationsDaoImpl implements TransactionOperationsDao {
 
     //*************************************************************************************************************
 
+
+    /**
+     * Dao:
+     * Get the number of trabsaction per day  between two dates for a creditcard.
+     * @param idCreditCard Id of creditcard account that you have get the balance
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return List of the balance per day of transactions between two dates from database
+     */
+    @Override
+    public List<Transaction> getDailyTransactionByDateRangeByCreditCard(Long idCreditCard, Map<String, String> map1) {
+
+/*
+SELECT COUNT(id) AS totalTransactions, DATE(`created_date`) FROM `transactions` WHERE `created_date` BETWEEN '2021-02-11 00:00:15.000000' AND '2021-04-11 23:59:15.000000' GROUP BY DATE(`created_date`)
+ */
+        try {
+            if (map1.get("startDate") != null && map1.get("endDate") != null) {
+
+                Query queryNative = manager.createNativeQuery(
+                        "SELECT COUNT(`id`) AS totalTransactions, DATE(`created_date`) from `transactions` WHERE `created_date` BETWEEN '"
+                                + map1.get("startDate") + "'"
+                                + " AND '" + map1.get("endDate") + "'"
+                                + " AND `id_credit_card` = " + idCreditCard
+                                + " GROUP BY DATE(`created_date`) DESC "
+                );
+                List result = queryNative.getResultList();
+
+                return result;
+            }
+            return new ArrayList<>();
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return new ArrayList<>();
+        }
+
+    }
+
 }

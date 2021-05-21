@@ -3,6 +3,7 @@ package com.example.proyectobanca.controller;
 import com.example.proyectobanca.model.Transaction;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceRange;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceResponse;
+import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionResponse;
 import com.example.proyectobanca.service.TransactionOperationsService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -249,4 +250,50 @@ public class TransactionOperationsController {
 
 
     //************************************************************************************************************/
+
+
+
+    /**
+     * Controller:
+     * Get the number of trasactions per day between two dates for a creditcard
+     * @param id Id of creditcard that you have get the balance
+     * @param startDate Start date to obtain the daily balance
+     * @param endDate End date to obtain the daily balance
+     * @param page Page to be displayed of the results obtained (optional)
+     * @param limit Number of records per page that you want to show of the results obtained (optional)
+     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     */
+    @GetMapping("/transactions-operations/daily-transaction-creditcard/{id}")
+    @ApiOperation("Get number of transactions per day between two dates")
+    public ResponseEntity<DailyTransactionResponse> getDailyTransactionByDateRangeByCreditCard(
+            @ApiParam("Primary key of credit card: Long") @PathVariable Long id,
+            @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
+            @ApiParam("End date: LocalDate") @QueryParam("endDate") String endDate,
+            @ApiParam("Pagination: page from which the records start to be displayed (optional): Integer") @QueryParam("page") String page,
+            @ApiParam("Pagination: number of records displayed per page (optional): Integer") @QueryParam("limit") String limit
+    ) {
+
+        Map<String, String> map1 = new HashMap<>();
+        map1.put("startDate", startDate + " 00:00:00.000000");
+        map1.put("endDate", endDate + " 23:59:59.999999");
+        map1.put("page", page);
+        map1.put("limit", limit);
+
+        if (startDate == null || endDate == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        DailyTransactionResponse result = transactionOperationsService.getDailyTransactionByDateRangeByCreditCard(id, map1);
+
+        if (result.getStatus() == "-404")
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        if (result.getStatus() == "-500")
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        if (result.getStatus() == "-204")
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return ResponseEntity.ok().body(result);
+    }
+
 }

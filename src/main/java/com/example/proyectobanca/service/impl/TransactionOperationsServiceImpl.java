@@ -1,15 +1,18 @@
 package com.example.proyectobanca.service.impl;
 
 import com.example.proyectobanca.dao.TransactionOperationsDao;
-import com.example.proyectobanca.model.BankAccount;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceRange;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceResponse;
+import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionRange;
+import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionResponse;
 import com.example.proyectobanca.repository.BankAccountRepository;
+import com.example.proyectobanca.repository.CreditCardRepository;
 import com.example.proyectobanca.service.TransactionOperationsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -22,9 +25,12 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
     private final BankAccountRepository bankAccountRepository;
 
-    public TransactionOperationsServiceImpl(TransactionOperationsDao transactionOperationsDao, BankAccountRepository bankAccountRepository) {
+    private final CreditCardRepository creditCardRepository;
+
+    public TransactionOperationsServiceImpl(TransactionOperationsDao transactionOperationsDao, BankAccountRepository bankAccountRepository, CreditCardRepository creditCardRepository) {
         this.transactionOperationsDao = transactionOperationsDao;
         this.bankAccountRepository = bankAccountRepository;
+        this.creditCardRepository = creditCardRepository;
     }
 
     /**
@@ -248,4 +254,68 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
 
     //*********************************************************************************************************
+
+
+    /**
+     * Service:
+     * Get the number of transactions per day between two dates for a creditcard
+     * @param idCreditCard Id of creditcard that you have get the transactions
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     */
+    @Override
+    public DailyTransactionResponse getDailyTransactionByDateRangeByCreditCard(Long idCreditCard, Map<String, String> map1) {
+
+        try {
+
+            boolean creditCardExist = creditCardRepository.existsById(idCreditCard);
+            if (!creditCardExist)
+                return new DailyTransactionResponse("-404");
+
+
+            List result = this.transactionOperationsDao.getDailyTransactionByDateRangeByCreditCard(idCreditCard, map1);
+
+            if (result.size() == 0)
+                return new DailyTransactionResponse("-204");
+
+            DailyTransactionResponse dailyTransactionResponse = transformResultToDailyTransaction(result, map1);
+
+            return dailyTransactionResponse;
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            return new DailyTransactionResponse("-500");
+        }
+    }
+
+    /**
+     * Transform the result of the database into a response of type DailyBalanceResponse
+     * @param result List of the balance per day of transactions between two dates from database
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     */
+    private DailyTransactionResponse transformResultToDailyTransaction(List result, Map<String, String> map1) {
+
+        DailyTransactionResponse dailyTransactionResponse = new DailyTransactionResponse("ok");
+
+        dailyTransactionResponse.setStartDate(map1.get("startDate"));
+        dailyTransactionResponse.setEndDate( map1.get("endDate"));
+
+
+        result.forEach(
+                item -> {
+                    DailyTransactionRange transaction = new DailyTransactionRange();
+
+                    Object transactionDate = ((Object[]) item)[1];
+                    BigInteger totalTransactions = (BigInteger) ((Object[]) item)[0];
+
+                    transaction.setTransactionDate(transactionDate.toString());
+                    transaction.setTotalTransactions(totalTransactions);
+                    dailyTransactionResponse.getDailyTransactionRanges().add(transaction);
+                }
+        );
+
+        return dailyTransactionResponse;
+    }
 }
