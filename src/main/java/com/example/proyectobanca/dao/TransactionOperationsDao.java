@@ -8,5 +8,5 @@ import java.util.Map;
 
 public interface TransactionOperationsDao {
 
-    List<Transaction> getDailyBalanceByDateRangeByNumAccount(Map<String, String> map1);
+    List<Transaction> getDailyBalanceByDateRangeByNumAccount(Long idBankAccount, Map<String, String> map1);
 }

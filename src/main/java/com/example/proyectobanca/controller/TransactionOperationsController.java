@@ -1,7 +1,8 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.Transaction;
-import com.example.proyectobanca.model.transaction.operations.DailyBalance;
+import com.example.proyectobanca.model.transaction.operations.DailyBalanceRange;
+import com.example.proyectobanca.model.transaction.operations.DailyBalanceResponse;
 import com.example.proyectobanca.service.TransactionOperationsService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,15 +32,19 @@ public class TransactionOperationsController {
         this.transactionOperationsService = transactionOperationsService;
     }
 
-
     /**
-     * Get the current balance per day between two dates for a bank account. Also, it returns the same balance from the
-     * same date range, but from the previous year.
-     * @return List of DailyBalance per day from database
+     * Controller:
+     * Get the balance per day of transactions between two dates for a bank account.
+     * @param id Id of bank account that you have get the balance
+     * @param startDate Start date to obtain the daily balance
+     * @param endDate End date to obtain the daily balance
+     * @param page Page to be displayed of the results obtained (optional)
+     * @param limit Number of records per page that you want to show of the results obtained (optional)
+     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
      */
     @GetMapping("/transactions-operations/daily-balance-bankaccount/{id}")
     @ApiOperation("Get balance per day between two dates")
-    public ResponseEntity<List<DailyBalance>> getDailyBalanceByDateRangeByNumAccount(
+    public ResponseEntity<DailyBalanceResponse> getDailyBalanceByDateRangeByNumAccount(
             @ApiParam("Primary key of Bank account: Long") @PathVariable Long id,
             @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
             @ApiParam("End date: LocalDate") @QueryParam("endDate") String endDate,
@@ -53,13 +58,19 @@ public class TransactionOperationsController {
         map1.put("page", page);
         map1.put("limit", limit);
 
-        List<DailyBalance> result = transactionOperationsService.getDailyBalanceByDateRangeByNumAccount(map1);
-
-        if (result.isEmpty())
+        if (startDate == null || endDate == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-/*        if (result.get(0).getId()== -500L)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);*/
+        DailyBalanceResponse result = transactionOperationsService.getDailyBalanceByDateRangeByNumAccount(id, map1);
+
+        if (result.getStatus() == "-404")
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        if (result.getStatus() == "-500")
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        if (result.getStatus() == "-204")
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         return ResponseEntity.ok().body(result);
     }

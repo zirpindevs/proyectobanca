@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 
-public class DailyBalance {
+public class DailyBalanceRange {
 
     private String startDate;
 
@@ -14,7 +14,7 @@ public class DailyBalance {
 
     private Double balance;
 
-    public DailyBalance() {
+    public DailyBalanceRange() {
     }
 
     public String getStartDate() {
