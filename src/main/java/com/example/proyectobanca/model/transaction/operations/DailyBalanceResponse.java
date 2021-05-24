@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Response object that contains the daily balance information for a bank account between two dates.
  */
 public class DailyBalanceResponse {
 
@@ -14,7 +14,7 @@ public class DailyBalanceResponse {
 
     private String endDate;
 
-    private String numBankAccount;
+    private Long idBankAccount;
 
     private List<DailyBalanceRange> dailyBalanceRanges = new ArrayList<>();
 
@@ -49,12 +49,12 @@ public class DailyBalanceResponse {
         this.endDate = endDate;
     }
 
-    public String getNumBankAccount() {
-        return numBankAccount;
+    public Long getIdBankAccount() {
+        return idBankAccount;
     }
 
-    public void setNumBankAccount(String numBankAccount) {
-        this.numBankAccount = numBankAccount;
+    public void setIdBankAccount(Long idBankAccount) {
+        this.idBankAccount = idBankAccount;
     }
 
     public List<DailyBalanceRange> getDailyBalanceRanges() {
@@ -71,7 +71,7 @@ public class DailyBalanceResponse {
                 "status='" + status + '\'' +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
-                ", numBankAccount='" + numBankAccount + '\'' +
+                ", idBankAccount=" + idBankAccount +
                 ", dailyBalanceRanges=" + dailyBalanceRanges +
                 '}';
     }
