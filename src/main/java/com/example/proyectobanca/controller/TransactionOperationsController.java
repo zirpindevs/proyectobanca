@@ -308,9 +308,9 @@ public class TransactionOperationsController {
      * @param limit Number of records per page that you want to show of the results obtained (optional)
      * @return DailyOperationsResponse with List of the operations per day of a bankaccount between two dates from database
      */
-    @GetMapping("/transactions-operations/daily-operations-category/{id}")
+    @GetMapping("/transactions-operations/daily-operations-category-bankaccount/{id}")
     @ApiOperation("Get number of operations per day between two dates")
-    public ResponseEntity<DailyOperationsResponse> getAllOperationsByCategory(
+    public ResponseEntity<DailyOperationsResponse> getAllOperationsByCategoryBankAccount(
             @ApiParam("Primary key of bank account: Long") @PathVariable Long id,
             @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
             @ApiParam("End date: LocalDate") @QueryParam("endDate") String endDate,
@@ -327,7 +327,50 @@ public class TransactionOperationsController {
         if (startDate == null || endDate == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        DailyOperationsResponse result = transactionOperationsService.getAllOperationsByCategory(id, map1);
+        DailyOperationsResponse result = transactionOperationsService.getAllOperationsByCategoryBankAccount(id, map1);
+
+        if (result.getStatus() == "-404")
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        if (result.getStatus() == "-500")
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        if (result.getStatus() == "-204")
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    /**
+     * Controller:
+     * Get the number of operations per day between two dates for a creditcard
+     * @param id Id of creditcard that you have get the operations
+     * @param startDate Start date to obtain the daily operations
+     * @param endDate End date to obtain the daily operations
+     * @param page Page to be displayed of the results obtained (optional)
+     * @param limit Number of records per page that you want to show of the results obtained (optional)
+     * @return DailyOperationsResponse with List of the operations per day of a creditcard between two dates from database
+     */
+    @GetMapping("/transactions-operations/daily-operations-category-creditcard/{id}")
+    @ApiOperation("Get number of operations per day between two dates")
+    public ResponseEntity<DailyOperationsResponse> getAllOperationsByCategoryCreditCard(
+            @ApiParam("Primary key of credit card: Long") @PathVariable Long id,
+            @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
+            @ApiParam("End date: LocalDate") @QueryParam("endDate") String endDate,
+            @ApiParam("Pagination: page from which the records start to be displayed (optional): Integer") @QueryParam("page") String page,
+            @ApiParam("Pagination: number of records displayed per page (optional): Integer") @QueryParam("limit") String limit
+    ) {
+
+        Map<String, String> map1 = new HashMap<>();
+        map1.put("startDate", startDate + " 00:00:00.000000");
+        map1.put("endDate", endDate + " 23:59:59.999999");
+        map1.put("page", page);
+        map1.put("limit", limit);
+
+        if (startDate == null || endDate == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        DailyOperationsResponse result = transactionOperationsService.getAllOperationsByCategoryCreditCard(id, map1);
 
         if (result.getStatus() == "-404")
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

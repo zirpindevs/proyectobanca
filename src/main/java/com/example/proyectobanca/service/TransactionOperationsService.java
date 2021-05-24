@@ -12,6 +12,8 @@ public interface TransactionOperationsService {
 
     DailyBalanceResponse getDailyBalanceByDateRangeByNumAccount(Long id, Map<String, String> map1);
     DailyTransactionResponse getDailyTransactionByDateRangeByCreditCard(Long idCreditCard, Map<String, String> map1);
-    DailyOperationsResponse getAllOperationsByCategory(Long idBankAccount, Map<String, String> map1);
+    DailyOperationsResponse getAllOperationsByCategoryBankAccount(Long idBankAccount, Map<String, String> map1);
+    DailyOperationsResponse getAllOperationsByCategoryCreditCard(Long idCreditCard, Map<String, String> map1);
 
-    }
+
+}

@@ -134,7 +134,7 @@ SELECT COUNT(id) AS totalTransactions, DATE(`created_date`) FROM `transactions` 
      * @return List of operations per day group by category between two dates from database
      */
     @Override
-    public List<Transaction> getAllOperationsByCategory(Long idBankAccount, Map<String, String> map1) {
+    public List<Transaction> getAllOperationsByCategoryBankAccount(Long idBankAccount, Map<String, String> map1) {
 
         try {
             if (map1.get("startDate") != null && map1.get("endDate") != null) {
@@ -144,6 +144,37 @@ SELECT COUNT(id) AS totalTransactions, DATE(`created_date`) FROM `transactions` 
                                 + map1.get("startDate") + "'"
                                 + " AND '" + map1.get("endDate") + "'"
                                 + " AND `id_bank_account` = " + idBankAccount
+                                + " GROUP BY id_category"
+                );
+                List result = queryNative.getResultList();
+
+                return result;
+            }
+            return new ArrayList<>();
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Dao:
+     * Get the all operations per day  between two dates by category of a credit card.
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return List of operations per day group by category between two dates from database
+     */
+    @Override
+    public List<Transaction> getAllOperationsByCategoryCreditCard(Long idCreditCard, Map<String, String> map1) {
+
+        try {
+            if (map1.get("startDate") != null && map1.get("endDate") != null) {
+
+                Query queryNative = manager.createNativeQuery(
+                        "SELECT id_category, COUNT(`id`) AS totalTransactions, ANY_VALUE(`created_date`) from `transactions` WHERE `created_date` BETWEEN '"
+                                + map1.get("startDate") + "'"
+                                + " AND '" + map1.get("endDate") + "'"
+                                + " AND `id_credit_card` = " + idCreditCard
                                 + " GROUP BY id_category"
                 );
                 List result = queryNative.getResultList();

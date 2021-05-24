@@ -347,7 +347,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
      * @return DailyOperationsResponse with List of the operations per day by category between two dates from database
      */
     @Override
-    public DailyOperationsResponse getAllOperationsByCategory(Long idBankAccount, Map<String, String> map1) {
+    public DailyOperationsResponse getAllOperationsByCategoryBankAccount(Long idBankAccount, Map<String, String> map1) {
 
         try {
 
@@ -356,7 +356,38 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
                 return new DailyOperationsResponse("-404");
 
 
-            List result = this.transactionOperationsDao.getAllOperationsByCategory(idBankAccount, map1);
+            List result = this.transactionOperationsDao.getAllOperationsByCategoryBankAccount(idBankAccount, map1);
+
+            if (result.size() == 0)
+                return new DailyOperationsResponse("-204");
+
+            DailyOperationsResponse dailyOperationsResponse = transformResultToDailyOperation(result, map1);
+
+            return dailyOperationsResponse;
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            return new DailyOperationsResponse("-500");
+        }
+    }
+
+    /**
+     * Service:
+     * Get the number of operations per day between two dates for a credit card
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return DailyOperationsResponse with List of the operations per day by category between two dates from database
+     */
+    @Override
+    public DailyOperationsResponse getAllOperationsByCategoryCreditCard(Long idCreditCard, Map<String, String> map1){
+        try {
+
+            boolean creditCardExist = creditCardRepository.existsById(idCreditCard);
+            if (!creditCardExist)
+                return new DailyOperationsResponse("-404");
+
+
+            List result = this.transactionOperationsDao.getAllOperationsByCategoryCreditCard(idCreditCard, map1);
 
             if (result.size() == 0)
                 return new DailyOperationsResponse("-204");
@@ -373,11 +404,12 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
     }
 
 
+
     /**
      * Transform the result of the database into a response of type DailyOperationsResponse
-     * @param result List of operations per day in a bankaccount between two dates from database
+     * @param result List of operations per day in a between two dates from database
      * @param map1 Map<String, String> with DateRange params and pagination optionals params
-     * @return DailyOperationsResponse with List of the operations per day in a bankaccount between two dates from database
+     * @return DailyOperationsResponse with List of the operations per day between two dates from database
      */
     private DailyOperationsResponse transformResultToDailyOperation(List result, Map<String, String> map1) {
 
