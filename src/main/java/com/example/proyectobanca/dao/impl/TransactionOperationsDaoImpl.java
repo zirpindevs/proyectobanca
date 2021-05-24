@@ -23,7 +23,7 @@ public class TransactionOperationsDaoImpl implements TransactionOperationsDao {
 
     /**
      * Dao:
-     * Get the balance per day of transactions between two dates for a bank account.
+     * Get the Balance per day and the Total Transactions between two dates for a bank account
      * @param idBankAccount Id of bank account that you have get the balance
      * @param map1 Map<String, String> with DateRange params and pagination optionals params
      * @return List of the balance per day of transactions between two dates from database
@@ -55,196 +55,36 @@ public class TransactionOperationsDaoImpl implements TransactionOperationsDao {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * DAO:
+     * Get the Total of Transactions per day between two dates for a bank account
+     * @param idBankAccount Id of bank account that you want to get the total of transactions
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return List of the Total of Transactions between two dates from database
+     */
+    @Override
+    public List getTotalTransactionsByDateRangeByNumAccount(Long idBankAccount, Map<String, String> map1) {
+        try {
+            if (map1.get("startDate") != null && map1.get("endDate") != null) {
+
+                Query queryNative = manager.createNativeQuery(
+                        "SELECT COUNT(id) AS totalTransactions, DATE(`created_date`) FROM `transactions` WHERE `created_date` BETWEEN '"
+                                + map1.get("startDate") + "'"
+                                + " AND '" + map1.get("endDate") + "'"
+                                + " AND `id_bank_account` = " + idBankAccount
+                                + " GROUP BY DATE(`created_date`) ORDER BY DATE(`created_date`) DESC"
+                );
+                List result = queryNative.getResultList();
+
+                return result;
+            }
+            return new ArrayList<>();
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 
 
     //*************************************************************************************************************

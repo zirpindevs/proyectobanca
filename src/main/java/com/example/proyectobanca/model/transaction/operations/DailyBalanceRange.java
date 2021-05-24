@@ -1,5 +1,6 @@
 package com.example.proyectobanca.model.transaction.operations;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 
 
@@ -13,7 +14,7 @@ public class DailyBalanceRange {
 
     private Double balance;
 
-    private Long totalTransactions;
+    private BigInteger totalTransactions;
 
     public DailyBalanceRange() {
     }
@@ -50,11 +51,11 @@ public class DailyBalanceRange {
         this.balance = balance;
     }
 
-    public Long getTotalTransactions() {
+    public BigInteger getTotalTransactions() {
         return totalTransactions;
     }
 
-    public void setTotalTransactions(Long totalTransactions) {
+    public void setTotalTransactions(BigInteger totalTransactions) {
         this.totalTransactions = totalTransactions;
     }
 }

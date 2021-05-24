@@ -34,16 +34,16 @@ public class TransactionOperationsController {
 
     /**
      * Controller:
-     * Get the balance per day of transactions between two dates for a bank account.
+     * Get the Balance and Total of Transactions per day and the total transactions between two dates for a bank account
      * @param id Id of bank account that you have get the balance
      * @param startDate Start date to obtain the daily balance
      * @param endDate End date to obtain the daily balance
      * @param page Page to be displayed of the results obtained (optional)
      * @param limit Number of records per page that you want to show of the results obtained (optional)
-     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     * @return DailyBalanceResponse with List of the Balance and Total of Transactions per day between two dates from database
      */
     @GetMapping("/transactions-operations/daily-balance-bankaccount/{id}")
-    @ApiOperation("Get balance per day between two dates")
+    @ApiOperation("Get Balance and Total of Transactions per day between two dates")
     public ResponseEntity<DailyBalanceResponse> getDailyBalanceByDateRangeByNumAccount(
             @ApiParam("Primary key of Bank account: Long") @PathVariable Long id,
             @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
