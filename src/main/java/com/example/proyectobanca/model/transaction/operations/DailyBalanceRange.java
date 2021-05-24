@@ -3,7 +3,9 @@ package com.example.proyectobanca.model.transaction.operations;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
-
+/**
+ * Class containing the information of a day's balance for a bank account.
+ */
 public class DailyBalanceRange {
 
     private Timestamp date;

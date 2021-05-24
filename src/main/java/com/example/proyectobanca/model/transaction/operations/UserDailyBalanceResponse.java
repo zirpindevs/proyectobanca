@@ -3,6 +3,9 @@ package com.example.proyectobanca.model.transaction.operations;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Response class that contains the information of the daily balance of all the bank accounts of a user between two dates.
+ */
 public class UserDailyBalanceResponse {
 
     private String status;

@@ -70,11 +70,11 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
             DailyBalanceResponse dailyBalanceResponse = new DailyBalanceResponse();
 
-            dailyBalanceResponse = transformResultToDailyBalances(result, map1, dailyBalanceResponse);
+            dailyBalanceResponse = transformResultToDailyBalances(idBankAccount, result, map1, dailyBalanceResponse);
 
             result = this.transactionOperationsDao.getTotalTransactionsByDateRangeByNumAccount(idBankAccount, map1);
 
-            dailyBalanceResponse = transformResultToDailyBalances(result, map1, dailyBalanceResponse);
+            dailyBalanceResponse = transformResultToDailyBalances(idBankAccount, result, map1, dailyBalanceResponse);
 
             return dailyBalanceResponse;
 
@@ -91,7 +91,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
      * @param map1 Map<String, String> with DateRange params and pagination optionals params
      * @return DailyBalanceResponse with List of the balance and Total of Transactions per day between two dates from database
      */
-    private DailyBalanceResponse transformResultToDailyBalances(List result, Map<String, String> map1, DailyBalanceResponse dailyBalanceResponse) {
+    private DailyBalanceResponse transformResultToDailyBalances(Long idBankAccount, List result, Map<String, String> map1, DailyBalanceResponse dailyBalanceResponse) {
 
         if (dailyBalanceResponse.getStatus() == null){
             result.forEach(
@@ -108,6 +108,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
             );
 
             dailyBalanceResponse.setStatus("ok");
+            dailyBalanceResponse.setIdBankAccount(idBankAccount);
             dailyBalanceResponse.setStartDate(map1.get("startDate"));
             dailyBalanceResponse.setEndDate( map1.get("endDate"));
         }else{
@@ -173,7 +174,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         bankAccountsByUser.forEach(
                 item -> {
 
-                    BigInteger idBankAccount = (BigInteger) ((Object[]) item)[0];
+                    BigInteger idBankAccount = (BigInteger) item;
 
                     Long idBankAccountLong = idBankAccount.longValue();
                     DailyBalanceResponse bankAccountBalance = this.getDailyBalanceByDateRangeByNumAccount(idBankAccountLong, map1);
@@ -188,7 +189,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         userDailyBalanceResponse.setStartDate(map1.get("startDate"));
         userDailyBalanceResponse.setEndDate(map1.get("endDate"));
 
-        return new UserDailyBalanceResponse("200");
+        return userDailyBalanceResponse;
     }
 
 
