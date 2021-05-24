@@ -14,4 +14,7 @@ public interface TransactionOperationsDao {
 
     List<Transaction> getDailyTransactionByDateRangeByCreditCard(Long idCreditCard, Map<String, String> map1);
 
-}
+    List<Transaction> getAllOperationsByCategory(Long idBankAccount, Map<String, String> map1);
+
+
+    }
