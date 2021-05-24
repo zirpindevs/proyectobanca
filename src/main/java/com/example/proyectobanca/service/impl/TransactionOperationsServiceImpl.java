@@ -1,12 +1,15 @@
 package com.example.proyectobanca.service.impl;
 
 import com.example.proyectobanca.dao.TransactionOperationsDao;
+import com.example.proyectobanca.dao.UserDao;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceRange;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceResponse;
+import com.example.proyectobanca.model.transaction.operations.UserDailyBalanceResponse;
 import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionRange;
 import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionResponse;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.repository.CreditCardRepository;
+import com.example.proyectobanca.repository.UserRepository;
 import com.example.proyectobanca.service.TransactionOperationsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class TransactionOperationsServiceImpl implements TransactionOperationsService {
 
-    private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(TransactionOperationsServiceImpl.class);
 
     private final TransactionOperationsDao transactionOperationsDao;
 
@@ -28,11 +31,18 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
     private final CreditCardRepository creditCardRepository;
 
-    public TransactionOperationsServiceImpl(TransactionOperationsDao transactionOperationsDao, BankAccountRepository bankAccountRepository, CreditCardRepository creditCardRepository) {
+    private final UserRepository userRepository;
+
+    private final UserDao userDao;
+
+    public TransactionOperationsServiceImpl(TransactionOperationsDao transactionOperationsDao, BankAccountRepository bankAccountRepository, CreditCardRepository creditCardRepository, UserRepository userRepository, UserDao userDao) {
         this.transactionOperationsDao = transactionOperationsDao;
         this.bankAccountRepository = bankAccountRepository;
         this.creditCardRepository = creditCardRepository;
+        this.userRepository = userRepository;
+        this.userDao = userDao;
     }
+
 
     /**
      * Service:
@@ -89,14 +99,15 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
                         Object[] transactionDate = ((Object[]) item);
                         Double balanceDay = (Double) ((Object[]) item)[1];
 
-                        balance.setStartDate(map1.get("startDate"));
-                        balance.setEndDate( map1.get("endDate"));
                         balance.setDate((Timestamp) transactionDate[0]);
                         balance.setBalance(balanceDay);
                         dailyBalanceResponse.getDailyBalanceRanges().add(balance);
                     }
             );
+
             dailyBalanceResponse.setStatus("ok");
+            dailyBalanceResponse.setStartDate(map1.get("startDate"));
+            dailyBalanceResponse.setEndDate( map1.get("endDate"));
         }else{
             AtomicReference<Integer> i = new AtomicReference<>(0);
 
@@ -111,6 +122,70 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         }
 
         return dailyBalanceResponse;
+    }
+
+
+    /**
+     * Get Balance of all bank accounts that a user has
+     * @param idUser Id user
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return UserDailyBalanceResponse with balance of all bank accounts that user has
+     */
+    @Override
+    public UserDailyBalanceResponse getDailyBalanceByDateRangeByUser(Long idUser, Map<String, String> map1) {
+
+        try {
+
+            boolean userExist = userRepository.existsById(idUser);
+            if (!userExist)
+                return new UserDailyBalanceResponse("-404");
+
+
+            List bankAccountsByUser = this.userDao.findAllBankAccountsByUser(idUser, map1);
+
+            if (bankAccountsByUser.size() == 0)
+                return new UserDailyBalanceResponse("-204");
+
+            UserDailyBalanceResponse userDailyBalanceResponse = createUserDailyBalanceResponse(bankAccountsByUser, idUser, map1);
+
+            return userDailyBalanceResponse;
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            return new UserDailyBalanceResponse("-500");
+        }
+    }
+
+    /**
+     * Create a Object of UserDailyBalanceResponse
+     * @param bankAccountsByUser Bank accounts that user has
+     * @param idUser Id user
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return DailyBalanceResponse with the balance and Total of Transactions per day between two dates of all user's bank accounts
+     */
+    private UserDailyBalanceResponse createUserDailyBalanceResponse(List bankAccountsByUser, Long idUser, Map<String, String> map1){
+
+        UserDailyBalanceResponse userDailyBalanceResponse = new UserDailyBalanceResponse();
+
+        bankAccountsByUser.forEach(
+                item -> {
+
+                    BigInteger idBankAccount = (BigInteger) ((Object[]) item)[0];
+                    Long idBankAccountLong = idBankAccount.longValue();
+                    DailyBalanceResponse bankAccountBalance = this.getDailyBalanceByDateRangeByNumAccount(idBankAccountLong, map1);
+
+                    userDailyBalanceResponse.getBankAccountBalance().add(bankAccountBalance);
+
+                }
+        );
+
+        userDailyBalanceResponse.setStatus("200");
+        userDailyBalanceResponse.setUserId(idUser);
+        userDailyBalanceResponse.setStartDate(map1.get("startDate"));
+        userDailyBalanceResponse.setEndDate(map1.get("endDate"));
+
+        return new UserDailyBalanceResponse("200");
     }
 
 

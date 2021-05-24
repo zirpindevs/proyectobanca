@@ -3,25 +3,22 @@ package com.example.proyectobanca.model.transaction.operations;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
-public class DailyBalanceResponse {
+public class UserDailyBalanceResponse {
 
     private String status;
+
+    private Long userId;
 
     private String startDate;
 
     private String endDate;
 
-    private String numBankAccount;
+    private List<DailyBalanceResponse> bankAccountBalance = new ArrayList<>();
 
-    private List<DailyBalanceRange> dailyBalanceRanges = new ArrayList<>();
-
-    public DailyBalanceResponse() {
+    public UserDailyBalanceResponse() {
     }
 
-    public DailyBalanceResponse(String status) {
+    public UserDailyBalanceResponse(String status) {
         this.status = status;
     }
 
@@ -31,6 +28,14 @@ public class DailyBalanceResponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getStartDate() {
@@ -49,30 +54,22 @@ public class DailyBalanceResponse {
         this.endDate = endDate;
     }
 
-    public String getNumBankAccount() {
-        return numBankAccount;
+    public List<DailyBalanceResponse> getBankAccountBalance() {
+        return bankAccountBalance;
     }
 
-    public void setNumBankAccount(String numBankAccount) {
-        this.numBankAccount = numBankAccount;
-    }
-
-    public List<DailyBalanceRange> getDailyBalanceRanges() {
-        return dailyBalanceRanges;
-    }
-
-    public void setDailyBalanceRanges(List<DailyBalanceRange> dailyBalanceRanges) {
-        this.dailyBalanceRanges = dailyBalanceRanges;
+    public void setBankAccountBalance(List<DailyBalanceResponse> bankAccountBalance) {
+        this.bankAccountBalance = bankAccountBalance;
     }
 
     @Override
     public String toString() {
-        return "DailyBalanceResponse{" +
+        return "UserDailyBalanceResponse{" +
                 "status='" + status + '\'' +
+                ", userId=" + userId +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
-                ", numBankAccount='" + numBankAccount + '\'' +
-                ", dailyBalanceRanges=" + dailyBalanceRanges +
+                ", bankAccountBalance=" + bankAccountBalance +
                 '}';
     }
 }

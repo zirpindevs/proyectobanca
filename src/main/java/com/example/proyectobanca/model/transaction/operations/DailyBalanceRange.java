@@ -6,10 +6,6 @@ import java.sql.Timestamp;
 
 public class DailyBalanceRange {
 
-    private String startDate;
-
-    private String endDate;
-
     private Timestamp date;
 
     private Double balance;
@@ -17,22 +13,6 @@ public class DailyBalanceRange {
     private BigInteger totalTransactions;
 
     public DailyBalanceRange() {
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
     }
 
     public Timestamp getDate() {
@@ -57,5 +37,14 @@ public class DailyBalanceRange {
 
     public void setTotalTransactions(BigInteger totalTransactions) {
         this.totalTransactions = totalTransactions;
+    }
+
+    @Override
+    public String toString() {
+        return "DailyBalanceRange{" +
+                "date=" + date +
+                ", balance=" + balance +
+                ", totalTransactions=" + totalTransactions +
+                '}';
     }
 }
