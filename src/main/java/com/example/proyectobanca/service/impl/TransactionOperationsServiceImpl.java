@@ -5,6 +5,8 @@ import com.example.proyectobanca.dao.UserDao;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceRange;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceResponse;
 import com.example.proyectobanca.model.transaction.operations.UserDailyBalanceResponse;
+import com.example.proyectobanca.model.transaction.operations.totalOperations.DailyOperationsRange;
+import com.example.proyectobanca.model.transaction.operations.totalOperations.DailyOperationsResponse;
 import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionRange;
 import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionResponse;
 import com.example.proyectobanca.repository.BankAccountRepository;
@@ -42,7 +44,6 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         this.userRepository = userRepository;
         this.userDao = userDao;
     }
-
 
     /**
      * Service:
@@ -355,7 +356,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
      * Get the number of transactions per day between two dates for a creditcard
      * @param idCreditCard Id of creditcard that you have get the transactions
      * @param map1 Map<String, String> with DateRange params and pagination optionals params
-     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     * @return DailyTransactionResponse with List of transactions by day of transactions between two dates from database
      */
     @Override
     public DailyTransactionResponse getDailyTransactionByDateRangeByCreditCard(Long idCreditCard, Map<String, String> map1) {
@@ -387,7 +388,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
      * Transform the result of the database into a response of type DailyBalanceResponse
      * @param result List of the balance per day of transactions between two dates from database
      * @param map1 Map<String, String> with DateRange params and pagination optionals params
-     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     * @return DailyTransactionResponse with List of the balance per day of transactions between two dates from database
      */
     private DailyTransactionResponse transformResultToDailyTransaction(List result, Map<String, String> map1) {
 
@@ -411,5 +412,102 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         );
 
         return dailyTransactionResponse;
+    }
+
+    /**
+     * Service:
+     * Get the number of operations per day between two dates for a bank account
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return DailyOperationsResponse with List of the operations per day by category between two dates from database
+     */
+    @Override
+    public DailyOperationsResponse getAllOperationsByCategoryBankAccount(Long idBankAccount, Map<String, String> map1) {
+
+        try {
+
+            boolean bankAccountExist = bankAccountRepository.existsById(idBankAccount);
+            if (!bankAccountExist)
+                return new DailyOperationsResponse("-404");
+
+
+            List result = this.transactionOperationsDao.getAllOperationsByCategoryBankAccount(idBankAccount, map1);
+
+            if (result.size() == 0)
+                return new DailyOperationsResponse("-204");
+
+            DailyOperationsResponse dailyOperationsResponse = transformResultToDailyOperation(result, map1);
+
+            return dailyOperationsResponse;
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            return new DailyOperationsResponse("-500");
+        }
+    }
+
+    /**
+     * Service:
+     * Get the number of operations per day between two dates for a credit card
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return DailyOperationsResponse with List of the operations per day by category between two dates from database
+     */
+    @Override
+    public DailyOperationsResponse getAllOperationsByCategoryCreditCard(Long idCreditCard, Map<String, String> map1){
+        try {
+
+            boolean creditCardExist = creditCardRepository.existsById(idCreditCard);
+            if (!creditCardExist)
+                return new DailyOperationsResponse("-404");
+
+
+            List result = this.transactionOperationsDao.getAllOperationsByCategoryCreditCard(idCreditCard, map1);
+
+            if (result.size() == 0)
+                return new DailyOperationsResponse("-204");
+
+            DailyOperationsResponse dailyOperationsResponse = transformResultToDailyOperation(result, map1);
+
+            return dailyOperationsResponse;
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            return new DailyOperationsResponse("-500");
+        }
+    }
+
+
+
+    /**
+     * Transform the result of the database into a response of type DailyOperationsResponse
+     * @param result List of operations per day in a between two dates from database
+     * @param map1 Map<String, String> with DateRange params and pagination optionals params
+     * @return DailyOperationsResponse with List of the operations per day between two dates from database
+     */
+    private DailyOperationsResponse transformResultToDailyOperation(List result, Map<String, String> map1) {
+
+        DailyOperationsResponse dailyOperationsResponse = new DailyOperationsResponse("ok");
+
+        dailyOperationsResponse.setStartDate(map1.get("startDate"));
+        dailyOperationsResponse.setEndDate( map1.get("endDate"));
+
+
+        result.forEach(
+                item -> {
+                    DailyOperationsRange operation = new DailyOperationsRange();
+
+                    BigInteger category = (BigInteger) ((Object[]) item)[0];
+                    BigInteger totalTransactions = (BigInteger) ((Object[]) item)[1];
+                    Object transactionDate = ((Object[]) item)[2];
+
+                    operation.setCategory(category);
+                    operation.setTotalOperations(totalTransactions);
+                    operation.setOperationDate(transactionDate.toString());
+                    dailyOperationsResponse.getDailyOperationsRanges().add(operation);
+                }
+        );
+
+        return dailyOperationsResponse;
     }
 }

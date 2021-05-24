@@ -2,7 +2,6 @@ package com.example.proyectobanca.service;
 
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceRange;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceResponse;
-import com.example.proyectobanca.model.transaction.operations.UserDailyBalanceResponse;
 import com.example.proyectobanca.model.transaction.operations.totalTransactions.DailyTransactionResponse;
 
 import java.util.List;
@@ -15,5 +14,8 @@ public interface TransactionOperationsService {
     UserDailyBalanceResponse getDailyBalanceByDateRangeByUser(Long idUser, Map<String, String> map1);
 
     DailyTransactionResponse getDailyTransactionByDateRangeByCreditCard(Long idCreditCard, Map<String, String> map1);
+    DailyOperationsResponse getAllOperationsByCategoryBankAccount(Long idBankAccount, Map<String, String> map1);
+    DailyOperationsResponse getAllOperationsByCategoryCreditCard(Long idCreditCard, Map<String, String> map1);
+
 
     }
