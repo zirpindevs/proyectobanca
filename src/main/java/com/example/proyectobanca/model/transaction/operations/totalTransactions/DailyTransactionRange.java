@@ -1,8 +1,10 @@
 package com.example.proyectobanca.model.transaction.operations.totalTransactions;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
 
+/**
+ * Class containing the total number of transactions on a given day.
+ */
 public class DailyTransactionRange {
 
     private String transactionDate;

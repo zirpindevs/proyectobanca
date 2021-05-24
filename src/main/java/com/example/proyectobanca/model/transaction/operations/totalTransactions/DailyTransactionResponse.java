@@ -3,6 +3,9 @@ package com.example.proyectobanca.model.transaction.operations.totalTransactions
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Response class that contains the information of the Total number of transactions per day of a bank account between two dates.
+ */
 public class DailyTransactionResponse {
 
     private String status;

@@ -1,18 +1,16 @@
 package com.example.proyectobanca.service;
 
-import com.example.proyectobanca.model.BankAccount;
-import com.example.proyectobanca.model.BankAccountDTO;
-import com.example.proyectobanca.model.CreditCard;
-import com.example.proyectobanca.model.CreditCardDTO;
+import com.example.proyectobanca.model.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface BankAccountService {
 
-    List<BankAccount> findAll();
+    List<BankAccount> findAll(Map<String, String> map1);
 
-    BankAccount findOne(Long id);
+    Optional<BankAccount> findOne(Long id);
 
     BankAccount createOne(BankAccountDTO bankAccountDTO);
 

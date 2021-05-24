@@ -127,7 +127,6 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         return dailyBalanceResponse;
     }
 
-
     /**
      * Get Balance of all bank accounts that a user has
      * @param idUser Id user
@@ -192,168 +191,6 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
         return userDailyBalanceResponse;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //*********************************************************************************************************
-
-
     /**
      * Service:
      * Get the number of transactions per day between two dates for a creditcard
@@ -391,7 +228,8 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
      * Transform the result of the database into a response of type DailyBalanceResponse
      * @param result List of the balance per day of transactions between two dates from database
      * @param map1 Map<String, String> with DateRange params and pagination optionals params
-     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     * @return DailyTransactionResponse with the information of the Total number of transactions per day of a bank
+     * account between two dates.
      */
     private DailyTransactionResponse transformResultToDailyTransaction(List result, Map<String, String> map1) {
 
@@ -416,6 +254,7 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
         return dailyTransactionResponse;
     }
+
     /**
      * Service:
      * Get the number of operations per day between two dates for a bank account
@@ -479,8 +318,6 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
             }
         }
 
-
-
         /**
          * Transform the result of the database into a response of type DailyOperationsResponse
          * @param result List of operations per day in a bankaccount between two dates from database
@@ -514,6 +351,5 @@ public class TransactionOperationsServiceImpl implements TransactionOperationsSe
 
             return dailyOperationsResponse;
         }
-
 
 }

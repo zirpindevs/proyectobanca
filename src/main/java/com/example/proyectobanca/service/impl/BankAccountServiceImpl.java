@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
@@ -28,21 +26,54 @@ public class BankAccountServiceImpl implements BankAccountService {
         this.bankAccountDAO = bankAccountDAO;
     }
 
-
+    /**
+     * Get all bank accounts with optionals filters options (String pag, String limit)
+     * Service Method
+     * @param map1 map with all filters options (String name, String pag, String limit)
+     * @return List of bank accounts from database
+     */
     @Override
-    public List<BankAccount> findAll() {
-        log.info("REST request to find all BankAccounts");
+    public List<BankAccount> findAll(Map<String, String> map1) {
+        try {
 
-        return this.repository.findAll();
+            return this.bankAccountDAO.findAllByFilters(map1);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            List<BankAccount> bankAccountsError = new ArrayList<>();
+            BankAccount bankAccountError = new BankAccount();
+            bankAccountError.setId(-500L);
+            bankAccountsError.add(bankAccountError);
+
+            return bankAccountsError;
+        }
     }
 
+    /**
+     * Get bank account by ID - Service
+     * @param id Primary key of Bank Account: Long
+     * @return Optional<BankAccount> from database
+     */
     @Override
-    public BankAccount findOne(Long id) {
-        log.info("REST request to find one BankAccount by id");
+    public Optional<BankAccount> findOne(Long id) {
+        try {
 
-        if (id == null)
-            return null;
-        return this.bankAccountDAO.findById(id);
+            if(id == null)
+                return Optional.empty();
+
+            Optional<BankAccount> bankAccountDb = this.repository.findById(id);
+
+            return bankAccountDb;
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            BankAccount bankAccountError = new BankAccount();
+            bankAccountError.setId(-500L);
+
+            return Optional.of(bankAccountError);
+        }
     }
 
     /**
@@ -58,7 +89,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             BankAccount bankAccountValidated = createValidateBankAccount(bankAccountDTO);
 
             if (bankAccountValidated.getNumAccount() == null)
-                return new BankAccount();;
+                return new BankAccount();
 
             return repository.save(bankAccountValidated);
 
@@ -110,8 +141,8 @@ public class BankAccountServiceImpl implements BankAccountService {
      */
     @Override
     public Optional<Boolean> deleteOne(Long id){
-
-       /* try {
+/*
+        try {
             if (id != null && repository.existsById(id)) {
 
                 // Delete users - bank accounts relations

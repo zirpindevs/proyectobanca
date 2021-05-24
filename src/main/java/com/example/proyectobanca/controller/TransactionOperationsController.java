@@ -1,7 +1,6 @@
 package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.Transaction;
-import com.example.proyectobanca.model.transaction.operations.DailyBalanceRange;
 import com.example.proyectobanca.model.transaction.operations.DailyBalanceResponse;
 import com.example.proyectobanca.model.transaction.operations.UserDailyBalanceResponse;
 import com.example.proyectobanca.model.transaction.operations.totalOperations.DailyOperationsResponse;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -123,20 +121,16 @@ public class TransactionOperationsController {
         return ResponseEntity.ok().body(result);
     }
 
-
-    //************************************************************************************************************/
-
-
     /**
      * Controller:
-     * Get the number of trasactions per day between two dates for a creditcard
+     * Get the number of transactions per day between two dates for a creditcard
      *
      * @param id        Id of creditcard that you have get the balance
      * @param startDate Start date to obtain the daily balance
      * @param endDate   End date to obtain the daily balance
      * @param page      Page to be displayed of the results obtained (optional)
      * @param limit     Number of records per page that you want to show of the results obtained (optional)
-     * @return DailyBalanceResponse with List of the balance per day of transactions between two dates from database
+     * @return DailyBalanceResponse with contains the information of the Total number of transactions per day of a bank account between two dates.
      */
     @GetMapping("/transactions-operations/daily-transaction-creditcard/{id}")
     @ApiOperation("Get number of transactions per day between two dates")
