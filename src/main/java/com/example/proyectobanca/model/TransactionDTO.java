@@ -3,6 +3,8 @@ package com.example.proyectobanca.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,14 +15,20 @@ public class TransactionDTO {
     @ApiModelProperty("Transaction amount: Double")
     private Double importe;
 
+    @ApiModelProperty("Balance after each transaction: Double")
+    private Double balanceAfterTransaction;
+
     @ApiModelProperty("Transaction description: String")
     private String concepto;
 
     @ApiModelProperty("Type of transaction: String")
-    private String tipoMovimiento;
+    private MovimientoType tipoMovimiento;
 
     @ApiModelProperty("Created date: Instant")
     private Instant createdDate;
+
+    @ApiModelProperty("Transaction update date: Instant")
+    private Instant lastModified;
 
     @ApiModelProperty("Primary key of transaction own of bankaccount: Long")
     private Long idBankAccount;
@@ -34,11 +42,13 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(Double importe, String concepto, String tipoMovimiento, Instant createdDate, Long idBankAccount, Long idCreditCard, Long idCategory) {
+    public TransactionDTO(Double importe, Double balanceAfterTransaction, String concepto, MovimientoType tipoMovimiento, Instant createdDate, Instant lastModified, Long idBankAccount, Long idCreditCard, Long idCategory) {
         this.importe = importe;
+        this.balanceAfterTransaction = balanceAfterTransaction;
         this.concepto = concepto;
         this.tipoMovimiento = tipoMovimiento;
         this.createdDate = createdDate;
+        this.lastModified = lastModified;
         this.idBankAccount = idBankAccount;
         this.idCreditCard = idCreditCard;
         this.idCategory = idCategory;
@@ -52,21 +62,19 @@ public class TransactionDTO {
         this.importe = importe;
     }
 
-    public String getConcepto() {
-        return concepto;
-    }
+    public Double getBalanceAfterTransaction() { return balanceAfterTransaction; }
+
+    public void setBalanceAfterTransaction(Double balanceAfterTransaction) { this.balanceAfterTransaction = balanceAfterTransaction; }
+
+    public String getConcepto() { return concepto; }
 
     public void setConcepto(String concepto) {
         this.concepto = concepto;
     }
 
-    public String getTipoMovimiento() {
-        return tipoMovimiento;
-    }
+    public MovimientoType getTipoMovimiento() { return tipoMovimiento; }
 
-    public void setTipoMovimiento(String tipoMovimiento) {
-        this.tipoMovimiento = tipoMovimiento;
-    }
+    public void setTipoMovimiento(MovimientoType tipoMovimiento) { this.tipoMovimiento = tipoMovimiento; }
 
     public Instant getCreatedDate() {
         return createdDate;
@@ -75,6 +83,10 @@ public class TransactionDTO {
     public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
     }
+
+    public Instant getLastModified() { return lastModified; }
+
+    public void setLastModified(Instant lastModified) { this.lastModified = lastModified; }
 
     public Long getIdBankAccount() {
         return idBankAccount;

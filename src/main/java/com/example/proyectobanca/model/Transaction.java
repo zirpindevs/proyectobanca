@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
@@ -19,20 +20,29 @@ public class Transaction {
     @ApiModelProperty("Transaction amount: Double")
     private Double importe;
 
+    @Column(name = "balance_after_transaction")
+    @ApiModelProperty("Balance after each transaction: Double")
+    private Double balanceAfterTransaction;
+
     @Column(nullable = false)
     @ApiModelProperty("Transaction description: String")
     private String concepto;
 
     @Column(name="tipo_movimiento")
+    @Enumerated(EnumType.STRING)
     @ApiModelProperty("Type of transaction: String")
-    private String tipoMovimiento;
+    private MovimientoType tipoMovimiento;
 
     @Column(name="created_date", nullable = false)
     @ApiModelProperty("Created date: Instant")
-    private Instant createdDate;
+    private Timestamp createdDate;
+
+    @Column(name="last_modified")
+    @ApiModelProperty("Transaction update date: Instant")
+    private Instant lastModified;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_bank_account")
+    @JoinColumn(name = "id_bank_account", nullable = false)
     @JsonIgnore
     @ApiModelProperty("Bank account to which a single transaction belongs: BankAccount")
     private BankAccount bankAccount;
@@ -68,6 +78,10 @@ public class Transaction {
         this.importe = importe;
     }
 
+    public Double getBalanceAfterTransaction() { return balanceAfterTransaction; }
+
+    public void setBalanceAfterTransaction(Double balanceAfterTransaction) { this.balanceAfterTransaction = balanceAfterTransaction; }
+
     public String getConcepto() {
         return concepto;
     }
@@ -76,21 +90,25 @@ public class Transaction {
         this.concepto = concepto;
     }
 
-    public String getTipoMovimiento() {
+    public MovimientoType getTipoMovimiento() {
         return tipoMovimiento;
     }
 
-    public void setTipoMovimiento(String tipoMovimiento) {
+    public void setTipoMovimiento(MovimientoType tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
     }
 
-    public Instant getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Instant createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
+
+    public Instant getLastModified() { return lastModified; }
+
+    public void setLastModified(Instant lastModified) { this.lastModified = lastModified; }
 
     public BankAccount getBankAccount() {
         return bankAccount;
@@ -121,12 +139,11 @@ public class Transaction {
         return "Transaction{" +
                 "id=" + id +
                 ", importe=" + importe +
+                ", balanceAfterTransaction=" + balanceAfterTransaction +
                 ", concepto='" + concepto + '\'' +
                 ", tipoMovimiento='" + tipoMovimiento + '\'' +
                 ", createdDate=" + createdDate +
-                ", bankAccount=" + bankAccount +
-                ", creditCard=" + creditCard +
-                ", category=" + category +
+                ", lastModified=" + lastModified +
                 '}';
     }
 }

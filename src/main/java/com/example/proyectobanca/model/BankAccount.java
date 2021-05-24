@@ -1,10 +1,11 @@
 package com.example.proyectobanca.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,24 +18,32 @@ public class BankAccount {
     @ApiModelProperty("Primary key: Long")
     private Long id;
 
-    @Column(name = "num_account", nullable = false, unique = true)
+    @Column(name = "num_account", nullable = false, unique = true, length = 24)
     @ApiModelProperty("Bank account number: Long")
-    private Long numAccount;
+    private String numAccount;
 
+    @Column(nullable = false, columnDefinition = "double default 0" )
     @ApiModelProperty("Current account balance: Double")
     private Double balance;
 
     @Column(nullable = false, columnDefinition = "boolean default true")
-    @ApiModelProperty("Indicates whether the account can be used or not: Boolean")
+    @ApiModelProperty("Indicates whether the account can be used actually or not: Boolean")
     private Boolean enabled;
 
-    @Column(name="created_date")
-    @ApiModelProperty("Bank account creation date: Instant")
-    private Instant createdDate;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    @ApiModelProperty("Mark an account as permanently deleted. The system will not allow updating this field, only change " +
+            "the value to true through the Delete service. The record is not deleted, it remains as archived.: Boolean")
+    private Boolean deleted;
 
-    @Column(name="last_modified")
-    @ApiModelProperty("Bank account update date: Instant")
-    private Instant lastModified;
+    @Column(name = "created_at", nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("Created date: LocalDateTime, Not null, pattern = 'yyyy-MM-dd HH:mm:ss'")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("Update date: LocalDateTime, pattern = 'yyyy-MM-dd HH:mm:ss'")
+    private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "bankAccounts")
     @JsonIgnore
@@ -42,6 +51,7 @@ public class BankAccount {
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "bankAccount", cascade = CascadeType.ALL)
+    @JsonIgnore
     @ApiModelProperty("List of transactions that a bank account has: List<Transaction>")
     private List<Transaction> transactions = new ArrayList<>();
 
@@ -49,27 +59,19 @@ public class BankAccount {
     public BankAccount() {
     }
 
-    public BankAccount(Long numAccount, Double balance, Boolean enabled, Instant createdDate, Instant lastModified) {
-        this.numAccount = numAccount;
-        this.balance = balance;
-        this.enabled = enabled;
-        this.createdDate = createdDate;
-        this.lastModified = lastModified;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getNumAccount() {
+    public String getNumAccount() {
         return numAccount;
     }
 
-    public void setNumAccount(Long numAccount) {
+    public void setNumAccount(String numAccount) {
         this.numAccount = numAccount;
     }
 
@@ -89,20 +91,28 @@ public class BankAccount {
         this.enabled = enabled;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
+    public Boolean getDeleted() {
+        return deleted;
     }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
-    public Instant getLastModified() {
-        return lastModified;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setLastModified(Instant lastModified) {
-        this.lastModified = lastModified;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<User> getUsers() {
@@ -125,11 +135,12 @@ public class BankAccount {
     public String toString() {
         return "BankAccount{" +
                 "id=" + id +
-                ", numAccount=" + numAccount +
+                ", numAccount='" + numAccount + '\'' +
                 ", balance=" + balance +
                 ", enabled=" + enabled +
-                ", createdDate=" + createdDate +
-                ", lastModified=" + lastModified +
+                ", deleted=" + deleted +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

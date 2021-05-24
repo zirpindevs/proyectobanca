@@ -66,6 +66,32 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
+     * Get all id of the bank accounts that a user has
+     * @param idUser
+     * @return List with all id of the bank accounts that a user has
+     */
+    @Override
+    public List findAllBankAccountsByUser(Long idUser, Map<String, String> map1) {
+
+        try {
+            if (idUser != null) {
+
+                Query queryNative = manager.createNativeQuery(
+                        "SELECT bank_account_id FROM users_bank_accounts WHERE  user_id = " + idUser);
+                List result = queryNative.getResultList();
+
+                return result;
+            }
+            return new ArrayList<>();
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return new ArrayList<>();
+        }
+
+    }
+
+    /**
      * Build the predicates needed to create the filter search sql query
      * @param map1 Filters of
      * @param builder
@@ -82,6 +108,7 @@ public class UserDaoImpl implements UserDao {
 
         return predicates;
     }
+
 
     /**
      * Delete all register relationated with Users and BankAccounts

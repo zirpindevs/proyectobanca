@@ -1,109 +1,247 @@
 package com.example.proyectobanca.service.impl;
 
 import com.example.proyectobanca.dao.BankAccountDAO;
-import com.example.proyectobanca.dao.impl.BankAccountDAOImpl;
-import com.example.proyectobanca.model.BankAccount;
-import com.example.proyectobanca.model.User;
+import com.example.proyectobanca.model.*;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
-    private final Logger log = LoggerFactory.getLogger(BankAccountDAOImpl.class);
 
-    private final BankAccountRepository bankAccountRepository;
+    private final Logger log = LoggerFactory.getLogger(BankAccountServiceImpl.class);
+
+    private final BankAccountRepository repository;
+
     private final BankAccountDAO bankAccountDAO;
 
-    public BankAccountServiceImpl(BankAccountRepository bankAccountRepository, BankAccountDAO bankAccountDAO) {
-        this.bankAccountRepository = bankAccountRepository;
+    public BankAccountServiceImpl(BankAccountRepository repository, BankAccountDAO bankAccountDAO) {
+        this.repository = repository;
         this.bankAccountDAO = bankAccountDAO;
     }
 
-
+    /**
+     * Get all bank accounts with optionals filters options (String pag, String limit)
+     * Service Method
+     * @param map1 map with all filters options (String name, String pag, String limit)
+     * @return List of bank accounts from database
+     */
     @Override
-    public BankAccount createBankAccount(BankAccount bankAccount) {
-        log.debug("Create BankAccount: {}", bankAccount);
-
-        BankAccount bankAccountCreated = null;
-
+    public List<BankAccount> findAll(Map<String, String> map1) {
         try {
-            bankAccount.setCreatedDate(Instant.now());
-            bankAccount.setLastModified(Instant.now());
-            bankAccountCreated = bankAccountRepository.save(bankAccount);
-        } catch (Exception e) {
-            log.error("Cannot save the bankAccount: {} , error : {}", bankAccount, e);
-        }
 
-        return bankAccountCreated;
+            return this.bankAccountDAO.findAllByFilters(map1);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            List<BankAccount> bankAccountsError = new ArrayList<>();
+            BankAccount bankAccountError = new BankAccount();
+            bankAccountError.setId(-500L);
+            bankAccountsError.add(bankAccountError);
+
+            return bankAccountsError;
+        }
     }
 
-
+    /**
+     * Get bank account by ID - Service
+     * @param id Primary key of Bank Account: Long
+     * @return Optional<BankAccount> from database
+     */
     @Override
-    public BankAccount updateBankAccount(BankAccount modifiedBankAccount) {
-
-        log.debug("Update a BankAccount: {}", modifiedBankAccount);
-        BankAccount checkModifiedBankAccount = null;
+    public Optional<BankAccount> findOne(Long id) {
         try {
 
-            checkModifiedBankAccount = validateFields(modifiedBankAccount);
+            if(id == null)
+                return Optional.empty();
 
-            if (checkModifiedBankAccount.getId() == -404L) {
-                BankAccount bankAccountError = new BankAccount();
-                bankAccountError.setId(-404L);
-                return bankAccountError;
-            }
+            Optional<BankAccount> bankAccountDb = this.repository.findById(id);
 
-            modifiedBankAccount.setLastModified(Instant.now());
-            return bankAccountRepository.save(modifiedBankAccount);
+            return bankAccountDb;
 
         }catch (Exception e){
 
             log.error(e.getMessage());
             BankAccount bankAccountError = new BankAccount();
             bankAccountError.setId(-500L);
+
+            return Optional.of(bankAccountError);
+        }
+    }
+
+    /**
+     * Create a new bank account in database - Service
+     * @param bankAccountDTO to update
+     * @return BankAccount created in database
+     */
+    @Override
+    public BankAccount createOne(BankAccountDTO bankAccountDTO) {
+
+        try {
+
+            BankAccount bankAccountValidated = createValidateBankAccount(bankAccountDTO);
+
+            if (bankAccountValidated.getNumAccount() == null)
+                return new BankAccount();
+
+            return repository.save(bankAccountValidated);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            BankAccount bankAccountError = new BankAccount();
+            bankAccountError.setId(-500L);
+
             return bankAccountError;
+        }
+    }
 
+    /**
+     * It update a bank account of database - Service
+     * @param bankAccountDTO to update
+     * @return BankAccount updated in database
+     */
+    @Override
+    public BankAccount updateOne(Long id, BankAccountDTO bankAccountDTO) {
+
+        try {
+
+            BankAccount bankAccountValidated = updateValidateBankAccount(id, bankAccountDTO);
+
+            if (bankAccountValidated.getNumAccount() == null){
+                BankAccount bankAccountError = new BankAccount();
+                bankAccountError.setId(-404L);
+                return bankAccountError;
+            }
+
+
+            return repository.save(bankAccountValidated);
+
+        }catch (Exception e){
+
+            log.error(e.getMessage());
+            BankAccount bankAccountError = new BankAccount();
+            bankAccountError.setId(-500L);
+
+            return bankAccountError;
+        }
+    }
+
+    /**
+     * Delete bank account of database by ID. (Update "deleted" field) - Service
+     * @param id bank account primary key that you want to delete
+     * @return Optional<Boolean>
+     */
+    @Override
+    public Optional<Boolean> deleteOne(Long id){
+/*
+        try {
+            if (id != null && repository.existsById(id)) {
+
+                // Delete users - bank accounts relations
+                Optional<Boolean> result = userDao.deleteUsersBankAccountsRelation(id);
+
+                if (Objects.equals(result, Optional.of(true))){
+                    repository.deleteById(id);
+                }
+
+                return Optional.of(true);
+            }
+            return Optional.of(false);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return Optional.empty();
+        }*/
+        return Optional.empty();
+    }
+
+
+    /**
+     * Validate a bank account before to save in db
+     * @param bankAccountDTO
+     * @return BankAccount
+     */
+    private BankAccount createValidateBankAccount (BankAccountDTO bankAccountDTO){
+
+        BankAccount bankAccountEmpty = new BankAccount();
+
+        // Only is permit to create a bank account if balance is 0, To change the balance is need to create a transaction
+        if ( bankAccountDTO.getNumAccount() == null || bankAccountDTO.getBalance() != null ){
+
+            return bankAccountEmpty;
+
+        }else {
+
+            if (bankAccountDTO.getNumAccount().length() != 24)
+                return new BankAccount();
+
+            Boolean numBankAccountExist = repository.existsByNumAccount(bankAccountDTO.getNumAccount());
+            if (numBankAccountExist)
+                return new BankAccount();
+
+            // If pass all validations
+
+            if ( bankAccountDTO.getEnabled() == null)
+                bankAccountDTO.setEnabled(true);
+
+
+            BankAccount bankAccount = new BankAccount();
+
+            bankAccount.setNumAccount(bankAccountDTO.getNumAccount());
+            bankAccount.setBalance(0D);
+            bankAccount.setEnabled(true);
+            bankAccount.setDeleted(false);
+            bankAccount.setCreatedAt(LocalDateTime.now());
+
+            return bankAccount;
         }
 
     }
 
-    private BankAccount validateFields (BankAccount bankAccount){
+    /**
+     * Validate a bank account before to update in db. Only is possible to update the "enabled" field
+     * @param bankAccountDTO
+     * @return BankAccount
+     */
+    private BankAccount updateValidateBankAccount (Long id, BankAccountDTO bankAccountDTO){
 
-        if ( bankAccount.getNumAccount() == null || bankAccount.getEnabled() == null){
-            bankAccount.setId(-404L);
-        }
+        // Exist ?
+        Optional<BankAccount> bankAccountDB = this.repository.findById(id);
+        if (ObjectUtils.isEmpty(bankAccountDB))
+            return new BankAccount();
 
-        return bankAccount;
+        // Only is permit to update the field enabled of a bank account
+        if ( bankAccountDTO.getEnabled() == null )
+            return new BankAccount();
+
+
+        // Is not possible to modify the number of bank account
+        if (!bankAccountDTO.getNumAccount().equals(bankAccountDB.get().getNumAccount()))
+            return new BankAccount();
+
+        // Is not possible to modify the number of bank account
+        if (!bankAccountDTO.getBalance().equals(bankAccountDB.get().getBalance()))
+            return new BankAccount();
+
+        // Is not possible to modify the number of bank account
+        if (!bankAccountDTO.getNumAccount().equals(bankAccountDB.get().getNumAccount()))
+            return new BankAccount();
+
+        // Is not possible to modify the number of bank account
+        if (!bankAccountDTO.getCreatedAt().equals(bankAccountDB.get().getCreatedAt()))
+            return new BankAccount();
+
+        // If pass all validations
+        bankAccountDB.get().setEnabled(bankAccountDTO.getEnabled());
+        bankAccountDB.get().setUpdatedAt(LocalDateTime.now());
+
+        return bankAccountDB.get();
     }
-
-    @Override
-    public List<BankAccount> findAll() {
-        log.info("REST request to find all BankAccounts");
-
-        return this.bankAccountRepository.findAll();
-    }
-
-    @Override
-    public BankAccount findOne(Long id) {
-        log.info("REST request to find one BankAccount by id");
-
-        if (id == null)
-            return null;
-        return this.bankAccountDAO.findById(id);
-    }
-
-    @Override
-    public void deleteBankAccount(BankAccount bankAccountToDelete) {
-        log.info("REST request to BankAccount an BankAccount by id");
-        this.bankAccountRepository.deleteById(bankAccountToDelete.getId());
-    }
-
 }
