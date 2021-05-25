@@ -132,9 +132,9 @@ public class TransactionOperationsController {
      * @param limit     Number of records per page that you want to show of the results obtained (optional)
      * @return DailyBalanceResponse with contains the information of the Total number of transactions per day of a bank account between two dates.
      */
-    @GetMapping("/transactions-operations/daily-transaction-creditcard/{id}")
+    @GetMapping("/transactions-operations/total-transactions-creditcard/{id}")
     @ApiOperation("Get number of transactions per day between two dates")
-    public ResponseEntity<DailyTransactionResponse> getDailyTransactionByDateRangeByCreditCard(
+    public ResponseEntity<DailyTransactionResponse> getTotalTransactionByDateRangeByCreditCard(
             @ApiParam("Primary key of credit card: Long") @PathVariable Long id,
             @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
             @ApiParam("End date: LocalDate") @QueryParam("endDate") String endDate,
@@ -168,7 +168,7 @@ public class TransactionOperationsController {
 
     /**
      * Controller:
-     * Get the number of operations per day between two dates for a bankaccount
+     * Get the number total of operations per day by category between two dates for a bankaccount
      *
      * @param id        Id of bankaccout that you have get the operations
      * @param startDate Start date to obtain the daily operations
@@ -177,9 +177,9 @@ public class TransactionOperationsController {
      * @param limit     Number of records per page that you want to show of the results obtained (optional)
      * @return DailyOperationsResponse with List of the operations per day of a bankaccount between two dates from database
      */
-    @GetMapping("/transactions-operations/daily-operations-category-bankaccount/{id}")
+    @GetMapping("/transactions-operations/total-transactions-category-bankaccount/{id}")
     @ApiOperation("Get number of operations per day between two dates")
-    public ResponseEntity<DailyOperationsResponse> getAllOperationsByCategoryBankAccount(
+    public ResponseEntity<DailyOperationsResponse> getTotalOperationsByDateRangeByCategoryByBankAccount(
             @ApiParam("Primary key of bank account: Long") @PathVariable Long id,
             @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
             @ApiParam("End date: LocalDate") @QueryParam("endDate") String endDate,
@@ -221,9 +221,9 @@ public class TransactionOperationsController {
      * @param limit     Number of records per page that you want to show of the results obtained (optional)
      * @return DailyOperationsResponse with List of the operations per day of a creditcard between two dates from database
      */
-    @GetMapping("/transactions-operations/daily-operations-category-creditcard/{id}")
+    @GetMapping("/transactions-operations/total-transactions-category-creditcard/{id}")
     @ApiOperation("Get number of operations per day between two dates")
-    public ResponseEntity<DailyOperationsResponse> getAllOperationsByCategoryCreditCard(
+    public ResponseEntity<DailyOperationsResponse> getTotalTransactiosByDateRangeByCategoryCreditCard(
             @ApiParam("Primary key of credit card: Long") @PathVariable Long id,
             @ApiParam("Start date: LocalDate") @QueryParam("startDate") String startDate,
             @ApiParam("End date: LocalDate") @QueryParam("endDate") String endDate,
