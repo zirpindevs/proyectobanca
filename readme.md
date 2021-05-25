@@ -1,5 +1,9 @@
 ## Propuesta Endpoints: Gráficas Balance Diario(Entregable3) y datos de BankAccout y CreditCard (entregable4)
 
+### Documentación
+[Documentación Postman] (https://documenter.getpostman.com/view/13054206/TzXuoLPT)
+[Documentación Swagger] (https://bancaproyect.herokuapp.com/swagger-ui/)
+
 ### Grafica1:
 ```Balance diario: Saldo actual por día entre dos fechas y el mismo balance con el mismo periodo del año anterior.```
 ### Grafica2:
