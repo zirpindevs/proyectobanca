@@ -116,7 +116,7 @@ public class BankAccountController {
      */
     @PutMapping("/bankaccounts/{id}")
     @ApiOperation("Update only enabled field of BankAccount in DB")
-    public ResponseEntity<BankAccount> updateCreditCard(
+    public ResponseEntity<BankAccount> updateOne(
             @ApiParam("id of BankAccount that you want to update: Long") @PathVariable Long id,
             @ApiParam("BankAccount that you want to update: BankAccountDTO") @RequestBody BankAccountDTO bankAccountDTO
     ){
