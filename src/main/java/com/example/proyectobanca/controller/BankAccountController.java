@@ -2,8 +2,7 @@ package com.example.proyectobanca.controller;
 
 import com.example.proyectobanca.model.BankAccount;
 import com.example.proyectobanca.model.BankAccountDTO;
-import com.example.proyectobanca.model.CreditCard;
-import com.example.proyectobanca.model.CreditCardDTO;
+import com.example.proyectobanca.model.User;
 import com.example.proyectobanca.repository.BankAccountRepository;
 import com.example.proyectobanca.service.BankAccountService;
 import io.swagger.annotations.ApiOperation;
@@ -18,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -38,34 +35,52 @@ public class BankAccountController {
     }
 
     /**
-     * FIND ALL BANKACCOUNTS
-     * @return List<BankAccount>
+     * Get all bank accounts
+     * @return List of bank accounts from database
      */
+    @GetMapping("/bankaccounts")
     @ApiOperation("Get all BankAccounts")
-    @RequestMapping(method = RequestMethod.GET, value = "/bankaccounts")
-    public List<BankAccount> findAllBankAccount(){
-        log.debug("REST request to find all BankAccounts");
+    public ResponseEntity<List<BankAccount>> findAll(
+            @ApiParam("Pagination: page from which the records start to be displayed (optional): Integer") @QueryParam("page") String page,
+            @ApiParam("Pagination: number of records displayed per page (optional): Integer") @QueryParam("limit") String limit
+    ) {
 
-        return this.bankAccountRepository.findAll();
+        Map<String, String> map1 = new HashMap<>();
+        map1.put("page", page);
+        map1.put("limit", limit);
+
+        List<BankAccount> bankAccountsDB = bankAccountService.findAll(map1);
+
+        if (bankAccountsDB.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        if (bankAccountsDB.get(0).getId()== -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity.ok().body(bankAccountsDB);
     }
 
     /**
-     * FIND BANKACCOUNTS BY ID
-     *
-     * @param id
-     * @return ResponseEntity<BankAccount>
-     * @throws URISyntaxException
+     * Get bank account by ID
+     * @param id Primary key of Bank Account: Long
+     * @return Bank account from database
      */
-    @ApiOperation("Get BankAccount by id")
     @GetMapping("/bankaccounts/{id}")
-    public ResponseEntity<BankAccount> findBankAccountById(@ApiParam("Primary key of bankaccounts: Long") @PathVariable Long id) throws URISyntaxException {
-        BankAccount findBankAccount = this.bankAccountService.findOne(id);
+    @ApiOperation("Get bank account by Id")
+    public ResponseEntity<BankAccount> findOne(@ApiParam("Primary key of bank account: Long") @PathVariable Long id){
 
-        if (findBankAccount == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (id == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok().body(findBankAccount);
+        Optional<BankAccount> bankAccountOpt = bankAccountService.findOne(id);
 
+        if(!bankAccountOpt.isPresent())
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        if (bankAccountOpt.get().getId() == -500L)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return ResponseEntity.ok().body(bankAccountOpt.get());
     }
 
     /**
@@ -86,7 +101,7 @@ public class BankAccountController {
         if (result.getId() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        if (result.getId() == -500L)
+        if (result.getId() == 500L)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return ResponseEntity
@@ -140,7 +155,7 @@ public class BankAccountController {
         if (!result.isPresent())
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }

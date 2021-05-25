@@ -137,7 +137,6 @@ public class TransactionController {
     @DeleteMapping("/transactions/{id}")
     @ApiOperation("Delete transaction of DB by Id")
     public ResponseEntity<Void> deleteTransaction(@ApiParam("Primary key of transaction: Long") @PathVariable Long id){
-        log.debug("REST request to delete a Transaction: {} ", id);
 
         Transaction transactionToDelete = this.transactionService.findOne(id);
 

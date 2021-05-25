@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +51,7 @@ public class BankAccount {
     private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "bankAccount", cascade = CascadeType.ALL)
+    @JsonIgnore
     @ApiModelProperty("List of transactions that a bank account has: List<Transaction>")
     private List<Transaction> transactions = new ArrayList<>();
 
