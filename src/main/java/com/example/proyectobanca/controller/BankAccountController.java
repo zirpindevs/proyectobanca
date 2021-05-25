@@ -155,7 +155,7 @@ public class BankAccountController {
         if (!result.isPresent())
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }

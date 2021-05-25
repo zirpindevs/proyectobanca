@@ -141,25 +141,26 @@ public class BankAccountServiceImpl implements BankAccountService {
      */
     @Override
     public Optional<Boolean> deleteOne(Long id){
-/*
         try {
-            if (id != null && repository.existsById(id)) {
 
-                // Delete users - bank accounts relations
-                Optional<Boolean> result = userDao.deleteUsersBankAccountsRelation(id);
+            if(id == null)
+                return Optional.empty();
 
-                if (Objects.equals(result, Optional.of(true))){
-                    repository.deleteById(id);
-                }
+            Optional<BankAccount> bankAccountDb = this.repository.findById(id);
 
-                return Optional.of(true);
-            }
-            return Optional.of(false);
+            if (bankAccountDb.isEmpty())
+                return Optional.of(false);
+
+            bankAccountDb.get().setDeleted(true);
+
+            repository.save(bankAccountDb.get());
+
+            return Optional.of(true);
+
         }catch (Exception e){
             log.error(e.getMessage());
             return Optional.empty();
-        }*/
-        return Optional.empty();
+        }
     }
 
 
