@@ -148,7 +148,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
             Optional<BankAccount> bankAccountDb = this.repository.findById(id);
 
-            if (bankAccountDb.isEmpty())
+            if (!bankAccountDb.isPresent())
                 return Optional.of(false);
 
             bankAccountDb.get().setDeleted(true);
